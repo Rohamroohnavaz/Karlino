@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Entities\Abstraction\" />
-    <Folder Include="Entities\MainModels\" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.17" />
+    <PackageReference Include="SequentialGuid" Version="6.2.0" />
   </ItemGroup>
 
 </Project>
