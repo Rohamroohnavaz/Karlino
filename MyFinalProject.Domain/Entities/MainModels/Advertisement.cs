@@ -27,6 +27,8 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public string Description { get; set; }
         public decimal Salary { get; set; }
         public string CompanyName { get; set; }
+        public RequestResume RequestResume { get; set; }
+        public Guid? RequestResumeId { get; set; }
         public Company Company { get; set; }
         public Guid CompanyId { get; set; }
         public User User { get; set; }

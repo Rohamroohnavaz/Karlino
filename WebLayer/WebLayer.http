@@ -1,0 +1,6 @@
+@WebLayer_HostAddress = http://localhost:5279
+
+GET {{WebLayer_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

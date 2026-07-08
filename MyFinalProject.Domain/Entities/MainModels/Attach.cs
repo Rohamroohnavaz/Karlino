@@ -28,10 +28,14 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public string FileName { get; set; }
         public string ContentType { get; set; }
         public long FileSize { get; set; }
+        public Company Company { get; set; }
+        public Guid? CompanyId { get; set; }
         public Guid? AdvertisementId { get; set; }
         public Advertisement Advertisement { get; set; }
         public Guid? RequestResumeId { get; set; }
         public RequestResume RequestResume { get; set; }
+        public User? User { get; set; }
+        public Guid? UserId { get; set; }
 
         public override void Validation()
         {

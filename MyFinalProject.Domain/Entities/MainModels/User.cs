@@ -26,7 +26,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public UserRole Role { get; set; } = UserRole.None;
+        public UserRole Role { get; set; }
         public ICollection<RequestResume> RequestResumes { get; set; } = new List<RequestResume>();
         public ICollection<Attach> Attaches { get; set; } = new List<Attach>();
 
@@ -49,6 +49,5 @@ namespace MyFinalProject.Domain.Entities.MainModels
             if (string.IsNullOrWhiteSpace(LastName))
                 throw new Exception("LastName is null !!");
         }
-       
     }
 }
