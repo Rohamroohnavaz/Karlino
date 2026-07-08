@@ -1,0 +1,35 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using MyFinalProject.Domain.Entities.MainModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MyFinalProject.Infrastructure.Persistence.Configurations
+{
+    public class RequestResumeModelBuilderConfiguration : BaseModelBuilderConfiguration<RequestResume>
+    {
+        protected override void ApplyEntityConfiguration(EntityTypeBuilder<RequestResume> builder)
+        {
+            builder.Property(r => r.JobSeekerName)
+                .HasColumnType("NVARCHAR(150)")
+                .IsRequired();
+
+            builder.Property(r => r.JobSeekerLastName)
+                .HasColumnType("NVARCHAR(200)")
+                .IsRequired();
+
+            builder.HasOne(r => r.User)
+                .WithMany(u => u.RequestResumes)
+                .HasForeignKey(r => r.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(r => r.Advertisement)
+               .WithOne(a => a.RequestResume)
+               .HasForeignKey<Advertisement>(r => r.RequestResumeId)
+               .OnDelete(DeleteBehavior.Restrict);
+        }
+    }
+}
