@@ -20,6 +20,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
             JobSeekerName = jobSeekerName;
             JobSeekerLastName = jobSeekerLastName;
             Skill = skill;
+            Validation();
         }
 
         public string JobSeekerName { get; set; }
@@ -27,13 +28,10 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public string Skill { get; set; }
         public RequestStatus Status { get; set; }
         public User User { get; set; }
-        public UserRole Role { get; set; } = UserRole.JobSeeker;
-
-        public Guid Id { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime? ModifiedAt { get; set; }
-        public bool IsDeleted { get; set; }
-        public DateTime? DeletedAt { get; set; }
+        public Guid UserId { get; set; }
+        public Advertisement Advertisement { get; set; }
+        public Guid? AttachmentId { get; set; }
+        public Attach Attach { get; set; }
 
         public override void Validation()
         {

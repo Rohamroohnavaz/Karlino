@@ -20,21 +20,17 @@ namespace MyFinalProject.Domain.Entities.MainModels
             Title = title;
             Description = description;
             Salary = salary;
+            Validation();
         }
         
         public string Title { get; set; }
         public string Description { get; set; }
         public decimal Salary { get; set; }
         public string CompanyName { get; set; }
+        public Company Company { get; set; }
         public Guid CompanyId { get; set; }
         public User User { get; set; }
-        public UserRole Role { get; set; } = UserRole.Employer;
-
-        public Guid Id { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime? ModifiedAt { get; set; }
-        public bool IsDeleted { get; set; }
-        public DateTime? DeletedAt { get; set; }
+        public ICollection<Attach> Attaches { get; set; } = new List<Attach>();
 
         public override void Validation()
         {

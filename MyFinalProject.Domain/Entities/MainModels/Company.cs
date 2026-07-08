@@ -18,18 +18,15 @@ namespace MyFinalProject.Domain.Entities.MainModels
         {
             CompanyName = companyName;
             CompanyLocation = companyLocation;
+            Validation();
         }
 
         public string CompanyName { get; set; }
         public string CompanyLocation { get; set; }
         public User User { get; set; }
-        public Attach Attach { get; set; }
-        public List<Advertisement> Advertisements { get; set; } = new();
-
-        public DateTime CreatedAt { get; set; }
-        public DateTime? ModifiedAt { get; set; }
-        public bool IsDeleted { get; set; }
-        public DateTime? DeletedAt { get; set; }
+        public Guid UserId { get; set; }
+        public ICollection<Attach> Attaches { get; set; } = new List<Attach>();
+        public ICollection<Advertisement> Advertisements { get; set; } = new List<Advertisement>();
 
         public override void Validation()
         {

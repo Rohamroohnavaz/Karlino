@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,22 +10,39 @@ namespace MyFinalProject.Domain.Entities.MainModels
 {
     public class Attach : BaseEntity
     {
-        public Attach(string filePath)
+        public Attach()
+        {
+            
+        }
+
+        public Attach(string filePath, string fileName ,string contentType ,long fileSize)
         {
             FilePath = filePath;
+            FileName = fileName;
+            ContentType = contentType;
+            FileSize = fileSize;
+            Validation();
         }
 
         public string FilePath { get; set; }
-        public Guid Id { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime? ModifiedAt { get; set; }
-        public bool IsDeleted { get; set; }
-        public DateTime? DeletedAt { get; set; }
+        public string FileName { get; set; }
+        public string ContentType { get; set; }
+        public long FileSize { get; set; }
+        public Guid? AdvertisementId { get; set; }
+        public Advertisement Advertisement { get; set; }
+        public Guid? RequestResumeId { get; set; }
+        public RequestResume RequestResume { get; set; }
 
         public override void Validation()
         {
             if (string.IsNullOrWhiteSpace(FilePath))
-                throw new Exception("FilePath is null !!");
+                throw new Exception("Invalid FilePath");
+
+            if (string.IsNullOrWhiteSpace(FileName))
+                throw new Exception("Invalid FileName !!");
+
+            if (string.IsNullOrWhiteSpace(ContentType))
+                throw new Exception("Invalid ContentType !!");
         }
     }
 }
