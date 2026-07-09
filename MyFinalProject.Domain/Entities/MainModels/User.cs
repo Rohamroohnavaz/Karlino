@@ -16,11 +16,12 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         }
 
-        public User(string firstName, string lastName)
+        public User(string firstName, string lastName ,string phoneNumber)
         {
             Id = new SequentialGuid.SequentialGuid();
             FirstName = firstName;
             LastName = lastName;
+            PhoneNumber = phoneNumber;
             UserValidation();
         }
 
