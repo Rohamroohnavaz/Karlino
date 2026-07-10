@@ -16,30 +16,49 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         }
 
-        public User(string firstName, string lastName ,string phoneNumber)
+        public User(string firstName, string lastName ,string phoneNumber ,string email)
         {
             Id = new SequentialGuid.SequentialGuid();
             FirstName = firstName;
             LastName = lastName;
             PhoneNumber = phoneNumber;
+            Email = email;
             UserValidation();
         }
 
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        public string FirstName { get; private set; }
+        public string LastName { get; private set; }
         public UserRole Role { get; set; }
         public ICollection<RequestResume> RequestResumes { get; set; } = new List<RequestResume>();
         public ICollection<Attach> Attaches { get; set; } = new List<Attach>();
 
-        public DateTime CreatedAt { get; set; }
-        public DateTime? ModifiedAt { get; set; }
-        public bool IsDeleted { get; set; }
-        public DateTime? DeletedAt { get; set; }
+        public DateTime CreatedAt { get;private set; }
+        public DateTime? ModifiedAt { get; private set; }
+        public bool IsDeleted { get; private set; }
+        public DateTime? DeletedAt { get; private set; }
 
-        public void UpdateInfo(string firstName ,string lastName)
+        public void UpdateInfo(string firstName ,string lastName ,string phoneNumber ,string email)
         {
             FirstName = firstName;
             LastName = lastName;
+            PhoneNumber = phoneNumber;
+            Email = email;
+        }
+
+        public void ChangeFirstName(string newFirstName)
+        {
+            if (string.IsNullOrEmpty(newFirstName))
+                throw new Exception("FirstName is required");
+
+            FirstName = newFirstName;
+        }
+
+        public void ChangeLastName(string newLastName)
+        {
+            if (string.IsNullOrEmpty(newLastName))
+                throw new Exception("LastName is required");
+
+            LastName = newLastName;
         }
 
         public void UserValidation()
@@ -49,6 +68,11 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
             if (string.IsNullOrWhiteSpace(LastName))
                 throw new Exception("LastName is null !!");
+        }
+
+        public void SetDeleted()
+        {
+            throw new NotImplementedException();
         }
     }
 }

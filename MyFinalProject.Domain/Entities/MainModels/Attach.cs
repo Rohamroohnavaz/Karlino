@@ -24,18 +24,50 @@ namespace MyFinalProject.Domain.Entities.MainModels
             Validation();
         }
 
-        public string FilePath { get; set; }
-        public string FileName { get; set; }
-        public string ContentType { get; set; }
-        public long FileSize { get; set; }
-        public Company Company { get; set; }
-        public Guid? CompanyId { get; set; }
-        public Guid? AdvertisementId { get; set; }
-        public Advertisement Advertisement { get; set; }
-        public Guid? RequestResumeId { get; set; }
-        public RequestResume RequestResume { get; set; }
-        public User? User { get; set; }
-        public Guid? UserId { get; set; }
+        public string FilePath { get; private set; }
+        public string FileName { get; private set; }
+        public string ContentType { get; private set; }
+        public long FileSize { get; private set; }
+        public Company Company { get; private set; }
+        public Guid? CompanyId { get; private set; }
+        public Guid? AdvertisementId { get; private set; }
+        public Advertisement Advertisement { get; private set; }
+        public Guid? RequestResumeId { get; private set; }
+        public RequestResume RequestResume { get; private set; }
+        public User? User { get; private set; }
+        public Guid? UserId { get; private set; }
+
+        public void ChangeFileName(string newFileName)
+        {
+            if (string.IsNullOrWhiteSpace(newFileName))
+                throw new Exception("FileName is required !");
+
+            FileName = newFileName;
+        }
+
+        public void ChangeFilePath(string newFilePath)
+        {
+            if (string.IsNullOrWhiteSpace(newFilePath))
+                throw new Exception("FilePath is required !");
+
+            FilePath = newFilePath;
+        }
+
+        public void ChangeContentType(string newContentType)
+        {
+            if (string.IsNullOrWhiteSpace(newContentType))
+                throw new Exception("ContentType is required !");
+
+            ContentType = newContentType;
+        }
+
+        public void ChangeFileSize(long newFileSize)
+        {
+            if (newFileSize <= 0)
+                throw new Exception("FileSize is invalid !!");
+
+            FileSize = newFileSize;
+        }
 
         public override void Validation()
         {

@@ -23,15 +23,39 @@ namespace MyFinalProject.Domain.Entities.MainModels
             Validation();
         }
 
-        public string JobSeekerName { get; set; }
-        public string JobSeekerLastName { get; set; }
-        public string Skill { get; set; }
+        public string JobSeekerName { get; private set; }
+        public string JobSeekerLastName { get; private set; }
+        public string Skill { get; private set; }
         public RequestStatus Status { get; set; }
-        public User User { get; set; }
-        public Guid UserId { get; set; }
-        public Advertisement Advertisement { get; set; }
-        public Guid? AttachmentId { get; set; }
-        public Attach Attach { get; set; }
+        public User User { get; private set; }
+        public Guid UserId { get; private set; }
+        public Advertisement Advertisement { get; private set; }
+        public Guid? AttachmentId { get; private set; }
+        public Attach Attach { get; private set; }
+
+        public void ChangeJobSeekerName(string jobSeekerName)
+        {
+            if (string.IsNullOrWhiteSpace(jobSeekerName))
+                throw new Exception("JobSeekerName is required !!");
+
+            JobSeekerName = jobSeekerName;
+        }
+
+        public void ChangeJobSeekerLastName(string jobSeekerLastName)
+        {
+            if (string.IsNullOrWhiteSpace(jobSeekerLastName))
+                throw new Exception("JobSeekerLastName is required !!");
+
+            JobSeekerLastName = jobSeekerLastName;
+        }
+
+        public void ChangeSkill(string newSkill)
+        {
+            if (string.IsNullOrWhiteSpace(newSkill))
+                throw new Exception("Skill is required !!");
+
+            Skill = newSkill;
+        }
 
         public override void Validation()
         {

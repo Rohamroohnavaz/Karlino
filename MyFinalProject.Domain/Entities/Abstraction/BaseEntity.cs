@@ -8,12 +8,18 @@ namespace MyFinalProject.Domain.Entities.Abstraction
 {
     public abstract class BaseEntity : IBaseEntity
     {
-        public Guid Id { get; set; } = new SequentialGuid.SequentialGuid();
-        public DateTime CreatedAt { get; set; }
-        public DateTime? ModifiedAt { get; set; }
-        public bool IsDeleted { get; set; }
-        public DateTime? DeletedAt { get; set; }
+        public Guid Id { get; private set; } = new SequentialGuid.SequentialGuid();
+        public DateTime CreatedAt { get; private set; }
+        public DateTime? ModifiedAt { get; private set; }
+        public bool IsDeleted { get; private set; }
+        public DateTime? DeletedAt { get; private set; }
 
-        public abstract void Validation(); 
+        public void SetDeleted()
+        {
+            IsDeleted = true;
+            DeletedAt = DateTime.UtcNow;
+        }
+
+        public abstract void Validation();
     }
 }

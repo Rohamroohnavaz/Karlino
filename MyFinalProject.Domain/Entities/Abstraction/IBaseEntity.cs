@@ -8,18 +8,14 @@ namespace MyFinalProject.Domain.Entities.Abstraction
 {
     public interface IBaseEntity
     {
-        public DateTime CreatedAt { get; protected set; }
+        public DateTime CreatedAt { get; }
 
-        public DateTime? ModifiedAt { get; protected set; }
+        public DateTime? ModifiedAt { get; }
 
-        public bool IsDeleted { get; protected set; }
+        public bool IsDeleted { get; }
 
-        public DateTime? DeletedAt { get; protected set; }
+        public DateTime? DeletedAt { get; }
 
-        public void SetDeleted()
-        {
-            IsDeleted = true;
-            DeletedAt = DateTime.UtcNow;
-        }
+        public void SetDeleted();
     }
 }
