@@ -1,5 +1,6 @@
 ﻿using MyFinalProject.Domain.Entities.Abstraction;
 using MyFinalProject.Domain.Entities.Enums;
+using MyFinalProject.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,29 +11,37 @@ namespace MyFinalProject.Domain.Entities.MainModels
 {
     public class Advertisement : BaseEntity
     {
-        public Advertisement()
+        private Advertisement()
         {
-            
-        }
 
-        public Advertisement(string title ,string description ,decimal salary)
+        }
+        
+        public Advertisement(string title, string description, decimal salary
+            , string province, string city)
         {
             Title = title;
             Description = description;
             Salary = salary;
+            Province = province;
+            City = city;
             Validation();
         }
-        
+
         public string Title { get; private set; }
         public string Description { get; private set; }
         public decimal Salary { get; private set; }
         public string CompanyName { get; private set; }
+        public string Province { get; private set; }
+        public string City { get; private set; }
         public RequestResume RequestResume { get; private set; }
         public Guid? RequestResumeId { get; private set; }
         public Company Company { get; private set; }
         public Guid CompanyId { get; private set; }
         public User User { get; private set; }
         public ICollection<Attach> Attaches { get; set; } = new List<Attach>();
+        public Category Category { get; private set; }
+        public Guid? CategoryId { get; private set; }
+        public bool IsActive { get; private set; } = true;
 
         public void ChangeTitle(string newTitle)
         {
@@ -60,21 +69,40 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         public void ChangeSalary(decimal newSalary)
         {
-            if(newSalary <= 0)
+            if (newSalary <= 0)
                 throw new Exception("Salary is invalid !!");
 
             Salary = newSalary;
         }
 
+        public void ChangeCity(string newCity)
+        {
+            if (string.IsNullOrWhiteSpace(newCity))
+                throw new Exception("CityName is required !!");
+
+            City = newCity;
+        }
+
+        public void ChangeProvince(string newProvince)
+        {
+            if (string.IsNullOrWhiteSpace(newProvince))
+                throw new Exception("ProvinceName is required !!");
+
+            Province = newProvince;
+        }
+
         public override void Validation()
         {
+            if (RequestResumeId == Guid.Empty)
+                throw new InvalidGuidException("Invalid Guid !");
+
             if (string.IsNullOrWhiteSpace(Title))
                 throw new Exception();
 
             if (string.IsNullOrWhiteSpace(Description))
                 throw new Exception();
 
-            if(Salary <= 0)
+            if (Salary <= 0)
                 throw new Exception();
 
             if (string.IsNullOrWhiteSpace(CompanyName))

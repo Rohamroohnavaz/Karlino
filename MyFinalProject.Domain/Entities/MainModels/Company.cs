@@ -1,4 +1,5 @@
 ﻿using MyFinalProject.Domain.Entities.Abstraction;
+using MyFinalProject.Domain.Entities.LogManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,24 +10,32 @@ namespace MyFinalProject.Domain.Entities.MainModels
 {
     public class Company : BaseEntity
     {
-        public Company()
+        private Company()
         {
 
         }
 
-        public Company(string companyName, string companyLocation)
+        public Company(string companyName, string companyLocation, string province, string city)
         {
             CompanyName = companyName;
             CompanyLocation = companyLocation;
+            Province = province;
+            City = city;
             Validation();
         }
 
         public string CompanyName { get; private set; }
         public string CompanyLocation { get; private set; }
-        public User User { get; set; }
-        public Guid UserId { get; private set; }
+        public string Province { get; private set; }
+        public string City { get; private set; }
+        public User? User { get; set; }
+        public Guid? UserId { get; private set; }
         public ICollection<Attach> Attaches { get; set; } = new List<Attach>();
         public ICollection<Advertisement> Advertisements { get; set; } = new List<Advertisement>();
+        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+        public ICollection<CompanyFeature> CompanyFeatures { get; set; } = new List<CompanyFeature>();
+        public ICollection<Payment> Payments { get; set; } = new List<Payment>();
+        public ICollection<User> Users { get; set; } = new List<User>();
 
         public void ChangeCompanyName(string newCompanyName)
         {

@@ -19,10 +19,7 @@ namespace MyFinalProject.Infrastructure.Persistence.Configurations
 
             builder.Property(c => c.CompanyLocation)
                 .HasColumnType("NVARCHAR(250)")
-                .IsRequired();
-
-            //builder.HasMany
-           
+                .IsRequired();           
         }
     }
 }

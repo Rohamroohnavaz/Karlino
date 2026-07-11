@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using MyFinalProject.Domain.Entities.Abstraction;
 using MyFinalProject.Domain.Entities.Enums;
+using MyFinalProject.Domain.Entities.LogManager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
 {
     public class User : IdentityUser<Guid>, IBaseEntity
     {
-        public User()
+        private User()
         {
 
         }
@@ -29,8 +30,11 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
         public UserRole Role { get; set; }
+        public Company? Company { get; private set; }
+        public Guid? CompanyId { get; private set; }
         public ICollection<RequestResume> RequestResumes { get; set; } = new List<RequestResume>();
         public ICollection<Attach> Attaches { get; set; } = new List<Attach>();
+        public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 
         public DateTime CreatedAt { get;private set; }
         public DateTime? ModifiedAt { get; private set; }
@@ -72,7 +76,8 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         public void SetDeleted()
         {
-            throw new NotImplementedException();
+            IsDeleted = true;
+            DeletedAt = DateTime.UtcNow;
         }
     }
 }

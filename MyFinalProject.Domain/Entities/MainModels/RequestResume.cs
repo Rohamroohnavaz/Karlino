@@ -1,5 +1,6 @@
 ﻿using MyFinalProject.Domain.Entities.Abstraction;
 using MyFinalProject.Domain.Entities.Enums;
+using MyFinalProject.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,28 +11,33 @@ namespace MyFinalProject.Domain.Entities.MainModels
 {
     public class RequestResume : BaseEntity
     {
-        public RequestResume()
+        private RequestResume()
         {
             
         }
 
-        public RequestResume(string jobSeekerName ,string jobSeekerLastName ,string skill)
+        public RequestResume(string jobSeekerName ,string jobSeekerLastName ,string skill 
+            ,string province ,string city)
         {
             JobSeekerName = jobSeekerName;
             JobSeekerLastName = jobSeekerLastName;
             Skill = skill;
+            Province = province;
+            City = city;
             Validation();
         }
 
         public string JobSeekerName { get; private set; }
         public string JobSeekerLastName { get; private set; }
         public string Skill { get; private set; }
+        public string Province { get; private set; }
+        public string City { get; private set; }
         public RequestStatus Status { get; set; }
-        public User User { get; private set; }
-        public Guid UserId { get; private set; }
+        public User? User { get; private set; }
+        public Guid? UserId { get; private set; }
         public Advertisement Advertisement { get; private set; }
         public Guid? AttachmentId { get; private set; }
-        public Attach Attach { get; private set; }
+        public Attach? Attach { get; private set; }
 
         public void ChangeJobSeekerName(string jobSeekerName)
         {
@@ -59,6 +65,12 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         public override void Validation()
         {
+            if (UserId == Guid.Empty)
+                throw new InvalidGuidException("UserId is empty !!");
+
+            if (AttachmentId == Guid.Empty)
+                throw new InvalidGuidException("AttachmentId is empty !!");
+
             if (string.IsNullOrWhiteSpace(JobSeekerName))
                 throw new Exception("Name is null !!");
 

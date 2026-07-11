@@ -33,6 +33,11 @@ namespace MyFinalProject.Infrastructure.Persistence.Configurations
                 .WithMany(c => c.Advertisements)
                 .HasForeignKey(a => a.CompanyId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(a => a.Category)
+                .WithMany(c => c.Advertisements)
+                .HasForeignKey(a => a.CategoryId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
