@@ -1,6 +1,11 @@
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Domain.Interfaces;
 using MyFinalProject.Infrastructure;
+using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
+using MyFinalProject.Infrastructure.Repositories.MainRepositories;
 
 namespace WebLayer
 {
@@ -28,7 +33,16 @@ namespace WebLayer
                     builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
-           
+            builder.Services
+                   .AddIdentity<User, IdentityRole<Guid>>()
+                   .AddEntityFrameworkStores<FinalDbContext>()
+                   .AddDefaultTokenProviders();
+
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+            builder.Services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
+
             // Add services to the container.
 
             builder.Services.AddControllers();
