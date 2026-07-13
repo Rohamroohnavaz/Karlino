@@ -1,5 +1,6 @@
 ﻿using MyFinalProject.Domain.Entities.Abstraction;
 using MyFinalProject.Domain.Entities.LogManager;
+using MyFinalProject.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +36,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
         public ICollection<CompanyFeature> CompanyFeatures { get; set; } = new List<CompanyFeature>();
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
-        public ICollection<User> Users { get; set; } = new List<User>();
+        //public ICollection<User> Users { get; set; } = new List<User>();
 
         public void ChangeCompanyName(string newCompanyName)
         {
@@ -55,11 +56,20 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         public override void Validation()
         {
+            if (UserId == Guid.Empty)
+                throw new InvalidGuidException("UserId is required !!");
+
             if (string.IsNullOrWhiteSpace(CompanyName))
-                throw new Exception("CompanyName is null !!");
+                throw new InvalidTextException("CompanyName is null !!");
 
             if (string.IsNullOrWhiteSpace(CompanyLocation))
-                throw new Exception("We don't have any location for company !!");
+                throw new InvalidTextException("We don't have any location for company !!");
+
+            if (string.IsNullOrWhiteSpace(Province))
+                throw new InvalidTextException("We don't have any province for company !!");
+
+            if (string.IsNullOrWhiteSpace(City))
+                throw new InvalidTextException("We don't have any city for company !!");
         }
     }
 }

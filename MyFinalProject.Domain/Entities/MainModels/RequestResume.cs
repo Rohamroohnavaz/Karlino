@@ -36,6 +36,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public User? User { get; private set; }
         public Guid? UserId { get; private set; }
         public Advertisement Advertisement { get; private set; }
+        public Guid? AdvertisementId { get; private set; }
         public Guid? AttachmentId { get; private set; }
         public Attach? Attach { get; private set; }
 
@@ -70,6 +71,9 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
             if (AttachmentId == Guid.Empty)
                 throw new InvalidGuidException("AttachmentId is empty !!");
+
+            if (AdvertisementId == Guid.Empty)
+                throw new InvalidGuidException("AdvertisementId is empty !!");
 
             if (string.IsNullOrWhiteSpace(JobSeekerName))
                 throw new Exception("Name is null !!");

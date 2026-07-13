@@ -27,8 +27,23 @@ namespace MyFinalProject.Infrastructure.Persistence.Configurations
             builder.HasQueryFilter(u => !u.IsDeleted);
 
             builder.HasOne(u => u.Company)
-                .WithMany(c => c.Users)
-                .HasForeignKey(u => u.CompanyId)
+                .WithOne(c => c.User)
+                .HasForeignKey<Company>(c => c.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(u => u.Creater)
+                .WithMany()
+                .HasForeignKey(u => u.CreateById)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(u => u.Modifier)
+                .WithMany()
+                .HasForeignKey(u => u.ModifiedById)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(u => u.Deleter)
+                .WithMany()
+                .HasForeignKey(u => u.DeletedById)
                 .OnDelete(DeleteBehavior.Restrict);
         }
     }
