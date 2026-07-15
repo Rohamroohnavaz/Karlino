@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyFinalProject.Application.AuthServices
+namespace MyFinalProject.Application.Services.MainServices.AuthServices
 {
     public interface IAuthenticationService
     {
-        Task<GenericResult> GenerateToken();
+        //Task GenerateToken();
     }
 }

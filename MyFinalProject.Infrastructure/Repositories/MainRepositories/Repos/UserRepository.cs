@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Domain.Exceptions;
+using MyFinalProject.Infrastructure.RepoExceptions;
 using MyFinalProject.Infrastructure.Repositories.Generics;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
 using System;
@@ -10,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyFinalProject.Infrastructure.Repositories.MainRepositories
+namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
 {
     public class UserRepository : IUserRepository
     {
@@ -44,6 +45,15 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories
 
         }
 
+        public async Task<User?> GetUserWithPhoneNumber(string phoneNumber)
+        {
+            var findUser = await _dbContext.Users
+                .FirstOrDefaultAsync(x => x.PhoneNumber == phoneNumber);
 
+            if (findUser is null)
+                throw new InvalidUserException("We can't find !!");
+
+            return findUser;
+        }
     }
 }

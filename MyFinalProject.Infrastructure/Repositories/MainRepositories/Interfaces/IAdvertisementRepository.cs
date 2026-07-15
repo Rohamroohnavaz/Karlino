@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyFinalProject.Domain.Entities.MainModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,5 +9,8 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
 {
     public interface IAdvertisementRepository
     {
+        Task<Advertisement?> GetAdvertisementByCompanyId(Guid companyId);
+
+        Task<Advertisement?> GetCompanyAdvertisement(Guid adverId);
     }
 }

@@ -12,5 +12,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
         Task<User?> FindByName(string firstName);
 
         Task<User?> FidnByEmail(string email);
+
+        Task<User?> GetUserWithPhoneNumber(string phoneNumber);
     }
 }

@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
 {
-    public interface ICompanyRepository : IGenericRepository<Company>
+    public interface IRequestResumeRepository : IGenericRepository<RequestResume>
     {
-        Task<List<Company>> GetAllExistCompanies();
+        Task<RequestResume?> GetRequestByAdverId(Guid adverId);
 
-        Task<Company?> GetCompanyByUserId(Guid userId);
+        Task<RequestResume?> GetRequestWithAdvertisement(Guid requestId);
     }
 }

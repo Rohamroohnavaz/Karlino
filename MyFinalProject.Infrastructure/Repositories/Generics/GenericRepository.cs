@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyFinalProject.Domain.Entities.Abstraction;
+using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,18 @@ using System.Threading.Tasks;
 
 namespace MyFinalProject.Infrastructure.Repositories.Generics
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity ,IBaseEntity
+    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity, IBaseEntity
     {
         protected readonly FinalDbContext _dbContext;
+        private readonly IUnitOfWork _unitOfWork;
 
-        protected GenericRepository(FinalDbContext dbContext)
+        protected GenericRepository(FinalDbContext dbContext, IUnitOfWork unitOfWork)
+        {
+            _dbContext = dbContext;
+            _unitOfWork = unitOfWork;
+        }
+
+        public GenericRepository(FinalDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -21,15 +29,15 @@ namespace MyFinalProject.Infrastructure.Repositories.Generics
         public async Task AddAsync(T entity)
         {
             await _dbContext.Set<T>().AddAsync(entity);
-            await _dbContext.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<List<T>> QueryAsync(Expression<Func<T ,bool>> predicate 
-            ,bool tracking = false)
+        public async Task<List<T>> QueryAsync(Expression<Func<T, bool>> predicate
+            , bool tracking = false)
         {
             var query = _dbContext.Set<T>().AsQueryable();
 
-            if(!tracking)
+            if (!tracking)
                 query = query.AsNoTracking();
 
             return await query
@@ -37,11 +45,11 @@ namespace MyFinalProject.Infrastructure.Repositories.Generics
                 .ToListAsync();
         }
 
-        public async Task<T?> GetByIdAsync(Guid id ,bool tracking = false)
+        public async Task<T?> GetByIdAsync(Guid id, bool tracking = false)
         {
             var query = _dbContext.Set<T>().AsQueryable().Where(q => q.IsDeleted == false);
 
-            if(!tracking) 
+            if (!tracking)
                 query = query.AsNoTracking();
 
             return await query.FirstOrDefaultAsync(q => q.Id == id);
@@ -49,8 +57,8 @@ namespace MyFinalProject.Infrastructure.Repositories.Generics
 
         public async Task UpdateAsync(T entity)
         {
-             _dbContext.Set<T>().Update(entity);
-            await _dbContext.SaveChangesAsync();
+            _dbContext.Set<T>().Update(entity);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task HardDeleteAsync(Guid id)
@@ -60,7 +68,7 @@ namespace MyFinalProject.Infrastructure.Repositories.Generics
                 return;
 
             _dbContext.Set<T>().Remove(entity);
-            await _dbContext.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task SoftDeleteAsync(Guid id)
@@ -70,7 +78,7 @@ namespace MyFinalProject.Infrastructure.Repositories.Generics
                 return;
 
             entity.SetDeleted(id);
-            await _dbContext.SaveChangesAsync();
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

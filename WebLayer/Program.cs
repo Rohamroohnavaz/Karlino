@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Infrastructure;
 using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
-using MyFinalProject.Infrastructure.Repositories.MainRepositories;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
+using MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos;
 
 namespace WebLayer
 {
