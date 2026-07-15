@@ -39,6 +39,8 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public Guid? AdvertisementId { get; private set; }
         public Guid? AttachmentId { get; private set; }
         public Attach? Attach { get; private set; }
+        public DateTime StartDate { get; private set; }
+        public DateTime ExpireDate { get; private set; }
 
         public void ChangeJobSeekerName(string jobSeekerName)
         {

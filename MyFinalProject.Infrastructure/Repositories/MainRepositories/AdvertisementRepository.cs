@@ -1,6 +1,6 @@
 ﻿using MyFinalProject.Domain.Entities.MainModels;
-using MyFinalProject.Domain.Interfaces;
 using MyFinalProject.Infrastructure.Repositories.Generics;
+using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

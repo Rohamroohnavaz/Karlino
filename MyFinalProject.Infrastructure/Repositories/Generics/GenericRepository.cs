@@ -9,11 +9,11 @@ using System.Threading.Tasks;
 
 namespace MyFinalProject.Infrastructure.Repositories.Generics
 {
-    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity, IBaseEntity
+    public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity ,IBaseEntity
     {
-        private readonly FinalDbContext _dbContext;
+        protected readonly FinalDbContext _dbContext;
 
-        public GenericRepository(FinalDbContext dbContext)
+        protected GenericRepository(FinalDbContext dbContext)
         {
             _dbContext = dbContext;
         }

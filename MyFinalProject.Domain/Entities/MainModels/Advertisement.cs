@@ -17,13 +17,15 @@ namespace MyFinalProject.Domain.Entities.MainModels
         }
         
         public Advertisement(string title, string description, decimal salary
-            , string province, string city)
+            , string province, string city ,DateTime startDate ,DateTime expireDate)
         {
             Title = title;
             Description = description;
             Salary = salary;
             Province = province;
             City = city;
+            StartDate = startDate;
+            ExpireDate = expireDate;
             Validation();
         }
 
@@ -42,6 +44,8 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public Category Category { get; private set; }
         public Guid? CategoryId { get; private set; }
         public bool IsActive { get; private set; } = true;
+        public DateTime StartDate { get; private set; }
+        public DateTime ExpireDate { get; private set; }
 
         public void ChangeTitle(string newTitle)
         {

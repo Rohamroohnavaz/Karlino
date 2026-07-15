@@ -1,4 +1,5 @@
-﻿using MyFinalProject.Domain.Interfaces;
+﻿using MyFinalProject.Infrastructure.Repositories.MainRepositories;
+using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,9 @@ namespace MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder
         public UnitOfWork(FinalDbContext dbContext)
         {
             _dbContext = dbContext;
+
+            Companies = new CompanyRepository(dbContext);
+            Advertisements = new AdvertisementRepository(dbContext);
         }
 
         public ICompanyRepository Companies { get; set; }

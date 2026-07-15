@@ -20,6 +20,14 @@ namespace MyFinalProject.Infrastructure.Persistence.Configurations
             builder.Property(f => f.Price)
                 .IsRequired();
 
+            builder.Property(f => f.StartDate)
+                .HasColumnType("DATETIME")
+                .IsRequired();
+
+            builder.Property(f => f.ExpireDate)
+                .HasColumnType("DATETIME")
+                .IsRequired();
+
 
         }
     }

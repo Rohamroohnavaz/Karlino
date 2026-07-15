@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyFinalProject.Domain.Interfaces
+namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
 {
-    public interface IUserRepository
+    public interface IAdvertisementRepository
     {
     }
 }

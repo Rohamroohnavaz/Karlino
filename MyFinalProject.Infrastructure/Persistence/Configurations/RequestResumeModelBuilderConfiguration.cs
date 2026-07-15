@@ -21,6 +21,14 @@ namespace MyFinalProject.Infrastructure.Persistence.Configurations
                 .HasColumnType("NVARCHAR(200)")
                 .IsRequired();
 
+            builder.Property(r => r.StartDate)
+                .HasColumnType("DATETIME")
+                .IsRequired();
+
+            builder.Property(r => r.ExpireDate)
+                .HasColumnType("DATETIME")
+                .IsRequired();
+
             builder.HasOne(r => r.User)
                 .WithMany(u => u.RequestResumes)
                 .HasForeignKey(r => r.UserId)

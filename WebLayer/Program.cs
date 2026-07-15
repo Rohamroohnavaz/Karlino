@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyFinalProject.Domain.Entities.MainModels;
-using MyFinalProject.Domain.Interfaces;
 using MyFinalProject.Infrastructure;
 using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories;
+using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
 
 namespace WebLayer
 {
@@ -34,7 +34,14 @@ namespace WebLayer
             });
 
             builder.Services
-                   .AddIdentity<User, IdentityRole<Guid>>()
+                   .AddIdentity<User, IdentityRole<Guid>>(options =>
+                   {
+                       options.Password.RequiredLength = 20;
+                       options.Password.RequireDigit = true;
+                       options.Password.RequireNonAlphanumeric = true;
+                       options.Password.RequireUppercase = true;
+                       options.Password.RequireLowercase = true;
+                   })
                    .AddEntityFrameworkStores<FinalDbContext>()
                    .AddDefaultTokenProviders();
 
@@ -59,6 +66,8 @@ namespace WebLayer
             }
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

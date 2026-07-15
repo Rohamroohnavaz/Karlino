@@ -23,12 +23,14 @@ namespace MyFinalProject.Domain.Entities.MainModels.Features
             Validation();
         }
 
-        public string Name { get; set; }
-        public decimal Price { get; set; }
+        public string Name { get; private set; }
+        public decimal Price { get; private set; }
         public FeatureStatus Status { get; set; }
         public ICollection<CompanyFeature> CompanyFeatures { get; set; } = new List<CompanyFeature>();
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
-        
+        public DateTime StartDate { get; private set; }
+        public DateTime ExpireDate { get; private set; }
+       
         public override void Validation()
         {
             if (string.IsNullOrWhiteSpace(Name))

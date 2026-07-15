@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyFinalProject.Infrastructure.Repositories.Generics
 {
-    public interface IGenericRepository<T> where T : BaseEntity
+    public interface IGenericRepository<T>
     {
         Task AddAsync(T entity);
 

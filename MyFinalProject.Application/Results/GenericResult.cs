@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyFinalProject.Domain.Interfaces
+namespace MyFinalProject.Application.Results
 {
-    public interface ICompanyRepository
+    public class GenericResult
     {
+        public Guid ResultId;
     }
 }
