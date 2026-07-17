@@ -1,0 +1,44 @@
+﻿using MyFinalProject.Application.DTOs;
+using MyFinalProject.Application.Services.ServiceInterfaces;
+using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
+using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace MyFinalProject.Application.Services.MainServices
+{
+    public class RequestResumeService : IRequestResumeService
+    {
+        private readonly IRequestResumeRepository _requestRepository;
+        private readonly ICurrentUserService _currentUserService;
+        private readonly IUnitOfWork _unitOfWork;
+
+        public RequestResumeService(IRequestResumeRepository requestResumeRepository 
+            ,ICurrentUserService currentUserService
+            ,IUnitOfWork unitOfWork)
+        {
+            _requestRepository = requestResumeRepository;
+            _currentUserService = currentUserService;
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task ChangeRequestStatusAsync(ChangeRequestStatusDto dto)
+        {
+            var companyId = _currentUserService.CompanyId;
+
+            var request = await _requestRepository
+                .GetRequestResumeByCompanyId(dto.RequestResumeId, companyId);
+
+            if (request is null)
+                throw new Exception("RequestResume not found !!");
+
+            request.Status = dto.Status;
+
+            await _requestRepository.UpdateAsync(request);
+            await _unitOfWork.SaveChangesAsync();
+        }
+    }
+}
