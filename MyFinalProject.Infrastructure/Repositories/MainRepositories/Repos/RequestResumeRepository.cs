@@ -29,6 +29,15 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
             return resume;
         }
 
+        public async Task<RequestResume?> GetRequestResumeByCompanyId(Guid resumeId,Guid companyId)
+        {
+            return await _dbContext.Resumes
+                .AsNoTracking()
+                .Include(r => r.Advertisement)
+                .FirstOrDefaultAsync(r => r.Id == resumeId
+                && r.Advertisement.CompanyId == companyId);
+        }
+
         public async Task<RequestResume?> GetRequestWithAdvertisement(Guid requestId)
         {
             return await _dbContext.Resumes

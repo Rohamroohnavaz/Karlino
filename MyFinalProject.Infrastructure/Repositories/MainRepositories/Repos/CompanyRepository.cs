@@ -15,7 +15,13 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
     {
         public CompanyRepository(FinalDbContext dbContext) : base(dbContext)
         {
-            
+
+        }
+
+        public async Task<bool> ExistCompanyAsync(Guid companyId)
+        {
+            return await _dbContext.Companies
+                .AnyAsync(c => c.Id == companyId);
         }
 
         public async Task<List<Company>> GetAllExistCompanies()
@@ -31,7 +37,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 .AsNoTracking()
                 .FirstOrDefaultAsync(c => c.UserId == userId);
 
-            if(company == null)
+            if (company == null)
                 throw new InvalidCompanyException($"{nameof(company)} doesn't exist !!");
 
             return company;

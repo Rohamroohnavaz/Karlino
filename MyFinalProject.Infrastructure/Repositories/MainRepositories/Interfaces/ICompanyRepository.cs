@@ -13,5 +13,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
         Task<List<Company>> GetAllExistCompanies();
 
         Task<Company?> GetCompanyByUserId(Guid userId);
+
+        Task<bool> ExistCompanyAsync(Guid companyId);
     }
 }

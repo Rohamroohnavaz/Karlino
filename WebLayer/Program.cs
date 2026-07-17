@@ -1,11 +1,18 @@
 
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using MyFinalProject.Application;
+using MyFinalProject.Application.Services.MainServices;
+using MyFinalProject.Application.Services.ServiceInterfaces;
 using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Infrastructure;
 using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos;
+using System.Text;
 
 namespace WebLayer
 {
@@ -38,17 +45,48 @@ namespace WebLayer
                    {
                        options.Password.RequiredLength = 20;
                        options.Password.RequireDigit = true;
-                       options.Password.RequireNonAlphanumeric = true;
+                       options.Password.RequireNonAlphanumeric = false;
                        options.Password.RequireUppercase = true;
                        options.Password.RequireLowercase = true;
+
+                       options.Lockout.MaxFailedAccessAttempts = 4;
+                       options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
                    })
                    .AddEntityFrameworkStores<FinalDbContext>()
                    .AddDefaultTokenProviders();
+
+            var jwtSettings = builder.Configuration.GetSection("JwtConfigurations").Get<JwtSettings>()!;
+            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtConfigurations"));
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ClockSkew = TimeSpan.Zero,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Secret)),
+                    ValidAudience = jwtSettings.Audience,
+                    ValidateAudience = true,
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidateIssuer = true
+                };
+            });
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
             builder.Services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
+            builder.Services.AddScoped<IRequestResumeRepository, RequestResumeRepository>();
+            builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddMemoryCache();
 
             // Add services to the container.
 

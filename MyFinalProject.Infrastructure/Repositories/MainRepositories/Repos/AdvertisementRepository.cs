@@ -17,15 +17,30 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
         {
         }
 
+        public async Task<bool> ExistAdvertisementAsync(Guid adverId)
+        {
+            return await _dbContext.Advertisements
+                .AnyAsync(a => a.Id == adverId);
+        }
+
         public async Task<Advertisement?> GetAdvertisementByCompanyId(Guid companyId)
         {
             var advertisement = await _dbContext.Advertisements
-                .AsNoTracking().FirstOrDefaultAsync(a => a.CompanyId == companyId);
+                .AsNoTracking()
+                .FirstOrDefaultAsync(a => a.CompanyId == companyId);
 
             if (advertisement is null)
                 throw new InvalidAdvertisementException($"{nameof(advertisement)} doesn't exist !!");
 
             return advertisement;
+        }
+
+        public async Task<Advertisement?> GetAdvertisementWithRequestResume(Guid resumeId)
+        {
+            return await _dbContext.Advertisements
+                .AsNoTracking()
+                .Include(a => a.RequestResume)
+                .FirstOrDefaultAsync(a => a.RequestResumeId == resumeId);
         }
 
         public async Task<Advertisement?> GetCompanyAdvertisement(Guid adverId)

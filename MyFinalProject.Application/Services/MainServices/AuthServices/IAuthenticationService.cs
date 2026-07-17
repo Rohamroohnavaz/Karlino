@@ -1,4 +1,6 @@
-﻿using MyFinalProject.Application.Results;
+﻿using MyFinalProject.Application.Commands;
+using MyFinalProject.Application.Results;
+using MyFinalProject.Domain.Entities.MainModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,10 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
 {
     public interface IAuthenticationService
     {
-        //Task GenerateToken();
+        Task<RegisterResult> RegisterAsync(RegisterUserCommand command);
+
+        Task<LoginResult> LoginAsync(LoginUserCommand command);
+
+        Task<LoginResult> GenerateTokenAsync(User user);
     }
 }

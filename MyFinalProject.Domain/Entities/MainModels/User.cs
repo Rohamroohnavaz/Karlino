@@ -12,7 +12,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
 {
     public class User : IdentityUser<Guid>, IBaseEntity
     {
-        private User()
+        public User()
         {
 
         }
@@ -35,7 +35,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public ICollection<RequestResume> RequestResumes { get; set; } = new List<RequestResume>();
         public ICollection<Attach> Attaches { get; set; } = new List<Attach>();
         public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
-        public bool IsApproved { get; private set; }
+        public bool IsApproved { get; set; }
         public DateTime CreatedAt { get; private set; }
         public DateTime? ModifiedAt { get; private set; }
         public bool IsDeleted { get; private set; }

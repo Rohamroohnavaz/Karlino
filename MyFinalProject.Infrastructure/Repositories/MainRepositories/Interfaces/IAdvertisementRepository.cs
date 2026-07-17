@@ -12,5 +12,9 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
         Task<Advertisement?> GetAdvertisementByCompanyId(Guid companyId);
 
         Task<Advertisement?> GetCompanyAdvertisement(Guid adverId);
+
+        Task<Advertisement?> GetAdvertisementWithRequestResume(Guid resumeId);
+
+        Task<bool> ExistAdvertisementAsync(Guid adverId);
     }
 }
