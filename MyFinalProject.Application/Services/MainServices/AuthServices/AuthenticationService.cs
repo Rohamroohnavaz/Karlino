@@ -84,6 +84,7 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
             new(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
             new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new(ClaimTypes.Name, $"{user.FirstName} {user.LastName}"),
+            new Claim("CompanyId" , user.Id.ToString())
         };
 
             var userRoles = (await _userManager.GetRolesAsync(user))

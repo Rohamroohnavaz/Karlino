@@ -1,5 +1,4 @@
 ﻿using MyFinalProject.Application.DTOs;
-using MyFinalProject.Domain.Entities.MainModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace MyFinalProject.Application.Services.ServiceInterfaces
 {
-    public interface ICompanyService
+    public interface IRequestResumeService
     {
-        Task<CompanyDto> GetMyCompanyAsync();
+        Task ChangeRequestStatusAsync(ChangeRequestStatusDto dto);
     }
 }

@@ -13,7 +13,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
 {
     public class RequestResumeRepository : GenericRepository<RequestResume>, IRequestResumeRepository
     {
-        protected RequestResumeRepository(FinalDbContext dbContext) : base(dbContext)
+        public RequestResumeRepository(FinalDbContext dbContext) : base(dbContext)
         {
         }
 
