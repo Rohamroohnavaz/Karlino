@@ -35,7 +35,7 @@ namespace MyFinalProject.Application.Seed
             {
                 var admin = new User
                 {
-                    UserName = "admin",
+                    UserName = "System_Admin",
                     Email = adminEmail,
                     IsApproved = true,
                     EmailConfirmed = true

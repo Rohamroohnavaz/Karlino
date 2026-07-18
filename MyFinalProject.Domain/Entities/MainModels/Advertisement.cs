@@ -15,7 +15,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
         {
 
         }
-        
+
         public Advertisement(string title, string description, decimal salary
             , string province, string city ,DateTime startDate ,DateTime expireDate)
         {

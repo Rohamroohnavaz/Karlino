@@ -20,7 +20,13 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
         public async Task<bool> ExistAdvertisementAsync(Guid adverId)
         {
             return await _dbContext.Advertisements
-                .AnyAsync(a => a.Id == adverId);
+                .AnyAsync(a => a.Id == adverId); 
+        }
+
+        public async Task<bool> ExistByTitle(string title)
+        {
+            return await _dbContext.Advertisements
+                .AnyAsync (a => a.Title == title);
         }
 
         public async Task<Advertisement?> GetAdvertisementByCompanyId(Guid companyId)

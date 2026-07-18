@@ -17,6 +17,7 @@ namespace WebLayer.Controllers
             _authenticationService = authenticationService;
         }
 
+        [HttpPost("api/AddUser")]
         public async Task<IActionResult> AddUserAsync([FromBody]AddUserRequestDto dto)
         {
             var result = await _authenticationService.RegisterAsync(dto.ToCommand());
