@@ -32,7 +32,7 @@ namespace MyFinalProject.Application.Services.MainServices
                 throw new InvalidAdvertisementException("This Advertisement Already Exist !!");
 
             var advertisement = new Advertisement(dto.Title , dto.Description ,dto.Salary 
-                ,dto.Province ,dto.City ,dto.StartDate ,dto.ExpireDate);
+                ,dto.Province ,dto.City);
 
             await _advertisementRepository.AddAsync(advertisement);
 

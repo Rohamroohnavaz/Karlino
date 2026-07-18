@@ -16,12 +16,11 @@ namespace MyFinalProject.Domain.Entities.MainModels
             
         }
 
-        public RequestResume(string jobSeekerName ,string jobSeekerLastName ,string skill 
+        public RequestResume(string jobSeekerName ,string jobSeekerLastName 
             ,string province ,string city)
         {
             JobSeekerName = jobSeekerName;
             JobSeekerLastName = jobSeekerLastName;
-            Skill = skill;
             Province = province;
             City = city;
             Validation();
@@ -29,7 +28,6 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         public string JobSeekerName { get; private set; }
         public string JobSeekerLastName { get; private set; }
-        public string Skill { get; private set; }
         public string Province { get; private set; }
         public string City { get; private set; }
         public RequestStatus Status { get; set; }
@@ -58,33 +56,13 @@ namespace MyFinalProject.Domain.Entities.MainModels
             JobSeekerLastName = jobSeekerLastName;
         }
 
-        public void ChangeSkill(string newSkill)
-        {
-            if (string.IsNullOrWhiteSpace(newSkill))
-                throw new Exception("Skill is required !!");
-
-            Skill = newSkill;
-        }
-
         public override void Validation()
         {
-            if (UserId == Guid.Empty)
-                throw new InvalidGuidException("UserId is empty !!");
-
-            if (AttachmentId == Guid.Empty)
-                throw new InvalidGuidException("AttachmentId is empty !!");
-
-            if (AdvertisementId == Guid.Empty)
-                throw new InvalidGuidException("AdvertisementId is empty !!");
-
             if (string.IsNullOrWhiteSpace(JobSeekerName))
                 throw new Exception("Name is null !!");
 
             if (string.IsNullOrWhiteSpace(JobSeekerLastName))
                 throw new Exception("LastName is null !!");
-
-            if (string.IsNullOrWhiteSpace(Skill))
-                throw new Exception("Skill is null !!");
         }
     }
 }

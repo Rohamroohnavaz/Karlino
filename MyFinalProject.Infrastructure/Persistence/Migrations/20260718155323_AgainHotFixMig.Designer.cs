@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyFinalProject.Infrastructure;
 
@@ -11,9 +12,11 @@ using MyFinalProject.Infrastructure;
 namespace MyFinalProject.Infrastructure.Migrations
 {
     [DbContext(typeof(FinalDbContext))]
-    partial class FinalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260718155323_AgainHotFixMig")]
+    partial class AgainHotFixMig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -435,6 +438,9 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.Property<Guid?>("ModifiedById")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("SkillLevel")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryName")
@@ -802,9 +808,6 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.Property<int>("SkillLevel")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CreateById");
@@ -816,8 +819,6 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.HasIndex("ModifiedById");
 
                     b.HasIndex("SkillCategoryId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Skill");
                 });
@@ -1394,11 +1395,6 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .HasForeignKey("SkillCategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "User")
-                        .WithMany("Skills")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.Navigation("Creater");
 
                     b.Navigation("Deleter");
@@ -1406,8 +1402,6 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.Navigation("Modifier");
 
                     b.Navigation("SkillCategory");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.SkillCategory", b =>
@@ -1510,8 +1504,6 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.Navigation("Notifications");
 
                     b.Navigation("RequestResumes");
-
-                    b.Navigation("Skills");
                 });
 #pragma warning restore 612, 618
         }

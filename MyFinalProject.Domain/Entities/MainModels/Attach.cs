@@ -72,18 +72,6 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         public override void Validation()
         {
-            if (CompanyId == Guid.Empty)
-                throw new InvalidGuidException("CompanyId is empty !!");
-
-            if (AdvertisementId == Guid.Empty)
-                throw new InvalidGuidException("AdvertisementId is empty !!");
-
-            if (RequestResumeId == Guid.Empty)
-                throw new InvalidGuidException("RequestResumeId is empty !!");
-
-            if (UserId == Guid.Empty)
-                throw new InvalidGuidException("UserId is empty !!");
-
             if (string.IsNullOrWhiteSpace(FilePath))
                 throw new Exception("Invalid FilePath");
 

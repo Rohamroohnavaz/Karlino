@@ -35,6 +35,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public ICollection<RequestResume> RequestResumes { get; set; } = new List<RequestResume>();
         public ICollection<Attach> Attaches { get; set; } = new List<Attach>();
         public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+        public ICollection<Skill> Skills { get; set; } = new List<Skill>();
         public bool IsApproved { get; set; }
         public DateTime CreatedAt { get; private set; }
         public DateTime? ModifiedAt { get; private set; }
@@ -53,7 +54,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         public User? Deleter { get; private set; }
 
-        public void UpdateInfo(string firstName ,string lastName ,string phoneNumber ,string email)
+        public void UpdateInfo(string firstName, string lastName, string phoneNumber, string email)
         {
             FirstName = firstName;
             LastName = lastName;
@@ -84,12 +85,6 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
             if (string.IsNullOrWhiteSpace(LastName))
                 throw new Exception("LastName is null !!");
-        }
-
-        public void SetDeleted()
-        {
-            IsDeleted = true;
-            DeletedAt = DateTime.UtcNow;
         }
 
         public void SetDeleted(Guid id)

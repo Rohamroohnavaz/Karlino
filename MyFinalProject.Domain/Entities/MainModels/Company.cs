@@ -36,7 +36,6 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
         public ICollection<CompanyFeature> CompanyFeatures { get; set; } = new List<CompanyFeature>();
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
-        //public ICollection<User> Users { get; set; } = new List<User>();
 
         public void ChangeCompanyName(string newCompanyName)
         {
@@ -56,9 +55,6 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         public override void Validation()
         {
-            if (UserId == Guid.Empty)
-                throw new InvalidGuidException("UserId is required !!");
-
             if (string.IsNullOrWhiteSpace(CompanyName))
                 throw new InvalidTextException("CompanyName is null !!");
 

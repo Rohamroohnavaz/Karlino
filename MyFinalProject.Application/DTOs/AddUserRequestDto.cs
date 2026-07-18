@@ -10,7 +10,6 @@ namespace MyFinalProject.Application.DTOs
 {
     public class AddUserRequestDto
     {
-
         [Required(ErrorMessage = "First name is required.", AllowEmptyStrings = false)]
         [MinLength(3, ErrorMessage = "Firstname should be at least 3 characters long.")]
         public string FirstName { get; set; }

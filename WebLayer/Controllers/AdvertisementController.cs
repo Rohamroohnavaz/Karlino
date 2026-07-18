@@ -17,20 +17,10 @@ namespace WebLayer.Controllers
         }
 
         [HttpPost("CreateAdvertisement")]
-        public async Task<IActionResult> CreateAdver([FromBody] CreateAdvertisementDto dto)
-        {
-            try
-            {
-                //var advertisement = new Advertisement(dto.Title, dto.Description ,dto.Salary ,dto.);
-                await _advertisementService.CreateAdvertisement(dto);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return BadRequest(ex);
-            }
-
-            return Created();
+        public async Task<IActionResult> CreateAdver([FromBody]CreateAdvertisementDto dto)
+        { 
+               var result = await _advertisementService.CreateAdvertisement(dto);
+               return Ok(result);
         }
     }
 }
