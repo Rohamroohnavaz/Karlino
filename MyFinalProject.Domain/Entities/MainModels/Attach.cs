@@ -33,8 +33,6 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public Guid? CompanyId { get; private set; }
         public Guid? AdvertisementId { get; private set; }
         public Advertisement Advertisement { get; private set; }
-        public Guid? RequestResumeId { get; private set; }
-        public RequestResume RequestResume { get; private set; }
         public User? User { get; private set; }
         public Guid? UserId { get; private set; }
 

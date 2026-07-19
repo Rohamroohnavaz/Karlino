@@ -1,5 +1,6 @@
 ﻿using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.Services.ServiceInterfaces;
+using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
 using System;
@@ -39,6 +40,17 @@ namespace MyFinalProject.Application.Services.MainServices
 
             await _requestRepository.UpdateAsync(request);
             await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<List<RequestResume>> GetRequestsByAdverIdAsync(Guid advertisementId)
+        {
+            var requests = await _requestRepository.GetRequestByAdverId(advertisementId);
+
+            if (requests.Count == 0)
+                return null;
+
+            return requests;
+
         }
     }
 }

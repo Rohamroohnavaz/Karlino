@@ -35,9 +35,14 @@ namespace MyFinalProject.Infrastructure.Persistence.Configurations
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(r => r.Advertisement)
-               .WithOne(a => a.RequestResume)
-               .HasForeignKey<Advertisement>(r => r.RequestResumeId)
+               .WithMany(a => a.RequestResumes)
+               .HasForeignKey(r => r.AdvertisementId)
                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(r => r.Attach)
+                .WithOne()
+                .HasForeignKey<RequestResume>(r => r.AttachmentId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

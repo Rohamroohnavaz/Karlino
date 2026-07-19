@@ -9,6 +9,6 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
 {
     public interface IAdvertisementService
     {
-        Task<Guid> CreateAdvertisement(CreateAdvertisementDto dto);
+        Task CreateAdvertisement(CreateAdvertisementDto dto);
     }
 }

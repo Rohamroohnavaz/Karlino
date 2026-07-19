@@ -16,10 +16,12 @@ namespace MyFinalProject.Domain.Entities.MainModels.Features
 
         }
 
-        public Feature(string name ,decimal price)
+        public Feature(string name ,decimal price ,DateTime startDate ,DateTime expireDate)
         {
             Name = name;
             Price = price;
+            StartDate = startDate;
+            ExpireDate = expireDate;
             Validation();
         }
 

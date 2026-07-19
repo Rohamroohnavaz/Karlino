@@ -19,8 +19,8 @@ namespace WebLayer.Controllers
         [HttpPost("CreateAdvertisement")]
         public async Task<IActionResult> CreateAdver([FromBody]CreateAdvertisementDto dto)
         { 
-               var result = await _advertisementService.CreateAdvertisement(dto);
-               return Ok(result);
+               await _advertisementService.CreateAdvertisement(dto);
+               return Ok();
         }
     }
 }

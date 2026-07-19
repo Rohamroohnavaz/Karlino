@@ -128,6 +128,8 @@ namespace WebLayer
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ICompanyService, CompanyService>();
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+            builder.Services.AddScoped<IAdvertisementService, AdvertisementService>();
+            builder.Services.AddScoped<IRequestResumeService, RequestResumeService>();
             builder.Services.AddMemoryCache();
 
             // Add services to the container.

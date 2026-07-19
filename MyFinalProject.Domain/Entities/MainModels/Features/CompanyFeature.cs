@@ -11,13 +11,27 @@ namespace MyFinalProject.Domain.Entities.MainModels
 {
     public class CompanyFeature : BaseEntity
     {
-        public Feature? Feature { get; private set; }
-        public Guid? FeatureId { get; private set; }
-        public Company? Company { get; private set; }
-        public Guid? CompanyId { get; private set; }
+        private CompanyFeature()
+        {
+            
+        }
+
+        public CompanyFeature(Guid featureId ,Guid companyId ,DateTime startTime ,DateTime endTime)
+        {
+            FeatureId = featureId;
+            CompanyId = companyId;
+            StartTime = startTime;
+            EndTime = endTime;
+            Validation();
+        }
+
+        public Feature Feature { get; private set; }
+        public Guid FeatureId { get; private set; }
+        public Company Company { get; private set; }
+        public Guid CompanyId { get; private set; }
         public DateTime StartTime { get; private set; }
         public DateTime EndTime { get; private set; }
-        public bool IsActive => DateTime.UtcNow == EndTime;
+        public bool IsActive => DateTime.UtcNow >= EndTime;
 
         public override void Validation()
         {

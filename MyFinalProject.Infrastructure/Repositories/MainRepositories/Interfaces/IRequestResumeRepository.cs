@@ -10,7 +10,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
 {
     public interface IRequestResumeRepository : IGenericRepository<RequestResume>
     {
-        Task<RequestResume?> GetRequestByAdverId(Guid adverId);
+        Task<List<RequestResume>> GetRequestByAdverId(Guid adverId);
 
         Task<RequestResume?> GetRequestWithAdvertisement(Guid requestId);
 

@@ -17,19 +17,20 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
         {
         }
 
-        public async Task<RequestResume?> GetRequestByAdverId(Guid adverId)
+        public async Task<List<RequestResume>> GetRequestByAdverId(Guid adverId)
         {
-            var resume = await _dbContext.Resumes
-                .AsNoTracking()
-                .FirstOrDefaultAsync(r => r.AdvertisementId == adverId);
+            var requests = await _dbContext.Resumes
+               .AsNoTracking()
+               .Where(r => r.AdvertisementId == adverId)
+               .ToListAsync();
 
-            if (resume == null)
-                throw new InvalidRequestResumeException($"{nameof(resume)} doesn't exist !!");
+            if (requests == null)
+                throw new InvalidRequestResumeException($"{nameof(requests)} doesn't exist !!");
 
-            return resume;
+            return requests;
         }
 
-        public async Task<RequestResume?> GetRequestResumeByCompanyId(Guid resumeId,Guid companyId)
+        public async Task<RequestResume?> GetRequestResumeByCompanyId(Guid resumeId, Guid companyId)
         {
             return await _dbContext.Resumes
                 .AsNoTracking()

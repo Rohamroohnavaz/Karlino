@@ -41,13 +41,13 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
             return advertisement;
         }
 
-        public async Task<Advertisement?> GetAdvertisementWithRequestResume(Guid resumeId)
-        {
-            return await _dbContext.Advertisements
-                .AsNoTracking()
-                .Include(a => a.RequestResume)
-                .FirstOrDefaultAsync(a => a.RequestResumeId == resumeId);
-        }
+        //public async Task<Advertisement?> GetAdvertisementWithRequestResume(Guid resumeId)
+        //{
+        //    return await _dbContext.Advertisements
+        //        .AsNoTracking()
+        //        .Include(a => a.RequestResume)
+        //        .FirstOrDefaultAsync(a => a.RequestResumeId == resumeId);
+        //}
 
         public async Task<Advertisement?> GetCompanyAdvertisement(Guid adverId)
         {

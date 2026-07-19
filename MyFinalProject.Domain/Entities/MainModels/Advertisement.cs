@@ -11,19 +11,19 @@ namespace MyFinalProject.Domain.Entities.MainModels
 {
     public class Advertisement : BaseEntity
     {
-        private Advertisement()
-        {
-
-        }
+        private Advertisement() { }
 
         public Advertisement(string title, string description, decimal salary
-            , string province, string city)
+            , string province, string city, string companyName, Guid companyId, Guid categoryId)
         {
             Title = title;
             Description = description;
             Salary = salary;
             Province = province;
             City = city;
+            CompanyName = companyName;
+            CompanyId = companyId;
+            CategoryId = categoryId;
             //StartDate = startDate;
             //ExpireDate = expireDate;
             Validation();
@@ -35,8 +35,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public string CompanyName { get; private set; }
         public string Province { get; private set; }
         public string City { get; private set; }
-        public RequestResume? RequestResume { get; private set; }
-        public Guid? RequestResumeId { get; private set; }
+        public ICollection<RequestResume> RequestResumes { get; set; } = new List<RequestResume>();
         public Company? Company { get; private set; }
         public Guid? CompanyId { get; private set; }
         public User? User { get; private set; }

@@ -24,7 +24,7 @@ namespace MyFinalProject.Application.Services.MainServices
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<Guid> CreateAdvertisement(CreateAdvertisementDto dto)
+        public async Task CreateAdvertisement(CreateAdvertisementDto dto)
         {
             var IsfindAdvertisement = await _advertisementRepository.ExistByTitle(dto.Title);
 
@@ -32,11 +32,11 @@ namespace MyFinalProject.Application.Services.MainServices
                 throw new InvalidAdvertisementException("This Advertisement Already Exist !!");
 
             var advertisement = new Advertisement(dto.Title , dto.Description ,dto.Salary 
-                ,dto.Province ,dto.City);
+                ,dto.Province ,dto.City ,dto.CompanyName ,dto.CompanyId ,dto.CategoryId);
 
             await _advertisementRepository.AddAsync(advertisement);
 
-            return (advertisement.Id);
+           // return (advertisement.Id);
         }
     }
 }

@@ -35,12 +35,7 @@ namespace MyFinalProject.Infrastructure.Persistence.Configurations
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(a => a.Advertisement)
-                .WithMany()
-                .HasForeignKey(a => a.AdvertisementId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasOne(a => a.Advertisement)
-                .WithMany()
+                .WithMany(ad => ad.Attaches)
                 .HasForeignKey(a => a.AdvertisementId)
                 .OnDelete(DeleteBehavior.Restrict);
 

@@ -17,12 +17,18 @@ namespace MyFinalProject.Domain.Entities.MainModels
         }
 
         public RequestResume(string jobSeekerName ,string jobSeekerLastName 
-            ,string province ,string city)
+            ,string province ,string city ,DateTime startDate ,DateTime expireDate 
+            ,Guid userId ,Guid advertisementId ,Guid attachmentId)
         {
             JobSeekerName = jobSeekerName;
             JobSeekerLastName = jobSeekerLastName;
             Province = province;
             City = city;
+            StartDate = startDate;
+            ExpireDate = expireDate;
+            UserId = userId;
+            AdvertisementId = advertisementId;
+            AttachmentId = attachmentId;
             Validation();
         }
 
@@ -32,10 +38,10 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public string City { get; private set; }
         public RequestStatus Status { get; set; }
         public User? User { get; private set; }
-        public Guid? UserId { get; private set; }
+        public Guid UserId { get; private set; }
         public Advertisement Advertisement { get; private set; }
-        public Guid? AdvertisementId { get; private set; }
-        public Guid? AttachmentId { get; private set; }
+        public Guid AdvertisementId { get; private set; }
+        public Guid AttachmentId { get; private set; }
         public Attach? Attach { get; private set; }
         public DateTime StartDate { get; private set; }
         public DateTime ExpireDate { get; private set; }
@@ -56,6 +62,22 @@ namespace MyFinalProject.Domain.Entities.MainModels
             JobSeekerLastName = jobSeekerLastName;
         }
 
+        public void ChangeProvince(string province)
+        {
+            if (string.IsNullOrWhiteSpace(province))
+                throw new Exception("Province is required !!");
+
+            Province = province;
+        }
+
+        public void ChangeCity(string city)
+        {
+            if (string.IsNullOrWhiteSpace(city))
+                throw new Exception("City is required !!");
+
+            City = city;
+        }
+
         public override void Validation()
         {
             if (string.IsNullOrWhiteSpace(JobSeekerName))
@@ -63,6 +85,12 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
             if (string.IsNullOrWhiteSpace(JobSeekerLastName))
                 throw new Exception("LastName is null !!");
+
+            if (string.IsNullOrWhiteSpace(Province))
+                throw new Exception("Province is null !!");
+
+            if (string.IsNullOrWhiteSpace(City))
+                throw new Exception("City is null !!");
         }
     }
 }
