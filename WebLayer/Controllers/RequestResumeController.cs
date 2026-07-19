@@ -19,7 +19,6 @@ namespace WebLayer.Controllers
         public async Task<IActionResult> ChangeStatus([FromBody]ChangeRequestStatusDto dto)
         {
             await _requestResumeService.ChangeRequestStatusAsync(dto);
-
             return Ok();
         }
 

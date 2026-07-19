@@ -42,6 +42,27 @@ namespace MyFinalProject.Application.Services.MainServices
             await _unitOfWork.SaveChangesAsync();
         }
 
+        public async Task<RequestResume?> GetRequestByAttachId(Guid attachId)
+        {
+            var request = await _requestRepository.GetResumeByAttachId(attachId);
+
+            if (request is null)
+                throw new Exception("Your Request Not Found !!");
+
+            return request;
+        }
+
+        public async Task<RequestResume?> GetRequestByUserId()
+        {
+            var userId = _currentUserService.UserId;
+            var findRequest = await _requestRepository.GetRequestByUserId(userId);
+
+            if (findRequest is null)
+                throw new Exception("Request Not Found !!");
+
+            return findRequest;
+        }
+
         public async Task<List<RequestResume>> GetRequestsByAdverIdAsync(Guid advertisementId)
         {
             var requests = await _requestRepository.GetRequestByAdverId(advertisementId);
@@ -50,7 +71,6 @@ namespace MyFinalProject.Application.Services.MainServices
                 return null;
 
             return requests;
-
         }
     }
 }

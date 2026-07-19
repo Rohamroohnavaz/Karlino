@@ -48,7 +48,7 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
 
             var result = await _userManager.CreateAsync(user, command.Password);
             var roleManaging = await _userManager.AddToRoleAsync(user, RoleConstants.UserRole);
-
+            
             if (!result.Succeeded)
                 throw new RegistrationUserException(result.Errors.FirstOrDefault()?.Description ?? "Registration Failed !!");
 

@@ -13,5 +13,9 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
         Task ChangeRequestStatusAsync(ChangeRequestStatusDto dto);
 
         Task<List<RequestResume>> GetRequestsByAdverIdAsync(Guid advertisementId);
+
+        Task<RequestResume?> GetRequestByUserId();
+
+        Task<RequestResume?> GetRequestByAttachId(Guid attachId);
     }
 }

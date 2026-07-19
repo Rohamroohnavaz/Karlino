@@ -30,6 +30,13 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
             return requests;
         }
 
+        public async Task<RequestResume?> GetRequestByUserId(Guid userId)
+        {
+            return await _dbContext.Resumes
+                .AsNoTracking()
+                .FirstOrDefaultAsync(r => r.UserId == userId && r.IsDeleted == false);
+        }
+
         public async Task<RequestResume?> GetRequestResumeByCompanyId(Guid resumeId, Guid companyId)
         {
             return await _dbContext.Resumes
@@ -45,6 +52,24 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 .AsNoTracking()
                 .Include(r => r.Advertisement)
                 .FirstOrDefaultAsync(r => r.Id == requestId);
+        }
+
+        public async Task<RequestResume?> GetRequestWithAttachmentByUserId(Guid requestId, Guid userId)
+        {
+            return await _dbContext.Resumes
+                .AsNoTracking()
+                .Include(r => r.Attach)
+                .FirstOrDefaultAsync(r => r.Id == requestId 
+                && r.UserId == userId 
+                && r.IsDeleted == false);
+        }
+
+        public async Task<RequestResume?> GetResumeByAttachId(Guid attachId)
+        {
+            return await _dbContext.Resumes
+                .AsNoTracking()
+                .Include(r => r.Attach)
+                .FirstOrDefaultAsync(r => r.AttachmentId == attachId && r.IsDeleted == false);
         }
     }
 }

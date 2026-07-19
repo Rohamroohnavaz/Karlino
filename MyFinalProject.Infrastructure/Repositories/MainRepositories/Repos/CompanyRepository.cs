@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Infrastructure.DTO;
 using MyFinalProject.Infrastructure.RepoExceptions;
 using MyFinalProject.Infrastructure.Repositories.Generics;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
@@ -18,10 +19,17 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
 
         }
 
+        public async Task CreateCompanyAsync(CreateCompanyDto dto)
+        {
+            var company = new Company(dto.CompanyName, dto.CompanyLocation, dto.Province, dto.City);
+               
+            await _dbContext.AddAsync(company);
+        }
+
         public async Task<bool> ExistCompanyAsync(Guid companyId)
         {
             return await _dbContext.Companies
-                .AnyAsync(c => c.Id == companyId);
+                .AnyAsync(c => c.Id == companyId && c.IsDeleted == false);
         }
 
         public async Task<List<Company>> GetAllExistCompanies()

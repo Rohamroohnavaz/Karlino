@@ -1,5 +1,6 @@
 ﻿using MyFinalProject.Application.DTOs;
 using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Infrastructure.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,7 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
     public interface ICompanyService
     {
         Task<CompanyDto> GetMyCompanyAsync();
+        
+        Task CreateNewCompanyAsync(CreateCompanyDto dto ,Guid companyId);
     }
 }

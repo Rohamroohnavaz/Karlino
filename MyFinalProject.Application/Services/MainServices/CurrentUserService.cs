@@ -12,7 +12,7 @@ namespace MyFinalProject.Application.Services.MainServices
     public class CurrentUserService : ICurrentUserService
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
-
+       
         public Guid UserId
             => Guid.Parse(_httpContextAccessor.HttpContext!.User
                 .FindFirst(ClaimTypes.NameIdentifier)!.Value);
@@ -24,7 +24,5 @@ namespace MyFinalProject.Application.Services.MainServices
 
         public string? Role
             => _httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Role)?.Value;
-
-        
     }
 }

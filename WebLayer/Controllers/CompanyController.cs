@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.Services.ServiceInterfaces;
+using MyFinalProject.Infrastructure.DTO;
 
 namespace WebLayer.Controllers
 {
@@ -23,6 +25,14 @@ namespace WebLayer.Controllers
                 return NotFound();
 
             return Ok(company);
+        }
+
+        [HttpPost("/CreateCompany")]
+        public async Task<IActionResult> AddNewCompany([FromBody] CreateCompanyDto dto,
+            [FromRoute] Guid companyId)
+        {
+            await _companyService.CreateNewCompanyAsync(dto, companyId);
+            return Ok();
         }
     }
 }

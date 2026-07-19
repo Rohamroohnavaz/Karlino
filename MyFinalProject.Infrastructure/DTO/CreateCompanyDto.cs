@@ -5,15 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyFinalProject.Application.DTOs
+namespace MyFinalProject.Infrastructure.DTO
 {
-    public class CompanyDto
+    public class CreateCompanyDto
     {
         [Required(ErrorMessage = "CompanyId is required !!")]
         public Guid Id { get; set; }
 
-        [Required(ErrorMessage = "CompanyName is required !!",AllowEmptyStrings = false)]
-        [MinLength(8 ,ErrorMessage = "CompanyName should be at least 8 characters long.")]
+        [Required(ErrorMessage = "CompanyName is required !!", AllowEmptyStrings = false)]
+        [MinLength(8, ErrorMessage = "CompanyName should be at least 8 characters long.")]
         public string CompanyName { get; set; }
 
         [Required(ErrorMessage = "CompanyLocation is required !!", AllowEmptyStrings = false)]

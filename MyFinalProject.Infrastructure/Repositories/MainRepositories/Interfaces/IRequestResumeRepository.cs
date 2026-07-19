@@ -15,5 +15,11 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
         Task<RequestResume?> GetRequestWithAdvertisement(Guid requestId);
 
         Task<RequestResume?> GetRequestResumeByCompanyId(Guid resumeId,Guid companyId);
+
+        Task<RequestResume?> GetResumeByAttachId(Guid attachId);
+
+        Task<RequestResume?> GetRequestByUserId(Guid userId);
+
+        Task<RequestResume?> GetRequestWithAttachmentByUserId(Guid requestId, Guid userId);
     }
 }

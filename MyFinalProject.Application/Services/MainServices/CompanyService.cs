@@ -2,7 +2,9 @@
 using MyFinalProject.Application.ServiceExceptions;
 using MyFinalProject.Application.Services.ServiceInterfaces;
 using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Infrastructure.DTO;
 using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
+using MyFinalProject.Infrastructure.RepoExceptions;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -27,6 +29,18 @@ namespace MyFinalProject.Application.Services.MainServices
             _unitOfWork = unitOfWork;
         }
 
+        public async Task CreateNewCompanyAsync(CreateCompanyDto dto, Guid companyId)
+        {
+            var existCompany = await _companyRepository.ExistCompanyAsync(companyId);
+
+            if (existCompany)
+                throw new InvalidCompanyException("This Company Is Already Exist !");
+
+            var newCompany = new Company(dto.CompanyName, dto.CompanyLocation, dto.Province, dto.City);
+            
+            await _companyRepository.AddAsync(newCompany);
+        }
+
         public async Task<CompanyDto> GetMyCompanyAsync()
         {
             var company = await _companyRepository.GetCompanyByUserId(_currentUser.UserId);
@@ -43,5 +57,8 @@ namespace MyFinalProject.Application.Services.MainServices
                 City = company.City
             };
         }
+
+
+
     }
 }
