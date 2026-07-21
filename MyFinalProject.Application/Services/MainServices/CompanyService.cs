@@ -39,6 +39,7 @@ namespace MyFinalProject.Application.Services.MainServices
             var newCompany = new Company(dto.CompanyName, dto.CompanyLocation, dto.Province, dto.City);
             
             await _companyRepository.AddAsync(newCompany);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<CompanyDto> GetMyCompanyAsync()

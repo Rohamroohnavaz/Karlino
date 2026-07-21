@@ -1,4 +1,5 @@
 ﻿using MyFinalProject.Application.DTOs;
+using MyFinalProject.Application.ServiceExceptions;
 using MyFinalProject.Application.Services.ServiceInterfaces;
 using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
@@ -16,14 +17,17 @@ namespace MyFinalProject.Application.Services.MainServices
         private readonly IRequestResumeRepository _requestRepository;
         private readonly ICurrentUserService _currentUserService;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IAttachService _attachService;
 
-        public RequestResumeService(IRequestResumeRepository requestResumeRepository 
-            ,ICurrentUserService currentUserService
-            ,IUnitOfWork unitOfWork)
+        public RequestResumeService(IRequestResumeRepository requestResumeRepository
+            , ICurrentUserService currentUserService
+            , IUnitOfWork unitOfWork
+            , IAttachService attachService)
         {
             _requestRepository = requestResumeRepository;
             _currentUserService = currentUserService;
             _unitOfWork = unitOfWork;
+            _attachService = attachService;
         }
 
         public async Task ChangeRequestStatusAsync(ChangeRequestStatusDto dto)
@@ -71,6 +75,46 @@ namespace MyFinalProject.Application.Services.MainServices
                 return null;
 
             return requests;
+        }
+
+        public async Task UploadFileAttach(Guid requestId, UploadAttachDto dto)
+        {
+            var userId = _currentUserService.UserId;
+
+            var request = await _requestRepository.GetRequestWithAttachmentByUserId(requestId, userId);
+
+            if (request is null)
+                throw new PermissionDeniedException("Request is required !");
+
+            if (request.AttachmentId.HasValue)
+                throw new Exception("");
+
+            var attach = await _attachService.CreateAttachAsync(dto);
+
+            request.SetAttach(attach.Id, attach);
+
+            await _requestRepository.UpdateAsync(request);
+        }
+
+        public async Task ReplaceFileAttach(Guid requestId, UploadAttachDto dto)
+        {
+            var userId = _currentUserService.UserId;
+            var request = await _requestRepository.GetRequestWithAttachmentByUserId(requestId, userId);
+
+            if (request is null)
+                throw new PermissionDeniedException("Request not found !!");
+
+            if (request.Attach is not null)
+            {
+                await _attachService.DeleteAttachAsync(request.Attach.Id);
+                request.AttachmentId = null;
+            }
+
+            var newAttach = await _attachService.CreateAttachAsync(dto);
+
+            request.SetAttach(newAttach.Id, newAttach);
+
+            await _requestRepository.UpdateAsync(request);
         }
     }
 }

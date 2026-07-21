@@ -17,5 +17,9 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
         Task<RequestResume?> GetRequestByUserId();
 
         Task<RequestResume?> GetRequestByAttachId(Guid attachId);
+
+        Task UploadFileAttach(Guid requestId, UploadAttachDto dto);
+
+        Task ReplaceFileAttach(Guid requestId, UploadAttachDto dto);
     }
 }

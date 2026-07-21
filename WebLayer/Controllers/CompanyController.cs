@@ -16,7 +16,7 @@ namespace WebLayer.Controllers
             _companyService = companyService;
         }
 
-        [HttpGet]
+        [HttpGet("/GetMyCompany")]
         public async Task<IActionResult> GetMyCompany()
         {
             var company = await _companyService.GetMyCompanyAsync();

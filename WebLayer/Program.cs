@@ -1,4 +1,3 @@
-
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -124,13 +123,14 @@ namespace WebLayer
             builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
             builder.Services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
             builder.Services.AddScoped<IRequestResumeRepository, RequestResumeRepository>();
+            builder.Services.AddScoped<IAttachRepository, AttachRepository>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ICompanyService, CompanyService>();
             builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
             builder.Services.AddScoped<IAdvertisementService, AdvertisementService>();
             builder.Services.AddScoped<IRequestResumeService, RequestResumeService>();
-            builder.Services.AddMemoryCache();
+            builder.Services.AddScoped<IAttachService, AttachService>();
 
             // Add services to the container.
 

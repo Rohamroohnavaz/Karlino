@@ -13,7 +13,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
 {
     public class AttachRepository : GenericRepository<Attach>, IAttachRepository
     {
-        protected AttachRepository(FinalDbContext dbContext) : base(dbContext)
+        public AttachRepository(FinalDbContext dbContext) : base(dbContext)
         {
         }
 

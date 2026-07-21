@@ -45,7 +45,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
         //{
         //    return await _dbContext.Advertisements
         //        .AsNoTracking()
-        //        .Include(a => a.RequestResume)
+        //        .Include(a => a.RequestResumes)
         //        .FirstOrDefaultAsync(a => a.RequestResumeId == resumeId);
         //}
 

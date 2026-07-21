@@ -28,5 +28,11 @@ namespace WebLayer.Controllers
             var result = await _requestResumeService.GetRequestsByAdverIdAsync(advertisementId);
             return Ok(result);
         }
+
+        //[HttpGet("/GetRequests/{requesterId}")]
+        //public async Task<IActionResult> GetRequestByRequestId([FromRoute] Guid requesterId)
+        //{
+        //    var request = await _requestResumeService.getrequ
+        //}
     }
 }

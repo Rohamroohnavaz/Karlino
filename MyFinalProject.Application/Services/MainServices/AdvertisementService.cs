@@ -35,6 +35,7 @@ namespace MyFinalProject.Application.Services.MainServices
                 ,dto.Province ,dto.City ,dto.CompanyName ,dto.CompanyId ,dto.CategoryId);
 
             await _advertisementRepository.AddAsync(advertisement);
+            await _unitOfWork.SaveChangesAsync();
 
            // return (advertisement.Id);
         }

@@ -46,6 +46,14 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 && r.Advertisement.CompanyId == companyId);
         }
 
+        public async Task<RequestResume?> GetRequestResumeWithAttachByCompanyId(Guid resumeId, Guid companyId)
+        {
+            return await _dbContext.Resumes
+                .AsNoTracking()
+                .Include(r => r.Attach)
+                .FirstOrDefaultAsync(r => r.Id == resumeId && r.Attach.CompanyId == companyId);
+        }
+
         public async Task<RequestResume?> GetRequestWithAdvertisement(Guid requestId)
         {
             return await _dbContext.Resumes
@@ -54,13 +62,21 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 .FirstOrDefaultAsync(r => r.Id == requestId);
         }
 
+        public async Task<RequestResume?> GetRequestWithAttach(Guid requestId)
+        {
+            return await _dbContext.Resumes
+                .AsNoTracking()
+                .Include(r => r.Attach)
+                .FirstOrDefaultAsync(r => r.Id == requestId);
+        }
+
         public async Task<RequestResume?> GetRequestWithAttachmentByUserId(Guid requestId, Guid userId)
         {
             return await _dbContext.Resumes
                 .AsNoTracking()
                 .Include(r => r.Attach)
-                .FirstOrDefaultAsync(r => r.Id == requestId 
-                && r.UserId == userId 
+                .FirstOrDefaultAsync(r => r.Id == requestId
+                && r.UserId == userId
                 && r.IsDeleted == false);
         }
 
