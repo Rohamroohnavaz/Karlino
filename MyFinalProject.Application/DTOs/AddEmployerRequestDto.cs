@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MyFinalProject.Application.DTOs
 {
-    public class AddUserRequestDto
+    public class AddEmployerRequestDto
     {
         [Required(ErrorMessage = "First name is required.", AllowEmptyStrings = false)]
         [MinLength(3, ErrorMessage = "Firstname should be at least 3 characters long.")]
@@ -19,18 +19,17 @@ namespace MyFinalProject.Application.DTOs
         [MinLength(3, ErrorMessage = "Last Name should be at least 3 characters long.")]
         public string LastName { get; set; }
 
-        
         public string PhoneNumber { get; set; }
-
 
         public string Email { get; set; }
 
+        public string Username { get; set; }
 
         public string Password { get; set; }
 
-        public RegisterUserCommand ToCommand()
+        public RegisterEmployerCommand ToCommand()
         {
-            return new RegisterUserCommand(FirstName, LastName, PhoneNumber, Email, Password);
+            return new RegisterEmployerCommand(FirstName, LastName, PhoneNumber, Email, Password ,Username);
         }
     }
 }

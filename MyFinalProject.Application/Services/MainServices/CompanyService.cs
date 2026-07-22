@@ -61,7 +61,7 @@ namespace MyFinalProject.Application.Services.MainServices
             var company = await _companyRepository.GetCompanyByUserId(_currentUser.UserId);
 
             if (company == null)
-                throw new CompanyNotFoundException("Company Not Found !!");
+                throw new CompanyNotFoundException();
 
             return new CompanyDto
             {
@@ -72,8 +72,5 @@ namespace MyFinalProject.Application.Services.MainServices
                 City = company.City
             };
         }
-
-
-
     }
 }

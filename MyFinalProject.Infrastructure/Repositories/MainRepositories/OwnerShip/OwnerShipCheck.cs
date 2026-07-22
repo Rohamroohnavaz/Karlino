@@ -21,5 +21,9 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.OwnerShip
             return await _dbContext.Advertisements
                 .AnyAsync(a => a.Id == advertisementId && a.CompanyId == companyId);
         }
+
+        //public Task<bool> IsOwnerShipOfAttach(Guid attachId)
+        //{
+        //}
     }
 }

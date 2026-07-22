@@ -37,22 +37,36 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
             _jwtSettings = jwtSettings;
         }
 
-        public async Task<RegisterResult> RegisterAsync(RegisterUserCommand command)
+        public async Task<RegisterResult> RegisterEmployerAsync(RegisterEmployerCommand command)
         {
-            var findUser = await _userManager.FindByNameAsync(command.Firstname);
+            var findEmployer = await _userManager.FindByNameAsync(command.Firstname);
 
-            if (findUser != null)
-                throw new DuplicateUserException(command.Firstname);
+            if (findEmployer != null)
+                throw new PermissionDeniedException();
 
-            var user = new User(command.Firstname, command.Lastname, command.Phonenumber, command.Email);
+            var newEmployer = new User(command.Firstname, command.Lastname, command.Phonenumber, command.Email);
+            var roleManage = _userManager.AddToRoleAsync(newEmployer, RoleConstants.EmployerRole.ToString());
 
-            var result = await _userManager.CreateAsync(user, command.Password);
-            var roleManaging = await _userManager.AddToRoleAsync(user, RoleConstants.EmployerRole);
-            
-            if (!result.Succeeded)
-                throw new RegistrationUserException(result.Errors.FirstOrDefault()?.Description ?? "Registration Failed !!");
+            newEmployer.Role = UserRole.Employer;
+            newEmployer.IsApproved = true;
 
-            return new RegisterResult(user.Id);
+            return new RegisterResult(newEmployer.Id);
+        }
+
+        public async Task<RegisterResult> RegisterJobSeekerAsync(RegisterJobSeekerCommand command)
+        {
+            var findJobSeeker = await _userManager.FindByNameAsync(command.Firstname);
+
+            if (findJobSeeker != null)
+                throw new PermissionDeniedException();
+
+            var newJobSeeker = new User(command.Firstname, command.Lastname, command.Phonenumber, command.Email);
+            var roleManage = _userManager.AddToRoleAsync(newJobSeeker, RoleConstants.JobSeekerRole.ToString());
+
+            newJobSeeker.Role = UserRole.Employer;
+            newJobSeeker.IsApproved = true;
+
+            return new RegisterResult(newJobSeeker.Id);
         }
 
         public async Task<LoginResult> LoginAsync(LoginUserCommand command)
@@ -64,7 +78,7 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
                 throw new AuthenticationException("User is locked out. Please try again 15 minutes later.");
 
             if (result.IsNotAllowed)
-                throw new PermissionDeniedException("Invalid Password !!");
+                throw new PermissionDeniedException();
 
             if (!result.Succeeded)
                 throw new AuthenticationException("Invalid username or password.");
@@ -122,5 +136,7 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
             var expiresInSeconds = expiresIn.Subtract(DateTime.UtcNow).TotalSeconds;
             return new LoginResult(accessToken, expiresInSeconds);
         }
+
+        
     }
 }

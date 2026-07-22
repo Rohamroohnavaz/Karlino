@@ -85,7 +85,7 @@ namespace MyFinalProject.Application.Services.MainServices
             var request = await _requestRepository.GetRequestWithAttachmentByUserId(requestId, userId);
 
             if (request is null)
-                throw new PermissionDeniedException("Request is required !");
+                throw new PermissionDeniedException();
 
             if (request.AttachmentId.HasValue)
                 throw new Exception("");
@@ -95,6 +95,7 @@ namespace MyFinalProject.Application.Services.MainServices
             request.SetAttach(attach.Id, attach);
 
             await _requestRepository.UpdateAsync(request);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task ReplaceFileAttachAsync(Guid requestId, UploadAttachDto dto)
@@ -103,7 +104,7 @@ namespace MyFinalProject.Application.Services.MainServices
             var request = await _requestRepository.GetRequestWithAttachmentByUserId(requestId, userId);
 
             if (request is null)
-                throw new PermissionDeniedException("Request not found !!");
+                throw new PermissionDeniedException();
 
             if (request.Attach is not null)
             {
@@ -116,6 +117,7 @@ namespace MyFinalProject.Application.Services.MainServices
             request.SetAttach(newAttach.Id, newAttach);
 
             await _requestRepository.UpdateAsync(request);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<RequestResume?> GetRequestResumeWithAttachByCompanyIdAsync(Guid resumeId, Guid companyId)

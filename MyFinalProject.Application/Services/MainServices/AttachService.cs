@@ -31,6 +31,7 @@ namespace MyFinalProject.Application.Services.MainServices
             var attach = new Attach(dto.FilePath ,dto.FileName ,dto.ContentType ,dto.FileSize);
 
             await _attachRepository.AddAsync(attach);
+            await _unitOfWork.SaveChangesAsync();
 
             return attach;
         }

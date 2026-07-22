@@ -11,7 +11,9 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
 {
     public interface IAuthenticationService
     {
-        Task<RegisterResult> RegisterAsync(RegisterUserCommand command);
+        Task<RegisterResult> RegisterEmployerAsync(RegisterEmployerCommand command);
+
+        Task<RegisterResult> RegisterJobSeekerAsync(RegisterJobSeekerCommand command);
 
         Task<LoginResult> LoginAsync(LoginUserCommand command);
 

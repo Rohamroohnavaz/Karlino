@@ -17,10 +17,17 @@ namespace WebLayer.Controllers
             _authenticationService = authenticationService;
         }
 
-        [HttpPost("api/Register")]
-        public async Task<IActionResult> AddUserAsync([FromBody]AddUserRequestDto dto)
+        [HttpPost("api/RegisterEmployer")]
+        public async Task<IActionResult> AddEmployer([FromBody]AddEmployerRequestDto dto)
         {
-            var result = await _authenticationService.RegisterAsync(dto.ToCommand());
+            var result = await _authenticationService.RegisterEmployerAsync(dto.ToCommand());
+            return Ok(result);
+        }
+
+        [HttpPost("api/RegisterJobSeeker")]
+        public async Task<IActionResult> AddJobSeeker([FromBody]AddEmployerRequestDto dto)
+        {
+            var result = await _authenticationService.RegisterEmployerAsync(dto.ToCommand());
             return Ok(result);
         }
 

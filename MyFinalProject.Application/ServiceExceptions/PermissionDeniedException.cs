@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace MyFinalProject.Application.ServiceExceptions
 {
-    public class PermissionDeniedException : Exception
+    public class PermissionDeniedException : BaseBussinessException
     {
-        public PermissionDeniedException(string message) : base(message)
+        public PermissionDeniedException(Exception? innerException = null)
+            : base("Can't Access This Resource", "403", innerException)
         {
-            
+
         }
     }
 }

@@ -3,6 +3,7 @@ using MyFinalProject.Domain.Entities.MainModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +13,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
     {
         Task<User?> FindByName(string firstName);
 
-        Task<User?> FidnByEmail(string email);
+        Task<User?> FindByEmail(string email);
 
         Task<User?> GetUserWithPhoneNumber(string phoneNumber);
 
