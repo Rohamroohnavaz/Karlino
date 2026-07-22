@@ -9,10 +9,6 @@ namespace MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder
 {
     public interface IUnitOfWork
     {
-        ICompanyRepository Companies { get; }
-
-        IAdvertisementRepository Advertisements { get; }
-
         Task<int> SaveChangesAsync();
     }
 }

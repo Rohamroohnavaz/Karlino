@@ -17,11 +17,13 @@ namespace WebLayer.Controllers
             _authenticationService = authenticationService;
         }
 
-        [HttpPost("api/AddUser")]
+        [HttpPost("api/Register")]
         public async Task<IActionResult> AddUserAsync([FromBody]AddUserRequestDto dto)
         {
             var result = await _authenticationService.RegisterAsync(dto.ToCommand());
             return Ok(result);
         }
+
+
     }
 }

@@ -8,5 +8,6 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
 {
     public interface IUserService
     {
+
     }
 }

@@ -23,12 +23,12 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
     {
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly RoleManager<User> _roleManager;
+        private readonly RoleManager<IdentityRole<Guid>> _roleManager;
         private readonly JwtSettings _jwtSettings;
 
         public AuthenticationService(UserManager<User> userManager,
             SignInManager<User> signInManager,
-            RoleManager<User> roleManager,
+            RoleManager<IdentityRole<Guid>> roleManager,
             JwtSettings jwtSettings)
         {
             _userManager = userManager;
@@ -47,7 +47,7 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
             var user = new User(command.Firstname, command.Lastname, command.Phonenumber, command.Email);
 
             var result = await _userManager.CreateAsync(user, command.Password);
-            var roleManaging = await _userManager.AddToRoleAsync(user, RoleConstants.UserRole);
+            var roleManaging = await _userManager.AddToRoleAsync(user, RoleConstants.EmployerRole);
             
             if (!result.Succeeded)
                 throw new RegistrationUserException(result.Errors.FirstOrDefault()?.Description ?? "Registration Failed !!");
@@ -92,8 +92,12 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
 
             foreach (var claim in userRoles)
             {
-                var role = _roleManager.Roles.FirstOrDefault(r => r.FirstName == claim.Value);
-                var roleClaims = await _roleManager.GetClaimsAsync(role!);
+                var role = _roleManager.Roles.FirstOrDefault(r => r.Name == claim.Value);
+
+                if (role is null)
+                    continue;
+
+                var roleClaims = await _roleManager.GetClaimsAsync(role);
                 claims.AddRange(roleClaims);
             }
 

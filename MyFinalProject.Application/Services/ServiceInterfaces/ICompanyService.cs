@@ -14,5 +14,7 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
         Task<CompanyDto> GetMyCompanyAsync();
         
         Task CreateNewCompanyAsync(CreateCompanyDto dto ,Guid companyId);
+
+        Task<List<CompanyDto>> GetAllActiveCompanies();
     }
 }

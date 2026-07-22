@@ -14,12 +14,14 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
 
         Task<List<RequestResume>> GetRequestsByAdverIdAsync(Guid advertisementId);
 
-        Task<RequestResume?> GetRequestByUserId();
+        Task<RequestResume?> GetRequestByUserIdAsync();
 
-        Task<RequestResume?> GetRequestByAttachId(Guid attachId);
+        Task<RequestResume?> GetRequestByAttachIdAsync(Guid attachId);
 
-        Task UploadFileAttach(Guid requestId, UploadAttachDto dto);
+        Task UploadFileAttachAsync(Guid requestId, UploadAttachDto dto);
 
-        Task ReplaceFileAttach(Guid requestId, UploadAttachDto dto);
+        Task ReplaceFileAttachAsync(Guid requestId, UploadAttachDto dto);
+
+        Task<RequestResume?> GetRequestResumeWithAttachByCompanyIdAsync(Guid resumeId, Guid companyId);
     }
 }

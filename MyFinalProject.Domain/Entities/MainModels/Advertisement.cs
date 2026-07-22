@@ -28,7 +28,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
             //ExpireDate = expireDate;
             Validation();
         }
-
+        
         public string Title { get; private set; }
         public string Description { get; private set; }
         public decimal Salary { get; private set; }

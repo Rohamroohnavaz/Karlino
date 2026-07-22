@@ -3,6 +3,7 @@ using MyFinalProject.Application.ServiceExceptions;
 using MyFinalProject.Application.Services.ServiceInterfaces;
 using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
+using MyFinalProject.Infrastructure.RepoExceptions;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -38,7 +39,7 @@ namespace MyFinalProject.Application.Services.MainServices
                 .GetRequestResumeByCompanyId(dto.RequestResumeId, companyId);
 
             if (request is null)
-                throw new Exception("RequestResume not found !!");
+                throw new InvalidRequestResumeException("RequestResume not found !!");
 
             request.Status = dto.Status;
 
@@ -46,23 +47,23 @@ namespace MyFinalProject.Application.Services.MainServices
             await _unitOfWork.SaveChangesAsync();
         }
 
-        public async Task<RequestResume?> GetRequestByAttachId(Guid attachId)
+        public async Task<RequestResume?> GetRequestByAttachIdAsync(Guid attachId)
         {
             var request = await _requestRepository.GetResumeByAttachId(attachId);
 
             if (request is null)
-                throw new Exception("Your Request Not Found !!");
+                throw new InvalidRequestResumeException("Your Request Not Found !!");
 
             return request;
         }
 
-        public async Task<RequestResume?> GetRequestByUserId()
+        public async Task<RequestResume?> GetRequestByUserIdAsync()
         {
             var userId = _currentUserService.UserId;
             var findRequest = await _requestRepository.GetRequestByUserId(userId);
 
             if (findRequest is null)
-                throw new Exception("Request Not Found !!");
+                throw new InvalidRequestResumeException("Request Not Found !!");
 
             return findRequest;
         }
@@ -77,7 +78,7 @@ namespace MyFinalProject.Application.Services.MainServices
             return requests;
         }
 
-        public async Task UploadFileAttach(Guid requestId, UploadAttachDto dto)
+        public async Task UploadFileAttachAsync(Guid requestId, UploadAttachDto dto)
         {
             var userId = _currentUserService.UserId;
 
@@ -96,7 +97,7 @@ namespace MyFinalProject.Application.Services.MainServices
             await _requestRepository.UpdateAsync(request);
         }
 
-        public async Task ReplaceFileAttach(Guid requestId, UploadAttachDto dto)
+        public async Task ReplaceFileAttachAsync(Guid requestId, UploadAttachDto dto)
         {
             var userId = _currentUserService.UserId;
             var request = await _requestRepository.GetRequestWithAttachmentByUserId(requestId, userId);
@@ -115,6 +116,16 @@ namespace MyFinalProject.Application.Services.MainServices
             request.SetAttach(newAttach.Id, newAttach);
 
             await _requestRepository.UpdateAsync(request);
+        }
+
+        public async Task<RequestResume?> GetRequestResumeWithAttachByCompanyIdAsync(Guid resumeId, Guid companyId)
+        {
+            var request = await _requestRepository.GetRequestResumeWithAttachByCompanyId(resumeId, companyId);
+
+            if (request is null)
+                throw new InvalidRequestResumeException("Request With Attach Not Found !!");
+
+            return request;
         }
     }
 }

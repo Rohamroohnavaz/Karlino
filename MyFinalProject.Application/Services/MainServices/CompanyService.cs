@@ -42,6 +42,20 @@ namespace MyFinalProject.Application.Services.MainServices
             await _unitOfWork.SaveChangesAsync();
         }
 
+        public async Task<List<CompanyDto>> GetAllActiveCompanies()
+        {
+            var result = await _companyRepository.GetAllExistCompanies();
+
+            return result.Select(c => new CompanyDto
+            {
+                Id = c.Id,
+                CompanyName = c.CompanyName,
+                CompanyLocation = c.CompanyLocation,
+                Province = c.Province,
+                City = c.City
+            }).ToList();
+        }
+
         public async Task<CompanyDto> GetMyCompanyAsync()
         {
             var company = await _companyRepository.GetCompanyByUserId(_currentUser.UserId);

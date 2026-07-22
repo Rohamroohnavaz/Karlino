@@ -16,7 +16,7 @@ namespace MyFinalProject.Infrastructure
     {
         public FinalDbContext(DbContextOptions<FinalDbContext> options) : base(options)
         {
-
+           
         }
 
         public DbSet<Company> Companies { get; set; }

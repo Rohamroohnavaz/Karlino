@@ -1,4 +1,5 @@
-﻿using MyFinalProject.Domain.Entities.MainModels;
+﻿using MyFinalProject.Domain.Entities.Enums;
+using MyFinalProject.Domain.Entities.MainModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,9 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
         Task<User?> FidnByEmail(string email);
 
         Task<User?> GetUserWithPhoneNumber(string phoneNumber);
+
+        Task<List<User>> GetUsersByRole(string userRole);
+
+        Task<bool> IsEmailUnique(string email);
     }
 }

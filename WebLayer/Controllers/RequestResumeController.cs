@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.Services.ServiceInterfaces;
 
@@ -28,6 +29,14 @@ namespace WebLayer.Controllers
             var result = await _requestResumeService.GetRequestsByAdverIdAsync(advertisementId);
             return Ok(result);
         }
+
+        //[HttpPost("/CreateResume")]
+        //[Authorize(Roles = "JobSeeker")]
+        //public async Task<IActionResult> CreareRequestResumeAsync()
+        //{
+        //    await _requestResumeService.
+        //}
+
 
         //[HttpGet("/GetRequests/{requesterId}")]
         //public async Task<IActionResult> GetRequestByRequestId([FromRoute] Guid requesterId)

@@ -36,8 +36,26 @@ namespace MyFinalProject.Application.Services.MainServices
 
             await _advertisementRepository.AddAsync(advertisement);
             await _unitOfWork.SaveChangesAsync();
+        }
 
-           // return (advertisement.Id);
+        public async Task<Advertisement?> GetAdvertisementByCompanyIdAsync(Guid companyId)
+        {
+            var advertisement = await _advertisementRepository.GetAdvertisementByCompanyId(companyId);
+
+            if (advertisement == null)
+                throw new InvalidAdvertisementException("Advertisement Not Found !!");
+
+            return advertisement;
+        }
+
+        public async Task<Advertisement?> GetCompanyAdvertisement(Guid adverId)
+        {
+            var advertisement = await _advertisementRepository.GetCompanyAdvertisement(adverId);
+
+            if (advertisement == null)
+                throw new InvalidAdvertisementException("Advertisement not found !!");
+
+            return advertisement;
         }
     }
 }

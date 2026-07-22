@@ -16,16 +16,22 @@ namespace MyFinalProject.Application.Seed
         public static async Task InitializeAsync(IServiceProvider services)
         {
             var db = services.GetRequiredService<FinalDbContext>();
-            var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+            var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
             var userManager = services.GetRequiredService<UserManager<User>>();
 
             await db.Database.EnsureCreatedAsync();
 
-            string[] roles = [RoleConstants.AdminRole, RoleConstants.UserRole];
+            string[] roles =
+            [
+                RoleConstants.JobSeekerRole,
+                RoleConstants.EmployerRole,
+                RoleConstants.AdminRole
+            ];
+
             foreach (var role in roles)
             {
                 if (!await roleManager.RoleExistsAsync(role))
-                    await roleManager.CreateAsync(new IdentityRole(role));
+                    await roleManager.CreateAsync(new IdentityRole<Guid> { Name = role });
             }
 
             const string adminEmail = "admin@gmail.com";
