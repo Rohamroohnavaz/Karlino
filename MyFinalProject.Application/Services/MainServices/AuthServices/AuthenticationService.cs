@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Azure.Core;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MyFinalProject.Application.Commands;
@@ -6,6 +7,7 @@ using MyFinalProject.Application.Constants;
 using MyFinalProject.Application.Results;
 using MyFinalProject.Application.ServiceExceptions;
 using MyFinalProject.Application.Services.ServiceInterfaces;
+using MyFinalProject.Domain.Entities;
 using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
@@ -32,15 +34,17 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICompanyRepository _companyRepository;
         private readonly IConfiguration _configuration;
+        private readonly IRefreshTokenRepository _refreshTokenRepository;
 
         public AuthenticationService(UserManager<User> userManager,
             SignInManager<User> signInManager,
             RoleManager<IdentityRole<Guid>> roleManager,
             ICompanyService companyService
-            ,JwtSettings jwtSettings
-            ,IUnitOfWork unitOfWork
-            ,ICompanyRepository companyRepository
-            ,IConfiguration configuration)
+            , JwtSettings jwtSettings
+            , IUnitOfWork unitOfWork
+            , ICompanyRepository companyRepository
+            , IConfiguration configuration
+            , IRefreshTokenRepository refreshTokenRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -50,6 +54,7 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
             _unitOfWork = unitOfWork;
             _companyRepository = companyRepository;
             _configuration = configuration;
+            _refreshTokenRepository = refreshTokenRepository;
         }
 
         public async Task<RegisterResult> RegisterEmployerAsync(RegisterEmployerCommand command)
@@ -59,11 +64,13 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
             if (findEmployer != null)
                 throw new PermissionDeniedException();
 
-            var user = new User(command.Firstname, command.Lastname, command.Phonenumber, command.Email);
-
-            user.UserName = command.Username;
-            user.IsApproved = false;
-            user.Role = UserRole.Employer;
+            var user = new User(command.Firstname, command.Lastname, command.Phonenumber,
+                command.Email)
+            {
+                UserName = command.Username,
+                IsApproved = false,
+                Role = UserRole.Employer
+            };
 
             var createResult = await _userManager.CreateAsync(user, command.Password);
             if (!createResult.Succeeded)
@@ -76,17 +83,26 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
                 throw new RegistrationUserException("! Unsuccessfuly AddRole !");
             }
 
-            var company = new Company(command.CompanyName, command.CompanyLocation,
-                command.Province, command.City ,user.Id);
-
-            await _companyRepository.AddAsync(company);
-            await _unitOfWork.SaveChangesAsync();
-
-            return new RegisterResult
+            try
             {
-                IsSuccess = true,
-                Message = "Registration Successfull ."
-            };
+                var company = new Company(command.CompanyName, command.CompanyLocation,
+                command.Province, command.City, user.Id);
+
+                await _companyRepository.AddAsync(company);
+                await _unitOfWork.SaveChangesAsync();
+
+                return new RegisterResult
+                {
+                    IsSuccess = true,
+                    Message = "Employer Registered Successfully !"
+                };
+            }
+            catch
+            {
+                await _userManager.RemoveFromRoleAsync(user, RoleConstants.EmployerRole);
+                await _userManager.DeleteAsync(user);
+                throw;
+            }
         }
 
         public async Task<RegisterResult> RegisterJobSeekerAsync(RegisterJobSeekerCommand command)
@@ -141,6 +157,64 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
                 Username = user.UserName!,
                 Role = user.Role.ToString()
             };
+
+            #region RefreshToken
+            /////////////////////////////////////////////////////////////////////
+
+            //var user = await _userManager.FindByEmailAsync(command.Email);
+
+            //if (user is null)
+            //    throw new UserNotFoundException("");
+
+            //var passwordIsValid = BCrypt.Net.BCrypt.Verify(command.Password);
+
+
+            //if (!passwordIsValid)
+            //    throw new PermissionDeniedException();
+
+            //var claims = new List<Claim>
+            //{
+            //  new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            //  new Claim(ClaimTypes.Email, user.Email),
+            //  new Claim(ClaimTypes.Role, user.Role.ToString())
+            //};
+
+            //var secretKey =
+            //    new SymmetricSecurityKey(
+            //        Encoding.UTF8.GetBytes(_jwtSettings.Secret));
+
+            //var credentials =
+            //    new SigningCredentials(
+            //        secretKey,
+            //        SecurityAlgorithms.HmacSha256);
+
+            //var accessTokenExpiresAt =
+            //    DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiresInMinutes);
+
+            //var token = new JwtSecurityToken(
+            //    issuer: _jwtSettings.Issuer,
+            //    audience: _jwtSettings.Audience,
+            //    claims: claims,
+            //    expires: accessTokenExpiresAt,
+            //    signingCredentials: credentials);
+
+            //var accessToken =
+            //    new JwtSecurityTokenHandler().WriteToken(token);
+
+            //var expiresInSeconds =
+            //    (accessTokenExpiresAt - DateTime.UtcNow).TotalSeconds;
+
+            //var refreshToken = Guid.NewGuid().ToString();
+            //var refreshTokenExpiresAt = DateTime.UtcNow.AddDays(7);
+
+            //return new LoginResultForRefresh
+            //(
+            //    accessToken,
+            //    refreshToken,
+            //    expiresInSeconds,
+            //    refreshTokenExpiresAt
+            //);
+            #endregion 
         }
 
         public async Task<string> GenerateTokenAsync(User user)
@@ -183,7 +257,17 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            return tokenHandler.WriteToken(token); 
+            return tokenHandler.WriteToken(token);
+        }
+
+        public Task<LoginResult> RefreshTokenAsync(string refreshToken)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task LogoutAsync(string refreshToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

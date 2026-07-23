@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyFinalProject.Application.DTOs;
+using MyFinalProject.Application.Filters;
 using MyFinalProject.Application.Services.ServiceInterfaces;
 using MyFinalProject.Domain.Entities.MainModels;
 
@@ -20,18 +21,26 @@ namespace WebLayer.Controllers
             _currentUserService = currentUserService;
         }
 
-        [HttpPost("CreateAdvertisement")]
+        [HttpPost("/CreateAdvertisement")]
         [Authorize(Roles = "Employer")]
         public async Task<IActionResult> CreateAdver([FromBody]CreateAdvertisementDto dto)
         { 
-               await _advertisementService.CreateAdvertisement(dto);
+               await _advertisementService.CreateAdvertisementAsync(dto);
                return Ok();
         }
 
-        //[HttpGet("/GetAdvertisement")]
-        //public async Task<IActionResult> GetAdvertisementByCompanyId([FromRoute] Guid companyId)
-        //{
-        //    var 
-        //}
+        [HttpGet("/GetActiveAdvertisements")]
+        public async Task<IActionResult> GetActiveAdvers()
+        {
+            var advers = await _advertisementService.GetActiveAdvertisementAsync();
+            return Ok(advers);
+        }
+
+        [HttpGet("/SearchAdvertisement")]
+        public async Task<IActionResult> SearchAdvertisement([FromBody] AdverSearchFilterDto filter)
+        {
+            var result = await _advertisementService.SearchAndFilterAdsAsync(filter); 
+            return Ok(result);
+        }
     }
 }

@@ -2,11 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.Services.ServiceInterfaces;
+using WebLayer.Models;
 
 namespace WebLayer.Controllers
 {
     [ApiController]
-    [Route("api/requestresume")]
+    [Route("api/RequestResume")]
     public class RequestResumeController : ControllerBase
     {
         private readonly IRequestResumeService _requestResumeService;
@@ -16,7 +17,7 @@ namespace WebLayer.Controllers
             _requestResumeService = requestResumeService;
         }
 
-        [HttpPut("api/change")]
+        [HttpPut("/ChangeStatus")]
         public async Task<IActionResult> ChangeStatus([FromBody]ChangeRequestStatusDto dto)
         {
             await _requestResumeService.ChangeRequestStatusAsync(dto);
@@ -38,10 +39,32 @@ namespace WebLayer.Controllers
         //}
 
 
-        //[HttpGet("/GetRequests/{requesterId}")]
-        //public async Task<IActionResult> GetRequestByRequestId([FromRoute] Guid requesterId)
-        //{
-        //    var request = await _requestResumeService.getrequ
-        //}
+        [HttpGet("/GetRequests/{adverId:guid}")]
+        public async Task<IActionResult> GetRequestByAdverId([FromRoute] Guid adverId)
+        {
+            var request = await _requestResumeService.GetRequestsByAdverIdAsync(adverId);
+
+            if(request is null)
+                return NotFound();
+
+            return Ok(request);
+        }
+
+        [HttpPost("/UploadFile")]
+        public async Task<IActionResult> UploadAttachFile([FromBody] UploadAttachDto dto,
+            [FromRoute] Guid requestId)
+        {
+            await _requestResumeService.UploadFileAttachAsync(requestId ,dto);
+            return Ok();
+        }
+
+        [HttpPost("/ReplaceFile")]
+        public async Task<IActionResult> ReplaceAttachFile([FromBody] UploadAttachDto dto,
+            [FromRoute] Guid requestId)
+        {
+            await _requestResumeService.ReplaceFileAttachAsync(requestId ,dto);
+            return Ok();
+        }
+
     }
 }

@@ -1,4 +1,6 @@
 ﻿using MyFinalProject.Application.Commands;
+using MyFinalProject.Application.Commands.ViewModels;
+using MyFinalProject.Application.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,5 +14,13 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
         Task UpdateUserInfo(UpdateUserInfoCommand command);
 
         Task AddVipEmployerForAdv(Guid userId);
+
+        Task UpdateProfileUser(UpdateUserProfileDto dto);
+
+        Task ApproveUserAsync(Guid userId);
+
+        Task ApproveUserWithCheckAsync(Guid userId);
+
+        Task<UsersViewModel> GetJobSeekerProfile(Guid userId);
     }
 }

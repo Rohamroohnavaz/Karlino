@@ -16,15 +16,15 @@ namespace MyFinalProject.Application.Services.MainServices
 {
     public class CompanyService : ICompanyService
     {
-        private readonly ICurrentUserService _currentUser;
+        private readonly ICurrentUserService _currentUserService;
         private readonly ICompanyRepository _companyRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public CompanyService(ICurrentUserService currentUser 
+        public CompanyService(ICurrentUserService currentUserService 
             ,ICompanyRepository companyRepository
             ,IUnitOfWork unitOfWork)
         {
-            _currentUser = currentUser;
+            _currentUserService = currentUserService;
             _companyRepository = companyRepository;
             _unitOfWork = unitOfWork;
         }
@@ -35,6 +35,11 @@ namespace MyFinalProject.Application.Services.MainServices
 
             if (existCompany)
                 throw new InvalidCompanyException("This Company Is Already Exist !");
+
+            var checkApprovedUser = await _currentUserService.GetAndEnsureApprovedAsync();
+
+            if (checkApprovedUser is null)
+                throw new UserNotFoundException("We can't find approved user :/");
 
             var newCompany = new Company(dto.CompanyName, dto.CompanyLocation,
                 dto.Province, dto.City ,dto.UserId);
@@ -59,7 +64,7 @@ namespace MyFinalProject.Application.Services.MainServices
 
         public async Task<CompanyDto> GetMyCompanyAsync()
         {
-            var company = await _companyRepository.GetCompanyByUserId(_currentUser.UserId);
+            var company = await _companyRepository.GetCompanyByUserId(_currentUserService.UserId);
 
             if (company == null)
                 throw new CompanyNotFoundException();

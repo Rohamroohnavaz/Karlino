@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using MyFinalProject.Domain.Entities;
 using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Domain.Entities.MainModels;
 using System;
@@ -24,6 +25,7 @@ namespace MyFinalProject.Infrastructure
         public DbSet<Advertisement> Advertisements { get; set; }
         public DbSet<Attach> Attaches { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

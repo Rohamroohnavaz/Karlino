@@ -16,6 +16,7 @@ using MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using WebLayer.Middlewares;
 
 namespace WebLayer
 {
@@ -161,6 +162,8 @@ namespace WebLayer
             }
 
             app.UseHttpsRedirection();
+
+            app.UseMiddleware<GlobalExceptionHandler>();
 
             app.UseAuthentication();
 

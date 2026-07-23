@@ -36,6 +36,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public ICollection<Attach> Attaches { get; set; } = new List<Attach>();
         public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
         public ICollection<Skill> Skills { get; set; } = new List<Skill>();
+        public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
         public bool IsApproved { get; set; }
         public DateTime CreatedAt { get; private set; }
         public DateTime? ModifiedAt { get; private set; }

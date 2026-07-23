@@ -19,7 +19,5 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
         Task<bool> ExistAdvertisementAsync(Guid adverId);
 
         Task<bool> ExistByTitle(string title);
-
-        //Task AddAdverAsync();
     }
 }
