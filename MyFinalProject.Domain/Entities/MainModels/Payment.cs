@@ -28,19 +28,13 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public PaymentStatus PaymentStatus { get; set; }
         public Company? Company { get; set; }
         public Guid? CompanyId { get; set; }
-        public Feature Feature { get; set; }
+        public Feature? Feature { get; set; }
         public Guid? FeatureId { get; set; }
 
         public override void Validation()
         {
             if (Amount <= 0)
                 throw new InvalidPriceException("Amount is invalid !!");
-
-            if (CompanyId == Guid.Empty)
-                throw new InvalidGuidException("CompanyId is required !!");
-
-            if (FeatureId == Guid.Empty)
-                throw new InvalidGuidException("FeatureId is required !!");
         }
     }
 }

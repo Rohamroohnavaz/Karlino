@@ -11,10 +11,16 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
 {
     public interface IAuthenticationService
     {
-        Task<RegisterResult> RegisterAsync(RegisterUserCommand command);
+        Task<RegisterResult> RegisterEmployerAsync(RegisterEmployerCommand command);
 
-        Task<LoginResult> LoginAsync(LoginUserCommand command);
+        Task<RegisterResult> RegisterJobSeekerAsync(RegisterJobSeekerCommand command);
 
-        Task<LoginResult> GenerateTokenAsync(User user);
+        Task<LoginResultForRefresh> LoginAsync(LoginUserCommand command);
+
+        Task<string> GenerateTokenAsync(User user);
+
+        Task<LoginResult> RefreshTokenAsync(string refreshToken);
+
+        Task LogoutAsync(string refreshToken);
     }
 }

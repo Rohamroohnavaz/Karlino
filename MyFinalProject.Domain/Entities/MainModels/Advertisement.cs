@@ -11,41 +11,40 @@ namespace MyFinalProject.Domain.Entities.MainModels
 {
     public class Advertisement : BaseEntity
     {
-        private Advertisement()
-        {
-
-        }
+        private Advertisement() { }
 
         public Advertisement(string title, string description, decimal salary
-            , string province, string city ,DateTime startDate ,DateTime expireDate)
+            , string province, string city, string companyName, Guid companyId, Guid categoryId)
         {
             Title = title;
             Description = description;
             Salary = salary;
             Province = province;
             City = city;
-            StartDate = startDate;
-            ExpireDate = expireDate;
+            CompanyName = companyName;
+            CompanyId = companyId;
+            CategoryId = categoryId;
+            //StartDate = startDate;
+            //ExpireDate = expireDate;
             Validation();
         }
-
+        
         public string Title { get; private set; }
         public string Description { get; private set; }
         public decimal Salary { get; private set; }
         public string CompanyName { get; private set; }
         public string Province { get; private set; }
         public string City { get; private set; }
-        public RequestResume RequestResume { get; private set; }
-        public Guid? RequestResumeId { get; private set; }
-        public Company Company { get; private set; }
-        public Guid CompanyId { get; private set; }
-        public User User { get; private set; }
+        public ICollection<RequestResume> RequestResumes { get; set; } = new List<RequestResume>();
+        public Company? Company { get; private set; }
+        public Guid? CompanyId { get; private set; }
+        public User? User { get; private set; }
         public ICollection<Attach> Attaches { get; set; } = new List<Attach>();
-        public Category Category { get; private set; }
+        public Category? Category { get; private set; }
         public Guid? CategoryId { get; private set; }
         public bool IsActive { get; private set; } = true;
-        public DateTime StartDate { get; private set; }
-        public DateTime ExpireDate { get; private set; }
+        public DateTime? StartDate { get; private set; }
+        public DateTime? ExpireDate { get; private set; }
 
         public void ChangeTitle(string newTitle)
         {
@@ -97,9 +96,6 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         public override void Validation()
         {
-            if (RequestResumeId == Guid.Empty)
-                throw new InvalidGuidException("Invalid Guid !");
-
             if (string.IsNullOrWhiteSpace(Title))
                 throw new Exception();
 

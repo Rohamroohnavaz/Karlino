@@ -33,8 +33,6 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public Guid? CompanyId { get; private set; }
         public Guid? AdvertisementId { get; private set; }
         public Advertisement Advertisement { get; private set; }
-        public Guid? RequestResumeId { get; private set; }
-        public RequestResume RequestResume { get; private set; }
         public User? User { get; private set; }
         public Guid? UserId { get; private set; }
 
@@ -72,18 +70,6 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         public override void Validation()
         {
-            if (CompanyId == Guid.Empty)
-                throw new InvalidGuidException("CompanyId is empty !!");
-
-            if (AdvertisementId == Guid.Empty)
-                throw new InvalidGuidException("AdvertisementId is empty !!");
-
-            if (RequestResumeId == Guid.Empty)
-                throw new InvalidGuidException("RequestResumeId is empty !!");
-
-            if (UserId == Guid.Empty)
-                throw new InvalidGuidException("UserId is empty !!");
-
             if (string.IsNullOrWhiteSpace(FilePath))
                 throw new Exception("Invalid FilePath");
 

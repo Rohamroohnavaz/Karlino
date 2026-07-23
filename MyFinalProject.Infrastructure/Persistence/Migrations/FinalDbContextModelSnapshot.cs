@@ -227,7 +227,7 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("CompanyId")
+                    b.Property<Guid?>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CompanyName")
@@ -269,9 +269,6 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("RequestResumeId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<decimal>("Salary")
                         .HasColumnType("DECIMAL");
 
@@ -282,7 +279,7 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("NVARCHAR(200)");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -299,10 +296,6 @@ namespace MyFinalProject.Infrastructure.Migrations
 
                     b.HasIndex("ModifiedById");
 
-                    b.HasIndex("RequestResumeId")
-                        .IsUnique()
-                        .HasFilter("[RequestResumeId] IS NOT NULL");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Advertisements");
@@ -317,13 +310,7 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.Property<Guid?>("AdvertisementId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AdvertisementId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("CompanyId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CompanyId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ContentType")
@@ -362,24 +349,14 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.Property<Guid?>("ModifiedById")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("RequestResumeId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("UserId1")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AdvertisementId");
 
-                    b.HasIndex("AdvertisementId1");
-
                     b.HasIndex("CompanyId");
-
-                    b.HasIndex("CompanyId1");
 
                     b.HasIndex("CreateById");
 
@@ -389,13 +366,7 @@ namespace MyFinalProject.Infrastructure.Migrations
 
                     b.HasIndex("ModifiedById");
 
-                    b.HasIndex("RequestResumeId")
-                        .IsUnique()
-                        .HasFilter("[RequestResumeId] IS NOT NULL");
-
                     b.HasIndex("UserId");
-
-                    b.HasIndex("UserId1");
 
                     b.ToTable("Attaches");
                 });
@@ -520,7 +491,7 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CompanyId")
+                    b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("CreateById")
@@ -538,7 +509,7 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid?>("FeatureId")
+                    b.Property<Guid>("FeatureId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDeleted")
@@ -605,6 +576,7 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .HasColumnType("NVARCHAR(150)");
 
                     b.Property<decimal>("Price")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("StartDate")
@@ -633,6 +605,7 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Amount")
+                        .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid?>("CompanyId")
@@ -688,7 +661,7 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("AdvertisementId")
+                    b.Property<Guid>("AdvertisementId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("AttachmentId")
@@ -734,14 +707,78 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Skill")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("DATETIME");
 
                     b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AdvertisementId");
+
+                    b.HasIndex("AttachmentId")
+                        .IsUnique()
+                        .HasFilter("[AttachmentId] IS NOT NULL");
+
+                    b.HasIndex("CreateById");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("DeletedById");
+
+                    b.HasIndex("ModifiedById");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Resumes");
+                });
+
+            modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.Skill", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreateById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(250)");
+
+                    b.Property<int>("ExperienceYear")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(120)");
+
+                    b.Property<Guid?>("SkillCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("SkillLevel")
                         .HasColumnType("int");
 
                     b.Property<Guid?>("UserId")
@@ -757,9 +794,59 @@ namespace MyFinalProject.Infrastructure.Migrations
 
                     b.HasIndex("ModifiedById");
 
+                    b.HasIndex("SkillCategoryId");
+
                     b.HasIndex("UserId");
 
-                    b.ToTable("Resumes");
+                    b.ToTable("Skill");
+                });
+
+            modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.SkillCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreateById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(100)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreateById");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("DeletedById");
+
+                    b.HasIndex("ModifiedById");
+
+                    b.ToTable("SkillCategory");
                 });
 
             modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.User", b =>
@@ -875,6 +962,62 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("MyFinalProject.Domain.Entities.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreateById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreateById");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("DeletedById");
+
+                    b.HasIndex("ModifiedById");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<System.Guid>", null)
@@ -974,8 +1117,7 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.HasOne("MyFinalProject.Domain.Entities.MainModels.Company", "Company")
                         .WithMany("Advertisements")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Creater")
                         .WithMany()
@@ -992,16 +1134,9 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .HasForeignKey("ModifiedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.RequestResume", "RequestResume")
-                        .WithOne("Advertisement")
-                        .HasForeignKey("MyFinalProject.Domain.Entities.MainModels.Advertisement", "RequestResumeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserId");
 
                     b.Navigation("Category");
 
@@ -1013,30 +1148,20 @@ namespace MyFinalProject.Infrastructure.Migrations
 
                     b.Navigation("Modifier");
 
-                    b.Navigation("RequestResume");
-
                     b.Navigation("User");
                 });
 
             modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.Attach", b =>
                 {
                     b.HasOne("MyFinalProject.Domain.Entities.MainModels.Advertisement", "Advertisement")
-                        .WithMany()
+                        .WithMany("Attaches")
                         .HasForeignKey("AdvertisementId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.Advertisement", null)
-                        .WithMany("Attaches")
-                        .HasForeignKey("AdvertisementId1");
-
                     b.HasOne("MyFinalProject.Domain.Entities.MainModels.Company", "Company")
-                        .WithMany()
+                        .WithMany("Attaches")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.Company", null)
-                        .WithMany("Attaches")
-                        .HasForeignKey("CompanyId1");
 
                     b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Creater")
                         .WithMany()
@@ -1053,18 +1178,10 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .HasForeignKey("ModifiedById")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.RequestResume", "RequestResume")
-                        .WithOne("Attach")
-                        .HasForeignKey("MyFinalProject.Domain.Entities.MainModels.Attach", "RequestResumeId");
-
                     b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "User")
-                        .WithMany()
+                        .WithMany("Attaches")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", null)
-                        .WithMany("Attaches")
-                        .HasForeignKey("UserId1");
 
                     b.Navigation("Advertisement");
 
@@ -1075,8 +1192,6 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.Navigation("Deleter");
 
                     b.Navigation("Modifier");
-
-                    b.Navigation("RequestResume");
 
                     b.Navigation("User");
                 });
@@ -1141,7 +1256,8 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.HasOne("MyFinalProject.Domain.Entities.MainModels.Company", "Company")
                         .WithMany("CompanyFeatures")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Creater")
                         .WithMany()
@@ -1156,7 +1272,8 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.HasOne("MyFinalProject.Domain.Entities.MainModels.Features.Feature", "Feature")
                         .WithMany("CompanyFeatures")
                         .HasForeignKey("FeatureId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Modifier")
                         .WithMany()
@@ -1238,6 +1355,17 @@ namespace MyFinalProject.Infrastructure.Migrations
 
             modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.RequestResume", b =>
                 {
+                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.Advertisement", "Advertisement")
+                        .WithMany("RequestResumes")
+                        .HasForeignKey("AdvertisementId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.Attach", "Attach")
+                        .WithOne()
+                        .HasForeignKey("MyFinalProject.Domain.Entities.MainModels.RequestResume", "AttachmentId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Creater")
                         .WithMany()
                         .HasForeignKey("CreateById")
@@ -1256,7 +1384,12 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "User")
                         .WithMany("RequestResumes")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Advertisement");
+
+                    b.Navigation("Attach");
 
                     b.Navigation("Creater");
 
@@ -1265,6 +1398,68 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.Navigation("Modifier");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.Skill", b =>
+                {
+                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Creater")
+                        .WithMany()
+                        .HasForeignKey("CreateById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Deleter")
+                        .WithMany()
+                        .HasForeignKey("DeletedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Modifier")
+                        .WithMany()
+                        .HasForeignKey("ModifiedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.SkillCategory", "SkillCategory")
+                        .WithMany("Skills")
+                        .HasForeignKey("SkillCategoryId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "User")
+                        .WithMany("Skills")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Creater");
+
+                    b.Navigation("Deleter");
+
+                    b.Navigation("Modifier");
+
+                    b.Navigation("SkillCategory");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.SkillCategory", b =>
+                {
+                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Creater")
+                        .WithMany()
+                        .HasForeignKey("CreateById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Deleter")
+                        .WithMany()
+                        .HasForeignKey("DeletedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Modifier")
+                        .WithMany()
+                        .HasForeignKey("ModifiedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Creater");
+
+                    b.Navigation("Deleter");
+
+                    b.Navigation("Modifier");
                 });
 
             modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.User", b =>
@@ -1291,9 +1486,43 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.Navigation("Modifier");
                 });
 
+            modelBuilder.Entity("MyFinalProject.Domain.Entities.RefreshToken", b =>
+                {
+                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Creater")
+                        .WithMany()
+                        .HasForeignKey("CreateById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Deleter")
+                        .WithMany()
+                        .HasForeignKey("DeletedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Modifier")
+                        .WithMany()
+                        .HasForeignKey("ModifiedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Creater");
+
+                    b.Navigation("Deleter");
+
+                    b.Navigation("Modifier");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.Advertisement", b =>
                 {
                     b.Navigation("Attaches");
+
+                    b.Navigation("RequestResumes");
                 });
 
             modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.Category", b =>
@@ -1321,12 +1550,9 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.Navigation("Payments");
                 });
 
-            modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.RequestResume", b =>
+            modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.SkillCategory", b =>
                 {
-                    b.Navigation("Advertisement")
-                        .IsRequired();
-
-                    b.Navigation("Attach");
+                    b.Navigation("Skills");
                 });
 
             modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.User", b =>
@@ -1337,7 +1563,11 @@ namespace MyFinalProject.Infrastructure.Migrations
 
                     b.Navigation("Notifications");
 
+                    b.Navigation("RefreshTokens");
+
                     b.Navigation("RequestResumes");
+
+                    b.Navigation("Skills");
                 });
 #pragma warning restore 612, 618
         }

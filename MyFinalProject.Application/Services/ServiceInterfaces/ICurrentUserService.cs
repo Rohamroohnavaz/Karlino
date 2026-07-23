@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyFinalProject.Domain.Entities.MainModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +15,10 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
 
         string? Username { get; }
 
+        string? Email { get; }
+
         string? Role { get; }
+
+        Task<User> GetAndEnsureApprovedAsync();
     }
 }

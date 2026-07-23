@@ -1,4 +1,5 @@
 ﻿using MyFinalProject.Domain.Entities.Abstraction;
+using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Domain.Exceptions;
 using System;
 using System.Collections.Generic;

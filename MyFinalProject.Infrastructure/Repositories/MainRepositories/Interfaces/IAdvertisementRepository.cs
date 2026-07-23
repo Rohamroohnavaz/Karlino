@@ -14,12 +14,10 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
 
         Task<Advertisement?> GetCompanyAdvertisement(Guid adverId);
 
-        Task<Advertisement?> GetAdvertisementWithRequestResume(Guid resumeId);
+        //Task<Advertisement?> GetAdvertisementWithRequestResume(Guid resumeId);
 
         Task<bool> ExistAdvertisementAsync(Guid adverId);
 
         Task<bool> ExistByTitle(string title);
-
-        //Task AddAdverAsync();
     }
 }

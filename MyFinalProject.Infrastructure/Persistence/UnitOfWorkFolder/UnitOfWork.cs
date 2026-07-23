@@ -16,14 +16,7 @@ namespace MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder
         public UnitOfWork(FinalDbContext dbContext)
         {
             _dbContext = dbContext;
-
-            Companies = new CompanyRepository(dbContext);
-            Advertisements = new AdvertisementRepository(dbContext);
         }
-
-        public ICompanyRepository Companies { get; set; }
-
-        public IAdvertisementRepository Advertisements { get; set; }
 
         public async Task<int> SaveChangesAsync()
         {

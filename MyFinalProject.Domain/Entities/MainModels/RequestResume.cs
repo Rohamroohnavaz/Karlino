@@ -16,31 +16,41 @@ namespace MyFinalProject.Domain.Entities.MainModels
             
         }
 
-        public RequestResume(string jobSeekerName ,string jobSeekerLastName ,string skill 
-            ,string province ,string city)
+        public RequestResume(string jobSeekerName ,string jobSeekerLastName 
+            ,string province ,string city ,DateTime startDate ,DateTime expireDate 
+            ,Guid userId ,Guid advertisementId ,Guid attachmentId)
         {
             JobSeekerName = jobSeekerName;
             JobSeekerLastName = jobSeekerLastName;
-            Skill = skill;
             Province = province;
             City = city;
+            StartDate = startDate;
+            ExpireDate = expireDate;
+            UserId = userId;
+            AdvertisementId = advertisementId;
+            AttachmentId = attachmentId;
             Validation();
         }
 
         public string JobSeekerName { get; private set; }
         public string JobSeekerLastName { get; private set; }
-        public string Skill { get; private set; }
         public string Province { get; private set; }
         public string City { get; private set; }
         public RequestStatus Status { get; set; }
         public User? User { get; private set; }
-        public Guid? UserId { get; private set; }
+        public Guid UserId { get; private set; }
         public Advertisement Advertisement { get; private set; }
-        public Guid? AdvertisementId { get; private set; }
-        public Guid? AttachmentId { get; private set; }
-        public Attach? Attach { get; private set; }
+        public Guid AdvertisementId { get; set; }
+        public Guid? AttachmentId { get; set; }
+        public Attach? Attach { get; set; }
         public DateTime StartDate { get; private set; }
         public DateTime ExpireDate { get; private set; }
+
+        public void SetAttach(Guid? attachId ,Attach attach)
+        {
+            AttachmentId = attachId;
+            Attach = attach;
+        }
 
         public void ChangeJobSeekerName(string jobSeekerName)
         {
@@ -58,33 +68,35 @@ namespace MyFinalProject.Domain.Entities.MainModels
             JobSeekerLastName = jobSeekerLastName;
         }
 
-        public void ChangeSkill(string newSkill)
+        public void ChangeProvince(string province)
         {
-            if (string.IsNullOrWhiteSpace(newSkill))
-                throw new Exception("Skill is required !!");
+            if (string.IsNullOrWhiteSpace(province))
+                throw new Exception("Province is required !!");
 
-            Skill = newSkill;
+            Province = province;
+        }
+
+        public void ChangeCity(string city)
+        {
+            if (string.IsNullOrWhiteSpace(city))
+                throw new Exception("City is required !!");
+
+            City = city;
         }
 
         public override void Validation()
         {
-            if (UserId == Guid.Empty)
-                throw new InvalidGuidException("UserId is empty !!");
-
-            if (AttachmentId == Guid.Empty)
-                throw new InvalidGuidException("AttachmentId is empty !!");
-
-            if (AdvertisementId == Guid.Empty)
-                throw new InvalidGuidException("AdvertisementId is empty !!");
-
             if (string.IsNullOrWhiteSpace(JobSeekerName))
                 throw new Exception("Name is null !!");
 
             if (string.IsNullOrWhiteSpace(JobSeekerLastName))
                 throw new Exception("LastName is null !!");
 
-            if (string.IsNullOrWhiteSpace(Skill))
-                throw new Exception("Skill is null !!");
+            if (string.IsNullOrWhiteSpace(Province))
+                throw new Exception("Province is null !!");
+
+            if (string.IsNullOrWhiteSpace(City))
+                throw new Exception("City is null !!");
         }
     }
 }

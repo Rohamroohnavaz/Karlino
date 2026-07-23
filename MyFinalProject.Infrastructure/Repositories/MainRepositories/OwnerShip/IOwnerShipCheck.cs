@@ -9,5 +9,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.OwnerShip
     public interface IOwnerShipCheck
     {
         Task<bool> IsOwnerShipOfAdvertisement(Guid advertisementId, Guid companyId);
+
+        //Task<bool> IsOwnerShipOfAttach(Guid attachId);
     }
 }

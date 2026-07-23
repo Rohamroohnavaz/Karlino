@@ -8,10 +8,7 @@ namespace MyFinalProject.Application.Results
 {
     public class RegisterResult
     {
-        public RegisterResult(Guid id)
-        {
-            ResultId = id;   
-        }
-        public Guid ResultId;
+        public bool IsSuccess { get; set; }
+        public string Message { get; set; } = string.Empty;
     }
 }

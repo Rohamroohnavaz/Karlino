@@ -10,10 +10,20 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
 {
     public interface IRequestResumeRepository : IGenericRepository<RequestResume>
     {
-        Task<RequestResume?> GetRequestByAdverId(Guid adverId);
+        Task<List<RequestResume>> GetRequestByAdverId(Guid adverId);
 
         Task<RequestResume?> GetRequestWithAdvertisement(Guid requestId);
 
+        Task<RequestResume?> GetRequestWithAttach(Guid requestId);
+
         Task<RequestResume?> GetRequestResumeByCompanyId(Guid resumeId,Guid companyId);
+
+        Task<RequestResume?> GetRequestResumeWithAttachByCompanyId(Guid resumeId,Guid companyId);
+
+        Task<RequestResume?> GetResumeByAttachId(Guid attachId);
+
+        Task<RequestResume?> GetRequestByUserId(Guid userId);
+
+        Task<RequestResume?> GetRequestWithAttachmentByUserId(Guid requestId, Guid userId);
     }
 }

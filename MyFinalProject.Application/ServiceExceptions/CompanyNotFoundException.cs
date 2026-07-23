@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace MyFinalProject.Application.ServiceExceptions
 {
-    public class CompanyNotFoundException : Exception
+    public class CompanyNotFoundException : BaseBussinessException
     {
-        public CompanyNotFoundException(string message) : base(message)
+        public CompanyNotFoundException(Exception? subsetException = null)
+            : base($"Company not found ! Pay attention !", "404", subsetException)
         {
-            
+
         }
     }
 }

@@ -13,15 +13,8 @@ namespace MyFinalProject.Infrastructure.Repositories.Generics
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity, IBaseEntity
     {
         protected readonly FinalDbContext _dbContext;
-        private readonly IUnitOfWork _unitOfWork;
 
-        protected GenericRepository(FinalDbContext dbContext, IUnitOfWork unitOfWork)
-        {
-            _dbContext = dbContext;
-            _unitOfWork = unitOfWork;
-        }
-
-        public GenericRepository(FinalDbContext dbContext)
+        protected GenericRepository(FinalDbContext dbContext)
         {
             _dbContext = dbContext;
         }
@@ -29,7 +22,6 @@ namespace MyFinalProject.Infrastructure.Repositories.Generics
         public async Task AddAsync(T entity)
         {
             await _dbContext.Set<T>().AddAsync(entity);
-            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task<List<T>> QueryAsync(Expression<Func<T, bool>> predicate
@@ -58,7 +50,7 @@ namespace MyFinalProject.Infrastructure.Repositories.Generics
         public async Task UpdateAsync(T entity)
         {
             _dbContext.Set<T>().Update(entity);
-            await _unitOfWork.SaveChangesAsync();
+            await Task.CompletedTask;
         }
 
         public async Task HardDeleteAsync(Guid id)
@@ -68,7 +60,6 @@ namespace MyFinalProject.Infrastructure.Repositories.Generics
                 return;
 
             _dbContext.Set<T>().Remove(entity);
-            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task SoftDeleteAsync(Guid id)
@@ -78,7 +69,6 @@ namespace MyFinalProject.Infrastructure.Repositories.Generics
                 return;
 
             entity.SetDeleted(id);
-            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

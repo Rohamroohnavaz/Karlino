@@ -30,22 +30,17 @@ namespace MyFinalProject.Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             builder.HasOne(a => a.Company)
-                .WithMany()
+                .WithMany(c => c.Attaches)
                 .HasForeignKey(a => a.CompanyId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(a => a.Advertisement)
-                .WithMany()
-                .HasForeignKey(a => a.AdvertisementId)
-                .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasOne(a => a.Advertisement)
-                .WithMany()
+                .WithMany(ad => ad.Attaches)
                 .HasForeignKey(a => a.AdvertisementId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(a => a.User)
-                .WithMany()
+                .WithMany(u => u.Attaches)
                 .HasForeignKey(a => a.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
         }

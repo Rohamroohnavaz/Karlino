@@ -8,7 +8,7 @@ namespace MyFinalProject.Infrastructure.RepoExceptions
 {
     public class InvalidCompanyException : Exception
     {
-        public InvalidCompanyException(string message) : base()
+        public InvalidCompanyException(string message) : base(message)
         {
             
         }
