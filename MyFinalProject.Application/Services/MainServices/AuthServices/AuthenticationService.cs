@@ -136,84 +136,85 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
             };
         }
 
-        public async Task<LoginResult> LoginAsync(LoginUserCommand command)
+        public async Task<LoginResultForRefresh> LoginAsync(LoginUserCommand command)
         {
-            var user = await _userManager.FindByNameAsync(command.Username);
-            if (user == null)
-                throw new UserNotFoundException("User not found !");
+            //var user = await _userManager.FindByNameAsync(command.Username);
+            //if (user == null)
+            //    throw new UserNotFoundException("User not found !");
 
-            if (!await _userManager.CheckPasswordAsync(user, command.Password))
-                throw new PermissionDeniedException();
+            //if (!await _userManager.CheckPasswordAsync(user, command.Password))
+            //    throw new PermissionDeniedException();
 
-            if (!user.IsApproved)
-                throw new PermissionDeniedException();
+            //if (!user.IsApproved)
+            //    throw new PermissionDeniedException();
 
-            var token = await GenerateTokenAsync(user);
+            //var token = await GenerateTokenAsync(user);
 
-            return new LoginResult
-            {
-                IsSuccess = true,
-                MainToken = token,
-                Username = user.UserName!,
-                Role = user.Role.ToString()
-            };
+            //return new LoginResult
+            //{
+            //    IsSuccess = true,
+            //    MainToken = token,
+            //    Username = user.UserName!,
+            //    Role = user.Role.ToString()
+            //};
 
             #region RefreshToken
             /////////////////////////////////////////////////////////////////////
 
-            //var user = await _userManager.FindByEmailAsync(command.Email);
+            var user = await _userManager.FindByEmailAsync(command.Email);
 
-            //if (user is null)
-            //    throw new UserNotFoundException("");
+            if (user is null)
+                throw new UserNotFoundException("");
 
-            //var passwordIsValid = BCrypt.Net.BCrypt.Verify(command.Password);
+            var passwordIsValid = BCrypt.Net.BCrypt.Verify(command.Password ,user.PasswordHash);
 
 
-            //if (!passwordIsValid)
-            //    throw new PermissionDeniedException();
+            if (!passwordIsValid)
+                throw new PermissionDeniedException();
 
-            //var claims = new List<Claim>
-            //{
-            //  new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            //  new Claim(ClaimTypes.Email, user.Email),
-            //  new Claim(ClaimTypes.Role, user.Role.ToString())
-            //};
+            var claims = new List<Claim>
+            {
+              new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+              new Claim(ClaimTypes.Email, user.Email),
+              new Claim(ClaimTypes.Role, user.Role.ToString())
+            };
 
-            //var secretKey =
-            //    new SymmetricSecurityKey(
-            //        Encoding.UTF8.GetBytes(_jwtSettings.Secret));
+            var secretKey =
+                new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(_jwtSettings.Secret));
 
-            //var credentials =
-            //    new SigningCredentials(
-            //        secretKey,
-            //        SecurityAlgorithms.HmacSha256);
+            var credentials =
+                new SigningCredentials(
+                    secretKey,
+                    SecurityAlgorithms.HmacSha256);
 
-            //var accessTokenExpiresAt =
-            //    DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiresInMinutes);
+            var accessTokenExpiresAt =
+                DateTime.UtcNow.AddMinutes(_jwtSettings.ExpiresInMinutes);
 
-            //var token = new JwtSecurityToken(
-            //    issuer: _jwtSettings.Issuer,
-            //    audience: _jwtSettings.Audience,
-            //    claims: claims,
-            //    expires: accessTokenExpiresAt,
-            //    signingCredentials: credentials);
+            var token = new JwtSecurityToken(
+                issuer: _jwtSettings.Issuer,
+                audience: _jwtSettings.Audience,
+                claims: claims,
+                expires: accessTokenExpiresAt,
+                signingCredentials: credentials);
 
-            //var accessToken =
-            //    new JwtSecurityTokenHandler().WriteToken(token);
+            var accessToken =
+                new JwtSecurityTokenHandler().WriteToken(token);
 
-            //var expiresInSeconds =
-            //    (accessTokenExpiresAt - DateTime.UtcNow).TotalSeconds;
+            var expiresInSeconds =
+                (accessTokenExpiresAt - DateTime.UtcNow).TotalSeconds;
 
-            //var refreshToken = Guid.NewGuid().ToString();
-            //var refreshTokenExpiresAt = DateTime.UtcNow.AddDays(7);
+            var refreshToken = Guid.NewGuid().ToString();
+            var refreshTokenExpiresAt = DateTime.UtcNow.AddDays(7);
 
-            //return new LoginResultForRefresh
-            //(
-            //    accessToken,
-            //    refreshToken,
-            //    expiresInSeconds,
-            //    refreshTokenExpiresAt
-            //);
+            return new LoginResultForRefresh
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+                RefreshTokenExpiresAtExpires = refreshTokenExpiresAt,
+                AccessTokenExpiresAt = refreshTokenExpiresAt
+            };
+            
             #endregion 
         }
 

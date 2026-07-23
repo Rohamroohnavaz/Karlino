@@ -15,7 +15,7 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
 
         Task<RegisterResult> RegisterJobSeekerAsync(RegisterJobSeekerCommand command);
 
-        Task<LoginResult> LoginAsync(LoginUserCommand command);
+        Task<LoginResultForRefresh> LoginAsync(LoginUserCommand command);
 
         Task<string> GenerateTokenAsync(User user);
 
