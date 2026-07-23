@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MyFinalProject.Application;
+using MyFinalProject.Application.Seed;
 using MyFinalProject.Application.Services.MainServices;
 using MyFinalProject.Application.Services.ServiceInterfaces;
 using MyFinalProject.Domain.Entities.MainModels;
@@ -14,12 +15,13 @@ using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace WebLayer
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -82,7 +84,7 @@ namespace WebLayer
             builder.Services
                    .AddIdentity<User, IdentityRole<Guid>>(options =>
                    {
-                       options.Password.RequiredLength = 20;
+                       options.Password.RequiredLength = 8;
                        options.Password.RequireDigit = true;
                        options.Password.RequireNonAlphanumeric = false;
                        options.Password.RequireUppercase = true;
@@ -139,6 +141,15 @@ namespace WebLayer
             builder.Services.AddOpenApi();
 
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<FinalDbContext>();
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+
+                await SeedData.SeedAsync(db, roleManager, userManager);
+            }
 
             app.UseCors("AllowAll");
             // Configure the HTTP request pipeline.

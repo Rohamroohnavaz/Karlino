@@ -18,6 +18,7 @@ namespace MyFinalProject.Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             builder.Property(f => f.Price)
+                .HasPrecision(18,2)
                 .IsRequired();
 
             builder.Property(f => f.StartDate)

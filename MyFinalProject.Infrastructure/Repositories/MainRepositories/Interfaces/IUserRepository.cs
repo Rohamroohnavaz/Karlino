@@ -11,7 +11,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
 {
     public interface IUserRepository
     {
-        Task<User?> FindByName(string firstName);
+        Task<User?> FindByUsername(string username);
 
         Task<User?> FindByEmail(string email);
 

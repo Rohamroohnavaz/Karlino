@@ -21,7 +21,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
 
         public async Task CreateCompanyAsync(CreateCompanyDto dto)
         {
-            var company = new Company(dto.CompanyName, dto.CompanyLocation, dto.Province, dto.City);
+            var company = new Company(dto.CompanyName, dto.CompanyLocation, dto.Province, dto.City ,dto.UserId);
                
             await _dbContext.AddAsync(company);
         }

@@ -36,7 +36,8 @@ namespace MyFinalProject.Application.Services.MainServices
             if (existCompany)
                 throw new InvalidCompanyException("This Company Is Already Exist !");
 
-            var newCompany = new Company(dto.CompanyName, dto.CompanyLocation, dto.Province, dto.City);
+            var newCompany = new Company(dto.CompanyName, dto.CompanyLocation,
+                dto.Province, dto.City ,dto.UserId);
             
             await _companyRepository.AddAsync(newCompany);
             await _unitOfWork.SaveChangesAsync();

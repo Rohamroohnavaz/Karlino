@@ -14,6 +14,7 @@ namespace MyFinalProject.Infrastructure.Persistence.Configurations
         protected override void ApplyEntityConfiguration(EntityTypeBuilder<Payment> builder)
         {
             builder.Property(p => p.Amount)
+                .HasPrecision(18,2)
                 .IsRequired();
 
             builder.HasOne(p => p.Company)

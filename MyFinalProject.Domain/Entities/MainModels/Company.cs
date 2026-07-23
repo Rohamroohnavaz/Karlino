@@ -16,12 +16,13 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         }
 
-        public Company(string companyName, string companyLocation, string province, string city)
+        public Company(string companyName, string companyLocation, string province, string city ,Guid userId)
         {
             CompanyName = companyName;
             CompanyLocation = companyLocation;
             Province = province;
             City = city;
+            UserId = userId;
             Validation();
         }
 

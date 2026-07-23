@@ -17,6 +17,6 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
 
         Task<LoginResult> LoginAsync(LoginUserCommand command);
 
-        Task<LoginResult> GenerateTokenAsync(User user);
+        Task<string> GenerateTokenAsync(User user);
     }
 }

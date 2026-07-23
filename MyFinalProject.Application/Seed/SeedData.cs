@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MyFinalProject.Application.Constants;
+using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Infrastructure;
 using System;
@@ -13,47 +15,70 @@ namespace MyFinalProject.Application.Seed
 {
     public static class SeedData
     {
-        public static async Task InitializeAsync(IServiceProvider services)
+        public static async Task SeedAsync(
+            FinalDbContext db,
+            RoleManager<IdentityRole<Guid>> roleManager,
+            UserManager<User> userManager)
         {
-            var db = services.GetRequiredService<FinalDbContext>();
-            var roleManager = services.GetRequiredService<RoleManager<IdentityRole<Guid>>>();
-            var userManager = services.GetRequiredService<UserManager<User>>();
+            await db.Database.MigrateAsync();
 
-            await db.Database.EnsureCreatedAsync();
+            await EnsureRolesAsync(roleManager);
+            await EnsureAdminAsync(userManager);
+        }
 
-            string[] roles =
-            [
-                RoleConstants.JobSeekerRole,
-                RoleConstants.EmployerRole,
-                RoleConstants.AdminRole
-            ];
-
-            foreach (var role in roles)
+        private static async Task EnsureRolesAsync(RoleManager<IdentityRole<Guid>> roleManager)
+        {
+            var roles = new[]
             {
-                if (!await roleManager.RoleExistsAsync(role))
-                    await roleManager.CreateAsync(new IdentityRole<Guid> { Name = role });
-            }
+               RoleConstants.JobSeekerRole,
+               RoleConstants.EmployerRole,
+               RoleConstants.AdminRole
+            };
 
-            const string adminEmail = "admin@gmail.com";
-            const string adminPassword = "admin8844_43";
-
-            if (await userManager.FindByEmailAsync(adminEmail) is null)
+            foreach (var roleName in roles)
             {
-                var admin = new User
+                if (!await roleManager.RoleExistsAsync(roleName))
                 {
-                    UserName = "System_Admin",
-                    Email = adminEmail,
-                    IsApproved = true,
-                    EmailConfirmed = true
-                };
+                    var result = await roleManager.CreateAsync(new IdentityRole<Guid>(roleName));
+                    if (!result.Succeeded)
+                    {
+                        throw new Exception($"Creating Role {roleName} was not successful :" +
+                            string.Join(" | ", result.Errors.Select(x => x.Description)));
+                    }
+                }
+            }
+        }
 
-                var result = await userManager.CreateAsync(admin, adminPassword);
-                if (result.Succeeded)
-                    await userManager.AddToRoleAsync(admin, RoleConstants.AdminRole);
+        private static async Task EnsureAdminAsync(UserManager<User> userManager)
+        {
+            var adminEmail = "admin@gmail.com";
+            var adminUserName = "System_Admin";
+            var adminPassword = "Admin@123456";
+
+            var existingAdmin = await userManager.FindByEmailAsync(adminEmail);
+            if (existingAdmin != null)
+                return;
+
+            var admin = new User("System", "Admin", "9876543210", adminEmail);
+
+            admin.Id = Guid.NewGuid();
+            admin.UserName = adminUserName;
+            admin.EmailConfirmed = true;
+            admin.IsApproved = true;
+            admin.Role = UserRole.Admin;
+
+            var createResult = await userManager.CreateAsync(admin, adminPassword);
+            if (!createResult.Succeeded)
+            {
+                throw new Exception("Creating Admin User Failed : " +
+                    string.Join(" | ", createResult.Errors.Select(x => x.Description)));
             }
 
-            Console.WriteLine("Seed Data Is OK");
-            Console.WriteLine($"Admin : {adminEmail} / {adminPassword}");
+            var roleResult = await userManager.AddToRoleAsync(admin, RoleConstants.AdminRole);
+            if (!roleResult.Succeeded)
+            {
+                throw new Exception("Add Role To Admin User Failed !");
+            }
         }
     }
 }

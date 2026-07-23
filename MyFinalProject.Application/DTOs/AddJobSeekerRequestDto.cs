@@ -14,14 +14,9 @@ namespace MyFinalProject.Application.DTOs
         [MinLength(3, ErrorMessage = "Firstname should be at least 3 characters long.")]
         public string FirstName { get; set; }
 
-
         [Required(ErrorMessage = "First Name is required.", AllowEmptyStrings = false)]
         [MinLength(3, ErrorMessage = "Last Name should be at least 3 characters long.")]
         public string LastName { get; set; }
-
-        [Required(ErrorMessage = "First Name is required.", AllowEmptyStrings = false)]
-        [MinLength(3, ErrorMessage = "Last Name should be at least 3 characters long.")]
-        public string CompanyName { get; set; }
 
         public string PhoneNumber { get; set; }
 
@@ -30,10 +25,5 @@ namespace MyFinalProject.Application.DTOs
         public string Username { get; set; }
 
         public string Password { get; set; }
-
-        public RegisterEmployerCommand ToCommand()
-        {
-            return new RegisterEmployerCommand(FirstName, LastName, PhoneNumber, Email, Password, Username);
-        }
     }
 }

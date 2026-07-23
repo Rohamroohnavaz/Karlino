@@ -29,7 +29,7 @@ namespace MyFinalProject.Application.Services.MainServices
             var user = await _userManager.FindByIdAsync(userId.ToString());
 
             if (user is null)
-                throw new UserNotFoundException($"{nameof(user)} not found !!");
+                throw new UserNotFoundException($"{nameof(user)} not found !!"); 
 
             await _userManager.AddClaimAsync(user, ClaimConstants.VipEmployer);
         }

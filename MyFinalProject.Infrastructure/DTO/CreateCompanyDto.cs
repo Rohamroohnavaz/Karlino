@@ -27,5 +27,7 @@ namespace MyFinalProject.Infrastructure.DTO
         [Required(ErrorMessage = "City is required !!", AllowEmptyStrings = false)]
         [MinLength(3, ErrorMessage = "City should be at least 3 characters long.")]
         public string City { get; set; }
+
+        public Guid UserId { get; set; }
     }
 }

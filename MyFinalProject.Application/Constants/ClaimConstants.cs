@@ -9,6 +9,8 @@ namespace MyFinalProject.Application.Constants
 {
     public static class ClaimConstants
     {
+        public readonly static string Username = "Username";
+        public readonly static string Role = "Role";
         public readonly static Claim VipEmployer = new Claim("Level" ,"VIP");
     }
 }

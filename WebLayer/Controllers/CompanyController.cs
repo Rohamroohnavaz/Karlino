@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using MyFinalProject.Application.Constants;
 using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.Services.ServiceInterfaces;
+using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Infrastructure.DTO;
 
 namespace WebLayer.Controllers
@@ -17,6 +20,7 @@ namespace WebLayer.Controllers
         }
 
         [HttpGet("/GetMyCompany")]
+        [Authorize(Roles = "Employer")]
         public async Task<IActionResult> GetMyCompany()
         {
             var company = await _companyService.GetMyCompanyAsync();
@@ -28,6 +32,7 @@ namespace WebLayer.Controllers
         }
 
         [HttpPost("/CreateCompany")]
+        [Authorize(Roles = "Employer")]
         public async Task<IActionResult> AddNewCompany([FromBody] CreateCompanyDto dto,
             [FromRoute] Guid companyId)
         {

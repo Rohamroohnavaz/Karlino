@@ -32,9 +32,9 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
             return await _userManager.FindByEmailAsync(email);
         }
 
-        public async Task<User?> FindByName(string firstName)
+        public async Task<User?> FindByUsername(string username)
         {
-            return await _userManager.FindByNameAsync(firstName);
+            return await _userManager.FindByNameAsync(username);
         }
 
         public async Task<List<User>> GetUsersByRole(string userRole)

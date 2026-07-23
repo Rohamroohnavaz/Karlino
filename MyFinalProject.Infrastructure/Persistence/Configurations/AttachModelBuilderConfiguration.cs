@@ -30,7 +30,7 @@ namespace MyFinalProject.Infrastructure.Persistence.Configurations
                 .IsRequired();
 
             builder.HasOne(a => a.Company)
-                .WithMany()
+                .WithMany(c => c.Attaches)
                 .HasForeignKey(a => a.CompanyId)
                 .OnDelete(DeleteBehavior.Restrict);
 
@@ -40,7 +40,7 @@ namespace MyFinalProject.Infrastructure.Persistence.Configurations
                 .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(a => a.User)
-                .WithMany()
+                .WithMany(u => u.Attaches)
                 .HasForeignKey(a => a.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
         }

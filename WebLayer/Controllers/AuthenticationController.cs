@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using MyFinalProject.Application.Commands;
 using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.Services.MainServices.AuthServices;
+using WebLayer.Models;
 using IAuthenticationService = MyFinalProject.Application.Services.MainServices.AuthServices.IAuthenticationService;
 
 namespace WebLayer.Controllers
@@ -17,20 +19,25 @@ namespace WebLayer.Controllers
             _authenticationService = authenticationService;
         }
 
-        [HttpPost("api/RegisterEmployer")]
-        public async Task<IActionResult> AddEmployer([FromBody]AddEmployerRequestDto dto)
+        [HttpPost("/RegisterEmployer")]
+        public async Task<IActionResult> RegisterEmployer([FromBody] RegisterEmployerCommand command)
         {
-            var result = await _authenticationService.RegisterEmployerAsync(dto.ToCommand());
-            return Ok(result);
+            var employerResult = await _authenticationService.RegisterEmployerAsync(command);
+            return Ok(employerResult);
         }
 
-        [HttpPost("api/RegisterJobSeeker")]
-        public async Task<IActionResult> AddJobSeeker([FromBody]AddEmployerRequestDto dto)
+        [HttpPost("/RegisterJobSeeker")]
+        public async Task<IActionResult> RegisterJobSeeker([FromBody] RegisterJobSeekerCommand command)
         {
-            var result = await _authenticationService.RegisterEmployerAsync(dto.ToCommand());
-            return Ok(result);
+            var jobSeekerResult = await _authenticationService.RegisterJobSeekerAsync(command);
+            return Ok(jobSeekerResult);
         }
 
-
+        [HttpPost("/LoginUser")]
+        public async Task<IActionResult> LoginUser([FromBody] LoginUserCommand command)
+        {
+            var loginResult = await _authenticationService.LoginAsync(command);
+            return Ok(loginResult);
+        }
     }
 }

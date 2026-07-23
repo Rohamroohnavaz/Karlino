@@ -13,6 +13,10 @@ namespace MyFinalProject.Application.Commands
         string Phonenumber,
         string Email,
         string Username,
-        string Password
+        string Password,
+        string CompanyName,
+        string CompanyLocation,
+        string Province,
+        string City
     );
 }
