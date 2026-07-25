@@ -43,6 +43,10 @@ namespace MyFinalProject.Infrastructure.Persistence.Configurations
                 .WithOne()
                 .HasForeignKey<RequestResume>(r => r.AttachmentId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasIndex(r => new { r.UserId, r.AdvertisementId })
+                   .IsUnique()
+                   .HasFilter("[IsDeleted] = 0");
         }
     }
 }

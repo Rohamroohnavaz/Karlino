@@ -10,6 +10,8 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
 {
     public interface IRequestResumeService
     {
+        Task<Guid> CreateResumeRequest(Guid advertisementId, CreateRequestResumeDto dto);
+
         Task ChangeRequestStatusAsync(ChangeRequestStatusDto dto);
 
         Task<List<RequestResume>> GetRequestsByAdverIdAsync(Guid advertisementId);

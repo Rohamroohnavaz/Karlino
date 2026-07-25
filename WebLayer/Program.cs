@@ -134,6 +134,7 @@ namespace WebLayer
             builder.Services.AddScoped<IAdvertisementService, AdvertisementService>();
             builder.Services.AddScoped<IRequestResumeService, RequestResumeService>();
             builder.Services.AddScoped<IAttachService, AttachService>();
+            builder.Services.AddTransient<GlobalExceptionHandler>();
 
             // Add services to the container.
 

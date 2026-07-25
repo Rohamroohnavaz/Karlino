@@ -8,6 +8,7 @@ namespace WebLayer.Controllers
 {
     [ApiController]
     [Route("api/RequestResume")]
+    [Authorize]
     public class RequestResumeController : ControllerBase
     {
         private readonly IRequestResumeService _requestResumeService;
@@ -24,22 +25,24 @@ namespace WebLayer.Controllers
             return Ok();
         }
 
-        [HttpGet("/GetRequests/{advertisementId:guid}")]
+        [HttpGet("/{advertisementId:guid}")]
         public async Task<IActionResult> GetRequestsAsync([FromRoute]Guid advertisementId)
         {
             var result = await _requestResumeService.GetRequestsByAdverIdAsync(advertisementId);
             return Ok(result);
         }
 
-        //[HttpPost("/CreateResume")]
-        //[Authorize(Roles = "JobSeeker")]
-        //public async Task<IActionResult> CreareRequestResumeAsync()
-        //{
-        //    await _requestResumeService.
-        //}
+        [HttpPost("/CreateResume")]
+        [Authorize(Roles = "JobSeeker")]
+        public async Task<IActionResult> CreateRequestResumeAsync([FromBody] CreateRequestResumeDto dto ,Guid adverId)
+        {
+            await _requestResumeService.CreateResumeRequest(adverId, dto);
+            return Ok();
+        }
 
 
         [HttpGet("/GetRequests/{adverId:guid}")]
+        [Authorize(Roles = "Employer")]
         public async Task<IActionResult> GetRequestByAdverId([FromRoute] Guid adverId)
         {
             var request = await _requestResumeService.GetRequestsByAdverIdAsync(adverId);

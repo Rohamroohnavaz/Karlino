@@ -8,7 +8,7 @@ using MyFinalProject.Domain.Entities.MainModels;
 namespace WebLayer.Controllers
 {
     [ApiController]
-    [Route("api/")]
+    [Route("api/adv")]
     public class AdvertisementController : ControllerBase
     {
         private readonly IAdvertisementService _advertisementService;
@@ -30,6 +30,7 @@ namespace WebLayer.Controllers
         }
 
         [HttpGet("/GetActiveAdvertisements")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetActiveAdvers()
         {
             var advers = await _advertisementService.GetActiveAdvertisementAsync();
@@ -37,6 +38,7 @@ namespace WebLayer.Controllers
         }
 
         [HttpGet("/SearchAdvertisement")]
+        [AllowAnonymous]
         public async Task<IActionResult> SearchAdvertisement([FromBody] AdverSearchFilterDto filter)
         {
             var result = await _advertisementService.SearchAndFilterAdsAsync(filter); 

@@ -16,14 +16,17 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
 
         Task<RequestResume?> GetRequestWithAttach(Guid requestId);
 
-        Task<RequestResume?> GetRequestResumeByCompanyId(Guid resumeId,Guid companyId);
+        Task<RequestResume?> GetRequestResumeByCompanyId(Guid resumeId, Guid companyId);
 
-        Task<RequestResume?> GetRequestResumeWithAttachByCompanyId(Guid resumeId,Guid companyId);
+        Task<RequestResume?> GetRequestResumeWithAttachByCompanyId(Guid resumeId, Guid companyId);
 
         Task<RequestResume?> GetResumeByAttachId(Guid attachId);
 
         Task<RequestResume?> GetRequestByUserId(Guid userId);
 
         Task<RequestResume?> GetRequestWithAttachmentByUserId(Guid requestId, Guid userId);
+
+        Task<bool> ExistsByUserAndAdvertisement(Guid userId, Guid advertisementId);
+
     }
 }

@@ -1,5 +1,4 @@
 ﻿using MyFinalProject.Domain.Entities.Abstraction;
-using MyFinalProject.Domain.Entities.MainModels.Features;
 using MyFinalProject.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -7,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyFinalProject.Domain.Entities.MainModels
+namespace MyFinalProject.Domain.Entities.MainModels.Features
 {
     public class CompanyFeature : BaseEntity
     {

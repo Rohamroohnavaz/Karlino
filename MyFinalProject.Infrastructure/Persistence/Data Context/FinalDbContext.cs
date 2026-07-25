@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MyFinalProject.Domain.Entities;
 using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Domain.Entities.MainModels;
 using System;

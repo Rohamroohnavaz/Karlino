@@ -1,5 +1,6 @@
 ﻿using MyFinalProject.Domain.Entities.Abstraction;
 using MyFinalProject.Domain.Entities.LogManager;
+using MyFinalProject.Domain.Entities.MainModels.Features;
 using MyFinalProject.Domain.Exceptions;
 using System;
 using System.Collections.Generic;

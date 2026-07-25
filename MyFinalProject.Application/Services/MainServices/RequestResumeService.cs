@@ -7,6 +7,7 @@ using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
 using MyFinalProject.Infrastructure.RepoExceptions;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
+using MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,18 +23,57 @@ namespace MyFinalProject.Application.Services.MainServices
         private readonly IUnitOfWork _unitOfWork;
         private readonly IAttachService _attachService;
         private readonly UserManager<User> _userManager;
+        private readonly IAdvertisementRepository _advertiserRepository;
 
         public RequestResumeService(IRequestResumeRepository requestResumeRepository
             , ICurrentUserService currentUserService
             , IUnitOfWork unitOfWork
             , IAttachService attachService
-            , UserManager<User> userManager)
+            , UserManager<User> userManager
+            , IAdvertisementRepository advertisementRepository)
         {
             _requestRepository = requestResumeRepository;
             _currentUserService = currentUserService;
             _unitOfWork = unitOfWork;
             _attachService = attachService;
             _userManager = userManager;
+            _advertiserRepository = advertisementRepository;
+        }
+
+        public async Task<Guid> CreateResumeRequest(Guid advertisementId, CreateRequestResumeDto dto)
+        {
+            var userId = _currentUserService.UserId;
+
+            var advertisementExists =
+                await _advertiserRepository.ExistAdvertisementAsync(advertisementId);
+
+            if (!advertisementExists)
+                throw new InvalidRequestResumeException("Advertisement not found !!");
+ 
+            var duplicate = await _requestRepository.ExistsByUserAndAdvertisement(userId ,advertisementId);
+                
+            if (duplicate)
+                throw new InvalidRequestResumeException(
+                    "You have already requested this advertisement !!");
+
+            var request = new RequestResume
+                (
+                  dto.JobSeekerName,
+                  dto.JobSeekerLastName,
+                  dto.Province,
+                  dto.City,
+                  dto.StartDate,
+                  dto.ExpireDate,
+                  dto.UserId,
+                  dto.AdvertisementId,
+                  dto.AttachmentId
+                );
+           
+
+            await _requestRepository.AddAsync(request);
+            await _unitOfWork.SaveChangesAsync();
+
+            return request.Id;
         }
 
         public async Task ChangeRequestStatusAsync(ChangeRequestStatusDto dto)
@@ -150,5 +190,7 @@ namespace MyFinalProject.Application.Services.MainServices
 
             return request;
         }
+
+        
     }
 }

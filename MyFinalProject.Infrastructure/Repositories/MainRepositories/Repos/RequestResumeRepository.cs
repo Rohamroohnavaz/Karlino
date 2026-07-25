@@ -17,6 +17,13 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
         {
         }
 
+        public async Task<bool> ExistsByUserAndAdvertisement(Guid userId, Guid advertisementId)
+        {
+            return await _dbContext.Resumes
+                .AnyAsync(r => r.UserId == userId && r.AdvertisementId == advertisementId
+                && r.IsDeleted == false);
+        }
+
         public async Task<List<RequestResume>> GetRequestByAdverId(Guid adverId)
         {
             var requests = await _dbContext.Resumes

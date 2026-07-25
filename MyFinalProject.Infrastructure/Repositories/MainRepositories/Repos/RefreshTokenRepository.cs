@@ -1,4 +1,4 @@
-﻿using MyFinalProject.Domain.Entities;
+﻿using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Infrastructure.Repositories.Generics;
 using System;
 using System.Collections.Generic;
