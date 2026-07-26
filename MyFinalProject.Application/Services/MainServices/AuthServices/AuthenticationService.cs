@@ -1,5 +1,7 @@
 ﻿using Azure.Core;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using MyFinalProject.Application.Commands;
@@ -10,6 +12,7 @@ using MyFinalProject.Application.Services.ServiceInterfaces;
 using MyFinalProject.Domain.Entities;
 using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Infrastructure;
 using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
 using System;
@@ -35,6 +38,7 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
         private readonly ICompanyRepository _companyRepository;
         private readonly IConfiguration _configuration;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
+        private readonly FinalDbContext _context;
 
         public AuthenticationService(UserManager<User> userManager,
             SignInManager<User> signInManager,
@@ -44,7 +48,8 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
             , IUnitOfWork unitOfWork
             , ICompanyRepository companyRepository
             , IConfiguration configuration
-            , IRefreshTokenRepository refreshTokenRepository)
+            , IRefreshTokenRepository refreshTokenRepository
+            , FinalDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -55,6 +60,7 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
             _companyRepository = companyRepository;
             _configuration = configuration;
             _refreshTokenRepository = refreshTokenRepository;
+            _context = context;
         }
 
         public async Task<RegisterResult> RegisterEmployerAsync(RegisterEmployerCommand command)
@@ -164,7 +170,7 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
             var user = await _userManager.FindByEmailAsync(command.Email);
 
             if (user is null)
-                throw new UserNotFoundException("");
+                throw new UserNotFoundException("User not found !!");
 
             var passwordIsValid = BCrypt.Net.BCrypt.Verify(command.Password ,user.PasswordHash);
 
@@ -237,9 +243,9 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
                new Claim(ClaimConstants.Role, user.Role.ToString())
             };
 
-            if (user.Role == UserRole.Employer && user.Company != null)
+            if (user.CompanyId.HasValue)
             {
-                claims.Add(new Claim("CompanyId", user.Company.Id.ToString()));
+                claims.Add(new Claim("CompanyId", user.CompanyId.Value.ToString()));
             }
 
             var roleName = user.Role.ToString();
@@ -261,14 +267,26 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
             return tokenHandler.WriteToken(token);
         }
 
-        public Task<LoginResult> RefreshTokenAsync(string refreshToken)
+        public async Task LogoutAsync(string jti, DateTime expiresAtUtc)
         {
-            throw new NotImplementedException();
-        }
+            if (string.IsNullOrWhiteSpace(jti))
+                throw new ArgumentException("Jti is invalid !!");
 
-        public Task LogoutAsync(string refreshToken)
-        {
-            throw new NotImplementedException();
+            var revoked = await _context.RevokedTokens
+                .FirstOrDefaultAsync(r => r.Jti == jti);
+
+            if (revoked != null)
+                return;
+
+            await _context.RevokedTokens.AddAsync(new RevokedToken
+            {
+                RevokeId = Guid.NewGuid(),
+                Jti = jti,
+                ExpiresAtUtc = expiresAtUtc,
+                RevokedAtUtc = DateTime.UtcNow
+            });
+
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

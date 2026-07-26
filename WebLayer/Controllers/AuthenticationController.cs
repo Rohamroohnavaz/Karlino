@@ -1,8 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyFinalProject.Application.Commands;
 using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.Services.MainServices.AuthServices;
+using System.Diagnostics.Eventing.Reader;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using WebLayer.Models;
 using IAuthenticationService = MyFinalProject.Application.Services.MainServices.AuthServices.IAuthenticationService;
 
@@ -38,6 +42,23 @@ namespace WebLayer.Controllers
         {
             var loginResult = await _authenticationService.LoginAsync(command);
             return Ok(loginResult);
+        }
+
+        [Authorize]
+        [HttpPost("/LogoutUser")]
+        public async Task<IActionResult> LogoutUser()
+        {
+            var jti = User.FindFirstValue(JwtRegisteredClaimNames.Jti);
+            var expire = User.FindFirstValue(JwtRegisteredClaimNames.Exp);
+
+            if (string.IsNullOrWhiteSpace(jti) || string.IsNullOrWhiteSpace(expire)
+                || long.TryParse(expire, out var expireTime))
+                return BadRequest("Invalid Token !");
+
+            var expiresAtUtc = DateTimeOffset.FromUnixTimeSeconds(expireTime).UtcDateTime;
+
+            await _authenticationService.LogoutAsync(jti , expiresAtUtc);
+            return NoContent();
         }
     }
 }
