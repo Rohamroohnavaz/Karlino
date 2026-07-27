@@ -1,8 +1,8 @@
 ﻿namespace WebLayer.Models
 {
-    public class ResponseDto : BaseResponseDto<General>
+    public class ResponseDto : BaseResponseDto<GeneralResult>
     {
-        public ResponseDto(Guid id) : base(new General(id))
+        public ResponseDto(Guid id) : base(new GeneralResult(id))
         {
             
         }

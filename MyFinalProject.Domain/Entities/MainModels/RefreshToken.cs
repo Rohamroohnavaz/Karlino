@@ -10,13 +10,29 @@ namespace MyFinalProject.Domain.Entities.MainModels
 {
     public class RefreshToken : BaseEntity
     {
-        public string Token { get; private set; } = null!;
-        public Guid UserId { get; private set; }
-        public User User { get; private set; } = null!;
-        public DateTime ExpiresAt { get; private set; }
-        public bool IsRevoked { get; private set; }
+        private RefreshToken() { }
 
-        
+
+        public RefreshToken(string token, Guid userId, DateTime expiresAt)
+        {
+            Token = token;
+            UserId = userId;
+            ExpiresAt = expiresAt;
+            IsRevoked = false;
+            Validation();
+        }
+
+        public string Token { get; set; } = null!;
+        public Guid UserId { get; set; }
+        public User User { get; set; } = null!;
+        public DateTime ExpiresAt { get; set; }
+        public bool IsExpired => DateTime.UtcNow >= ExpiresAt;
+        public bool IsRevoked { get; set; }
+        public DateTime? RevokedAt { get; set; }
+        public string? RevokeReason { get; set; }
+        public string? ReplacedByToken { get; set; }
+        public bool IsActive => !IsRevoked && !IsExpired;
+
         public override void Validation()
         {
             if (string.IsNullOrWhiteSpace(Token))

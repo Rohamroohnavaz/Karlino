@@ -9,6 +9,6 @@ namespace MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder
 {
     public interface IUnitOfWork
     {
-        Task<int> SaveChangesAsync();
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

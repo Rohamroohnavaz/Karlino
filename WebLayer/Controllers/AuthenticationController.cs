@@ -23,6 +23,7 @@ namespace WebLayer.Controllers
             _authenticationService = authenticationService;
         }
 
+        [AllowAnonymous]
         [HttpPost("/RegisterEmployer")]
         public async Task<IActionResult> RegisterEmployer([FromBody] RegisterEmployerCommand command)
         {
@@ -30,13 +31,15 @@ namespace WebLayer.Controllers
             return Ok(employerResult);
         }
 
+        [AllowAnonymous]
         [HttpPost("/RegisterJobSeeker")]
         public async Task<IActionResult> RegisterJobSeeker([FromBody] RegisterJobSeekerCommand command)
         {
             var jobSeekerResult = await _authenticationService.RegisterJobSeekerAsync(command);
-            return Ok(jobSeekerResult);
+            return Ok(new ResponseDto(jobSeekerResult.ResultId));
         }
 
+        [AllowAnonymous]
         [HttpPost("/LoginUser")]
         public async Task<IActionResult> LoginUser([FromBody] LoginUserCommand command)
         {

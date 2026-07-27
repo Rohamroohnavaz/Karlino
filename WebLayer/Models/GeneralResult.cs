@@ -1,8 +1,8 @@
 ﻿namespace WebLayer.Models
 {
-    public class General
+    public class GeneralResult
     {
-        public General(Guid id)
+        public GeneralResult(Guid id)
         {
             ResourceId = id;
         }

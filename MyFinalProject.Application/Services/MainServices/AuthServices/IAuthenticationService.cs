@@ -17,7 +17,7 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
 
         Task<LoginResultForRefresh> LoginAsync(LoginUserCommand command);
 
-        Task<string> GenerateTokenAsync(User user);
+        Task<GenerateTokenResult> GenerateTokenAsync(User user);
 
         Task LogoutAsync(string jti ,DateTime expiresAtUtc);
     }

@@ -98,7 +98,13 @@ namespace WebLayer
                    .AddEntityFrameworkStores<FinalDbContext>()
                    .AddDefaultTokenProviders();
 
-            var jwtSettings = builder.Configuration.GetSection("JwtConfigurations").Get<JwtSettings>()!;
+
+            builder.Services.Configure<JwtSettings>(
+            builder.Configuration.GetSection("JwtConfigurations"));
+
+            var jwtSection = builder.Configuration.GetSection("JwtConfigurations");
+            var jwtSettings = jwtSection.Get<JwtSettings>();
+
             builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtConfigurations"));
             builder.Services.AddAuthentication(options =>
             {
@@ -154,6 +160,7 @@ namespace WebLayer
             builder.Services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
             builder.Services.AddScoped<IRequestResumeRepository, RequestResumeRepository>();
             builder.Services.AddScoped<IAttachRepository, AttachRepository>();
+            builder.Services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
             builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ICompanyService, CompanyService>();

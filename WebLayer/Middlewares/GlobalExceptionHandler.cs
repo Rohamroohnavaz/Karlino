@@ -1,9 +1,11 @@
 ﻿
+using Microsoft.EntityFrameworkCore;
 using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.ServiceExceptions;
 using System;
 using System.Security.Authentication;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 namespace WebLayer.Middlewares
 {
@@ -18,35 +20,48 @@ namespace WebLayer.Middlewares
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                HandleExceptionsAsync(context, ex);
+                Console.WriteLine(ex.ToString());
+                await HandleExceptionsAsync(context, ex);
             }
         }
 
-        private void HandleExceptionsAsync(HttpContext context, Exception exception)
+        private async Task HandleExceptionsAsync(HttpContext context, Exception exception)
         {
             switch (exception)
             {
                 case ItemNotFoundException ex:
                     context.Response.StatusCode = 404;
-                    context.Response.WriteAsync(GenerateResponseBody(ex.Code, ex.Message));
+                    await context.Response.WriteAsync(GenerateResponseBody(ex.Code, ex.Message));
                     break;
                 case PermissionDeniedException ex:
                     context.Response.StatusCode = 403;
-                    context.Response.WriteAsync(GenerateResponseBody(ex.Code, ex.Message));
+                    await context.Response.WriteAsync(GenerateResponseBody(ex.Code, ex.Message));
                     break;
                 case BaseBussinessException ex:
                     context.Response.StatusCode = 400;
-                    context.Response.WriteAsync(GenerateResponseBody(ex.Code, ex.Message));
+                    await context.Response.WriteAsync(GenerateResponseBody(ex.Code, ex.Message));
                     break;
                 case AuthenticationException ex:
                     context.Response.StatusCode = 401;
-                    context.Response.WriteAsync(GenerateResponseBody("AuthenticationError_401", ex.Message));
+                    await context.Response.WriteAsync(GenerateResponseBody("AuthenticationError_401", ex.Message));
                     break;
+                case DbUpdateException ex:
+                    context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                    context.Response.ContentType = "application/json";
+                    await context.Response.WriteAsJsonAsync(new
+                    {
+                        message = "Database update failed.",
+                        detail = ex.InnerException?.Message ?? ex.Message
+                    });
+                    break;
+                //case ArgumentException ex:
+                //    context.Response.StatusCode = 400;
+                //    await context.Response.WriteAsync(GenerateResponseBody())
                 default:
                     context.Response.StatusCode = 500;
-                    context.Response.WriteAsync(GenerateResponseBody(
-                        "InternalServerError_500",
-                        "Something went wrong. Please contact your administrator."));
+                    await context.Response.WriteAsync(GenerateResponseBody(
+                         "InternalServerError_500",
+                         "Something went wrong. Please contact your administrator."));
                     break;
             }
         }
