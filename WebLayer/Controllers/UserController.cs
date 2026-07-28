@@ -21,7 +21,7 @@ namespace WebLayer.Controllers
         }
 
         [HttpGet("/GetProfile")]
-        [Authorize(Roles = "JobSeeker")]
+        [Authorize(Roles = RoleConstants.JobSeekerRole)]
         public async Task<IActionResult> GetJobSeekerProfile([FromRoute] Guid userId)
         {
             var user = await _userService.GetJobSeekerProfile(userId);
@@ -32,7 +32,7 @@ namespace WebLayer.Controllers
         } 
 
         [HttpPut("/UpdateProfile")]
-        [Authorize(Roles = "JobSeeker")]
+        [Authorize(Roles = RoleConstants.JobSeekerRole)]
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserProfileDto dto)
         {
             await _userService.UpdateProfileUser(dto);

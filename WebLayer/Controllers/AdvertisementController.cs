@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyFinalProject.Application.Constants;
 using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.Filters;
 using MyFinalProject.Application.Services.ServiceInterfaces;
@@ -9,6 +10,7 @@ namespace WebLayer.Controllers
 {
     [ApiController]
     [Route("api/adv")]
+    [Authorize]
     public class AdvertisementController : ControllerBase
     {
         private readonly IAdvertisementService _advertisementService;
@@ -22,7 +24,7 @@ namespace WebLayer.Controllers
         }
 
         [HttpPost("/CreateAdvertisement")]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = RoleConstants.EmployerRole)]
         public async Task<IActionResult> CreateAdver([FromBody]CreateAdvertisementDto dto)
         { 
                await _advertisementService.CreateAdvertisementAsync(dto);

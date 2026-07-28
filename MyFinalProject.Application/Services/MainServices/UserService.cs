@@ -52,6 +52,7 @@ namespace MyFinalProject.Application.Services.MainServices
             currentUser.PhoneNumber = dto.Phonenumber;
 
             await _userManager.UpdateAsync(currentUser);
+            await _unitOfWork.SaveChangesAsync();
         }
 
         public async Task UpdateUserInfo(UpdateUserInfoCommand command)
@@ -85,8 +86,10 @@ namespace MyFinalProject.Application.Services.MainServices
 
             user.IsApproved = true;
             await _userManager.UpdateAsync(user);
+            await _unitOfWork.SaveChangesAsync();
         }
 
+        //Admin Task
         public async Task ApproveUserWithCheckAsync(Guid userId)
         {
             var requesterId = _currentUserService.UserId;

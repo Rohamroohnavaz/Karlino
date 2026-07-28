@@ -38,6 +38,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public ICollection<Skill> Skills { get; set; } = new List<Skill>();
         public ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
         public bool IsApproved { get; set; }
+        public bool IsActive { get; set; }
         public DateTime CreatedAt { get; private set; }
         public DateTime? ModifiedAt { get; private set; }
         public bool IsDeleted { get; private set; }

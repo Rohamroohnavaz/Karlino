@@ -190,7 +190,5 @@ namespace MyFinalProject.Application.Services.MainServices
 
             return request;
         }
-
-        
     }
 }

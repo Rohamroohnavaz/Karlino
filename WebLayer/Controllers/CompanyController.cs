@@ -10,6 +10,7 @@ namespace WebLayer.Controllers
 {
     [ApiController]
     [Route("api/companies")]
+    [Authorize]
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
@@ -20,7 +21,7 @@ namespace WebLayer.Controllers
         }
 
         [HttpGet("/GetMyCompany")]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = RoleConstants.EmployerRole)]
         public async Task<IActionResult> GetMyCompany()
         {
             var company = await _companyService.GetMyCompanyAsync();
@@ -32,7 +33,7 @@ namespace WebLayer.Controllers
         }
 
         [HttpPost("/CreateCompany")]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = RoleConstants.EmployerRole)]
         public async Task<IActionResult> AddNewCompany([FromBody] CreateCompanyDto dto,
             [FromRoute] Guid companyId)
         {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyFinalProject.Application.Constants;
 using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.Services.ServiceInterfaces;
 using WebLayer.Models;
@@ -33,7 +34,7 @@ namespace WebLayer.Controllers
         }
 
         [HttpPost("/CreateResume")]
-        [Authorize(Roles = "JobSeeker")]
+        [Authorize(Roles = RoleConstants.JobSeekerRole)]
         public async Task<IActionResult> CreateRequestResumeAsync([FromBody] CreateRequestResumeDto dto ,Guid adverId)
         {
             await _requestResumeService.CreateResumeRequest(adverId, dto);
@@ -42,7 +43,7 @@ namespace WebLayer.Controllers
 
 
         [HttpGet("/GetRequests/{adverId:guid}")]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = RoleConstants.EmployerRole)]
         public async Task<IActionResult> GetRequestByAdverId([FromRoute] Guid adverId)
         {
             var request = await _requestResumeService.GetRequestsByAdverIdAsync(adverId);

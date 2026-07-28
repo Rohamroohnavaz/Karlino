@@ -28,7 +28,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
             //ExpireDate = expireDate;
             Validation();
         }
-        
+
         public string Title { get; private set; }
         public string Description { get; private set; }
         public decimal Salary { get; private set; }
@@ -42,7 +42,10 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public ICollection<Attach> Attaches { get; set; } = new List<Attach>();
         public Category? Category { get; private set; }
         public Guid? CategoryId { get; private set; }
-        public bool IsActive { get; private set; } = true;
+        public bool IsActive { get; set; } = true;
+        public bool IsFeatured { get; set; }
+        public bool IsApproved { get; set; }
+        public DateTime? FeaturedUntil { get; private set; }
         public DateTime? StartDate { get; private set; }
         public DateTime? ExpireDate { get; private set; }
 

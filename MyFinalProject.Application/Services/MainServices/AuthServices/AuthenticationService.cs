@@ -72,7 +72,7 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
             var findEmployer = await _userManager.FindByNameAsync(command.Username);
 
             if (findEmployer != null)
-                throw new DuplicateUserException("An Employer With This Username Is Exist !!");
+                throw new DuplicateUserException("Duplicate Key");
 
             if (string.IsNullOrWhiteSpace(command.Email))
                 throw new ArgumentException("Email is required !");
