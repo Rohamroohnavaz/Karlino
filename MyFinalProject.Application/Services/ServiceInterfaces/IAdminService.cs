@@ -1,4 +1,5 @@
 ﻿using MyFinalProject.Application.DTOs.AdminDTOs;
+using MyFinalProject.Application.Requests;
 using MyFinalProject.Domain.Entities.MainModels;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,11 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
 
         Task<AdminEmployerDetailsDto> GetEmployerDetailsAsync(Guid employerId);
 
-        Task<bool> ApproveEmployerAsync(Guid employerId);
+        Task<SendEmailResponse> ApproveEmployerAsync(SendEmailRequest request, Guid employerId 
+            ,CancellationToken cancellationToken);
 
-        Task<bool> RejectEmployersAsync(Guid employerId);
+        Task<SendEmailResponse> RejectEmployersAsync(SendEmailRequest request, Guid employerId
+            , CancellationToken cancellationToken);
 
         /////////////
 
@@ -26,16 +29,16 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
 
         Task<AdminJobSeekerDetailsDto> GetJobSeekerDetailsAsync(Guid jobSeekerId);
 
-        Task<bool> ToggleJobSeekerStatusAsync(Guid jobSeekerId ,bool isActive);
+        Task<bool> ToggleJobSeekerStatusAsync(Guid jobSeekerId, bool isActive);
 
         /////////////
 
         ///Advertisement
         Task<List<AdminAdvertisementListDto>> GetAllAdvertisementAsync();
 
-        Task<bool> ToggleAdvertisementStatusAsync();
+        Task<bool> ToggleAdvertisementStatusAsync(Guid adverId ,bool isActive);
 
-        Task<bool> FeatureAdvertisementAsync(Guid adverId ,bool isFeatured ,int? days = null);
+        Task<bool> FeatureAdvertisementAsync(Guid adverId, bool isFeatured, int? days = null);
 
         Task<bool> SoftDeleteAdvertisementAsync(Guid adverId);
 

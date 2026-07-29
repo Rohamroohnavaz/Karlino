@@ -8,5 +8,7 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
 {
     public interface IEmailService
     {
+        Task SendEmailAsync(string to, string subject, string body,
+            bool isHtml, CancellationToken cancellationToken);
     }
 }

@@ -32,11 +32,13 @@ namespace MyFinalProject.Domain.Entities.MainModels
             Validation();
         }
 
+        public string Title { get; private set; }
+        public string Description { get; private set; }
         public string JobSeekerName { get; private set; }
         public string JobSeekerLastName { get; private set; }
         public string Province { get; private set; }
         public string City { get; private set; }
-        public RequestStatus Status { get; set; }
+        public RequestStatus Status { get; set; } = RequestStatus.Pending;
         public User? User { get; private set; }
         public Guid UserId { get; private set; }
         public Advertisement Advertisement { get; private set; }
@@ -46,10 +48,28 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public DateTime StartDate { get; private set; }
         public DateTime ExpireDate { get; private set; }
 
+        public void SetStatus(RequestStatus newStatus)
+        {
+            Status = newStatus;
+        }
+
+        public void Cancel()
+        {
+            Status = RequestStatus.Fail;
+        }
+
         public void SetAttach(Guid? attachId ,Attach attach)
         {
             AttachmentId = attachId;
             Attach = attach;
+        }
+
+        public void ChangeJobSeekerTitle(string jobSeekerTitle)
+        {
+            if (string.IsNullOrWhiteSpace(Title))
+                throw new Exception("JobSeekerTitle is required !!");
+
+            Title = jobSeekerTitle;
         }
 
         public void ChangeJobSeekerName(string jobSeekerName)

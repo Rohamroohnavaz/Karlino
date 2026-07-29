@@ -20,11 +20,15 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
     {
         private readonly FinalDbContext _dbContext;
         private readonly UserManager<User> _userManager;
+        private readonly RoleManager<IdentityRole<Guid>> _roleManager;
 
-        public UserRepository(FinalDbContext dbContext, UserManager<User> userManager)
+        public UserRepository(FinalDbContext dbContext
+            , UserManager<User> userManager
+            , RoleManager<IdentityRole<Guid>> roleManager)
         {
             _dbContext = dbContext;
             _userManager = userManager;
+            _roleManager = roleManager;
         }
 
         public async Task<User?> FindByEmail(string email)
@@ -67,12 +71,52 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
         }
 
         public async Task<List<TResult>> GetUsersAsViewModel<TResult>
-            (Expression<Func<User ,TResult>> projection) where TResult : UserViewModel
+            (Expression<Func<User, TResult>> projection) where TResult : UserViewModel
         {
             return await _dbContext.Users
                 .Select(projection)
                 .OrderByDescending(v => v.CreatedAt)
                 .ToListAsync();
+        }
+
+        public async Task<User?> GetUserWithCompany(Guid employerId)
+        {
+            return await _dbContext.Users
+                .FirstOrDefaultAsync(u => u.CompanyId == employerId);
+        }
+
+        public async Task<User?> GetUserByResumes(Guid jobSeekerId)
+        {
+            return await _dbContext.Users
+                .Include(u => u.RequestResumes)
+                .FirstOrDefaultAsync(u => u.Id == jobSeekerId);
+        }
+
+        public async Task<int> GetCountByRole(string userRole)
+        {
+            var role = await _roleManager.FindByNameAsync(userRole);
+            if (role == null)
+                return 0;
+
+
+            return await (from user in _userManager.Users
+                          join roleUser in _dbContext.UserRoles on user.Id equals roleUser.UserId
+                          where roleUser.RoleId == role.Id && !user.IsDeleted
+                          select user).CountAsync();
+        }
+
+        public async Task<int> GetPendingEmployersCount()
+        {
+            var employer = await _roleManager.FindByNameAsync("Employer");
+            if(employer is null)
+                return 0;
+
+            return await (from user in _userManager.Users
+                          join userRole in _dbContext.UserRoles on user.Id equals userRole.UserId
+                          where userRole.RoleId == employer.Id
+                                && !user.IsApproved
+                                && !user.IsDeleted
+                          select user).CountAsync();
         }
     }
 }

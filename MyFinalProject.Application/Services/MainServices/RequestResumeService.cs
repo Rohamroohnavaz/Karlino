@@ -3,6 +3,7 @@ using MyFinalProject.Application.Constants;
 using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.ServiceExceptions;
 using MyFinalProject.Application.Services.ServiceInterfaces;
+using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
 using MyFinalProject.Infrastructure.RepoExceptions;
@@ -24,13 +25,15 @@ namespace MyFinalProject.Application.Services.MainServices
         private readonly IAttachService _attachService;
         private readonly UserManager<User> _userManager;
         private readonly IAdvertisementRepository _advertiserRepository;
+        private readonly IEmailService _emailService;
 
         public RequestResumeService(IRequestResumeRepository requestResumeRepository
             , ICurrentUserService currentUserService
             , IUnitOfWork unitOfWork
             , IAttachService attachService
             , UserManager<User> userManager
-            , IAdvertisementRepository advertisementRepository)
+            , IAdvertisementRepository advertisementRepository
+            , IEmailService emailService)
         {
             _requestRepository = requestResumeRepository;
             _currentUserService = currentUserService;
@@ -38,6 +41,7 @@ namespace MyFinalProject.Application.Services.MainServices
             _attachService = attachService;
             _userManager = userManager;
             _advertiserRepository = advertisementRepository;
+            _emailService = emailService;
         }
 
         public async Task<Guid> CreateResumeRequest(Guid advertisementId, CreateRequestResumeDto dto)
@@ -49,9 +53,9 @@ namespace MyFinalProject.Application.Services.MainServices
 
             if (!advertisementExists)
                 throw new InvalidRequestResumeException("Advertisement not found !!");
- 
-            var duplicate = await _requestRepository.ExistsByUserAndAdvertisement(userId ,advertisementId);
-                
+
+            var duplicate = await _requestRepository.ExistsByUserAndAdvertisement(userId, advertisementId);
+
             if (duplicate)
                 throw new InvalidRequestResumeException(
                     "You have already requested this advertisement !!");
@@ -68,7 +72,6 @@ namespace MyFinalProject.Application.Services.MainServices
                   dto.AdvertisementId,
                   dto.AttachmentId
                 );
-           
 
             await _requestRepository.AddAsync(request);
             await _unitOfWork.SaveChangesAsync();
@@ -90,7 +93,7 @@ namespace MyFinalProject.Application.Services.MainServices
 
             if (checkApprovedUser is null)
                 throw new UserNotFoundException("We can't find approved user :/");
-            
+
             request.Status = dto.Status;
 
             await _requestRepository.UpdateAsync(request);
@@ -145,7 +148,7 @@ namespace MyFinalProject.Application.Services.MainServices
             if (request.AttachmentId.HasValue)
                 throw new PermissionDeniedException();
 
-           // var roleManage = await _userManager.GetRolesAsync(RoleConstants.JobSeekerRole);
+            // var roleManage = await _userManager.GetRolesAsync(RoleConstants.JobSeekerRole);
             var checkApprovedUser = await _currentUserService.GetAndEnsureApprovedAsync();
 
             if (checkApprovedUser is null)
@@ -189,6 +192,30 @@ namespace MyFinalProject.Application.Services.MainServices
                 throw new InvalidRequestResumeException("Request With Attach Not Found !!");
 
             return request;
+        }
+
+        public async Task ChangeStatusAsync(Guid requestId, RequestStatus newStatus)
+        {
+            var requestResume = await _requestRepository.GetByIdAsync(requestId);
+            if (requestResume is null)
+                throw new ArgumentException(nameof(requestResume));
+
+            requestResume.SetStatus(newStatus);
+
+            await _requestRepository.UpdateAsync(requestResume);
+            await _unitOfWork.SaveChangesAsync();
+
+            await SendStatusChangedEmailAsync(requestResume , newStatus);
+
+        }
+
+        public async Task SendStatusChangedEmailAsync(RequestResume request, RequestStatus status)
+        {
+            switch (status)
+            {
+                //case RequestStatus.Pending:
+                //    await _emailService.SendEmailAsync()
+            }
         }
     }
 }

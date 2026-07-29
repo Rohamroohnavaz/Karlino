@@ -49,6 +49,21 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public DateTime? StartDate { get; private set; }
         public DateTime? ExpireDate { get; private set; }
 
+        public void MakeFeatured(int days)
+        {
+            if (days <= 0)
+                throw new ArgumentException("Days count should be more than 0 !", nameof(days));
+
+            IsFeatured = true;
+            FeaturedUntil = DateTime.UtcNow.AddDays(days);
+        }
+
+        public void CancelFeature()
+        {
+            IsFeatured = false;
+            FeaturedUntil = null;
+        }
+
         public void ChangeTitle(string newTitle)
         {
             if (string.IsNullOrWhiteSpace(newTitle))

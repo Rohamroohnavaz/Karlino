@@ -13,6 +13,6 @@ namespace MyFinalProject.Application.DTOs.AdminDTOs
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
         public bool IsActive { get; set; }
-        public ResumeDto Resume { get; set; }
+        public List<ResumeDto> Resumes { get; set; }
     }
 }

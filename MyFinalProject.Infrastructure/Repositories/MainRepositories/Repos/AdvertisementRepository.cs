@@ -20,13 +20,13 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
         public async Task<bool> ExistAdvertisementAsync(Guid adverId)
         {
             return await _dbContext.Advertisements
-                .AnyAsync(a => a.Id == adverId); 
+                .AnyAsync(a => a.Id == adverId);
         }
 
         public async Task<bool> ExistByTitle(string title)
         {
             return await _dbContext.Advertisements
-                .AnyAsync (a => a.Title == title);
+                .AnyAsync(a => a.Title == title);
         }
 
         public async Task<Advertisement?> GetAdvertisementByCompanyId(Guid companyId)
@@ -39,6 +39,15 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 throw new InvalidAdvertisementException($"{nameof(advertisement)} doesn't exist !!");
 
             return advertisement;
+        }
+
+        public async Task<List<Advertisement>> GetAllWithSoftDelete()
+        {
+            return await _dbContext.Advertisements
+                .IgnoreQueryFilters()
+                .Include(a => a.Company)
+                .OrderByDescending(a => a.CreatedAt)
+                .ToListAsync();
         }
 
         //public async Task<Advertisement?> GetAdvertisementWithRequestResume(Guid resumeId)
@@ -55,6 +64,12 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 .AsNoTracking()
                 .Include(a => a.Company)
                 .FirstOrDefaultAsync(a => a.Id == adverId);
+        }
+
+        public async Task<int> GetCountByStatus(bool isActive)
+        {
+            return await _dbContext.Advertisements
+                .CountAsync(a => a.IsActive == isActive);
         }
     }
 }
