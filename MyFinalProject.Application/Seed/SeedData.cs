@@ -55,17 +55,22 @@ namespace MyFinalProject.Application.Seed
             var adminUserName = "System_Admin";
             var adminPassword = "Admin@123456";
 
-            var existingAdmin = await userManager.FindByEmailAsync(adminEmail);
-            if (existingAdmin != null)
+            var existingEmail = await userManager.FindByEmailAsync(adminEmail);
+            if (existingEmail != null)
                 return;
 
-            var admin = new User("System", "Admin", "9876543210", adminEmail);
+            var existingUsername = await userManager.FindByNameAsync(adminUserName);
+            if (existingUsername != null)
+                return;
 
-            admin.Id = Guid.NewGuid();
-            admin.UserName = adminUserName;
-            admin.EmailConfirmed = true;
-            admin.IsApproved = true;
-            admin.Role = UserRole.Admin;
+            var admin = new User("System", "Admin", "9876543210", adminEmail)
+            {
+                Id = Guid.NewGuid(),
+                UserName = adminUserName,
+                EmailConfirmed = true,
+                IsApproved = true,
+                Role = UserRole.Admin
+            };
 
             var createResult = await userManager.CreateAsync(admin, adminPassword);
             if (!createResult.Succeeded)

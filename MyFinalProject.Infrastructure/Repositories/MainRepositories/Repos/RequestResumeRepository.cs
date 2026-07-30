@@ -94,5 +94,13 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 .Include(r => r.Attach)
                 .FirstOrDefaultAsync(r => r.AttachmentId == attachId && r.IsDeleted == false);
         }
+
+        public async Task<Dictionary<string, int>> GetStatusStats()
+        {
+            return await _dbContext.Resumes
+                .GroupBy(r => r.Status)
+                .Select(g => new { Status = g.Key.ToString(), Count = g.Count() })
+                .ToDictionaryAsync(x => x.Status, x => x.Count);
+        }
     }
 }

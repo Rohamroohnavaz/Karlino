@@ -28,5 +28,6 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
 
         Task<bool> ExistsByUserAndAdvertisement(Guid userId, Guid advertisementId);
 
+        Task<Dictionary<string, int>> GetStatusStats();
     }
 }

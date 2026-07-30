@@ -9,9 +9,9 @@ namespace MyFinalProject.Application.Constants
 {
     public static class RoleConstants
     {
-        public static readonly string JobSeekerRole = "JobSeeker";
-        public static readonly string EmployerRole = "Employer";
-        public static readonly string AdminRole = "Admin";
+        public const string JobSeekerRole = "JobSeeker";
+        public const string EmployerRole = "Employer";
+        public const string AdminRole = "Admin";
 
         public static string ToName(UserRole role) => role switch
         {

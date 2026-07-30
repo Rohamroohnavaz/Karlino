@@ -3,6 +3,7 @@ using MyFinalProject.Application.Constants;
 using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.ServiceExceptions;
 using MyFinalProject.Application.Services.ServiceInterfaces;
+using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
 using MyFinalProject.Infrastructure.RepoExceptions;
@@ -24,13 +25,15 @@ namespace MyFinalProject.Application.Services.MainServices
         private readonly IAttachService _attachService;
         private readonly UserManager<User> _userManager;
         private readonly IAdvertisementRepository _advertiserRepository;
+        private readonly IEmailService _emailService;
 
         public RequestResumeService(IRequestResumeRepository requestResumeRepository
             , ICurrentUserService currentUserService
             , IUnitOfWork unitOfWork
             , IAttachService attachService
             , UserManager<User> userManager
-            , IAdvertisementRepository advertisementRepository)
+            , IAdvertisementRepository advertisementRepository
+            , IEmailService emailService)
         {
             _requestRepository = requestResumeRepository;
             _currentUserService = currentUserService;
@@ -38,6 +41,7 @@ namespace MyFinalProject.Application.Services.MainServices
             _attachService = attachService;
             _userManager = userManager;
             _advertiserRepository = advertisementRepository;
+            _emailService = emailService;
         }
 
         public async Task<Guid> CreateResumeRequest(Guid advertisementId, CreateRequestResumeDto dto)
@@ -49,9 +53,9 @@ namespace MyFinalProject.Application.Services.MainServices
 
             if (!advertisementExists)
                 throw new InvalidRequestResumeException("Advertisement not found !!");
- 
-            var duplicate = await _requestRepository.ExistsByUserAndAdvertisement(userId ,advertisementId);
-                
+
+            var duplicate = await _requestRepository.ExistsByUserAndAdvertisement(userId, advertisementId);
+
             if (duplicate)
                 throw new InvalidRequestResumeException(
                     "You have already requested this advertisement !!");
@@ -68,7 +72,6 @@ namespace MyFinalProject.Application.Services.MainServices
                   dto.AdvertisementId,
                   dto.AttachmentId
                 );
-           
 
             await _requestRepository.AddAsync(request);
             await _unitOfWork.SaveChangesAsync();
@@ -90,7 +93,7 @@ namespace MyFinalProject.Application.Services.MainServices
 
             if (checkApprovedUser is null)
                 throw new UserNotFoundException("We can't find approved user :/");
-            
+
             request.Status = dto.Status;
 
             await _requestRepository.UpdateAsync(request);
@@ -145,7 +148,7 @@ namespace MyFinalProject.Application.Services.MainServices
             if (request.AttachmentId.HasValue)
                 throw new PermissionDeniedException();
 
-           // var roleManage = await _userManager.GetRolesAsync(RoleConstants.JobSeekerRole);
+            // var roleManage = await _userManager.GetRolesAsync(RoleConstants.JobSeekerRole);
             var checkApprovedUser = await _currentUserService.GetAndEnsureApprovedAsync();
 
             if (checkApprovedUser is null)
@@ -191,6 +194,62 @@ namespace MyFinalProject.Application.Services.MainServices
             return request;
         }
 
-        
+        public async Task ChangeStatusAsync(Guid requestId, 
+            RequestStatus newStatus ,CancellationToken cancellationToken)
+        {
+            var requestResume = await _requestRepository.GetByIdAsync(requestId);
+            if (requestResume is null)
+                throw new ArgumentException(nameof(requestResume));
+
+            requestResume.SetStatus(newStatus);
+
+            await _requestRepository.UpdateAsync(requestResume);
+            await _unitOfWork.SaveChangesAsync();
+
+            await SendStatusChangedEmailAsync(requestResume, newStatus ,cancellationToken);
+
+        }
+
+        public async Task SendStatusChangedEmailAsync(RequestResume request,
+            RequestStatus status, CancellationToken cancellationToken)
+        {
+            var jobSeeker = await _userManager.FindByIdAsync(request.UserId.ToString());
+            var advertisement = await _advertiserRepository.GetByIdAsync(request.AdvertisementId);
+
+            if (jobSeeker is null || advertisement is null)
+                return;
+
+            string recipientEmail = jobSeeker.Email;
+            string subject = "";
+            string body = "";
+
+            switch (status)
+            {
+                case RequestStatus.Pending:
+                    subject = $"Your request for this advertisement {advertisement.Title} is pending...";
+                    body = $"Hey {jobSeeker.FirstName} ! Your request for advertisement {advertisement.Title} is pending . Please be patient ";
+                    break;
+                case RequestStatus.CurrentlyViewing:
+                    subject = $"Your request for this advertisement {advertisement.Title} is viewing ! ";
+                    body = $"Hi {jobSeeker.FirstName} ! Your request for advertisement {advertisement.Title} is viewing . Await the result";
+                    break;
+                case RequestStatus.Interview:
+                    subject = $"Your request for this advertisement {advertisement.Title} accepted for interview !";
+                    body = $"Hello {jobSeeker.FirstName} ! Congratulation Your request for advertisement {advertisement.Title} accepted for interview ";
+                    break;
+                case RequestStatus.Success:
+                    subject = $"Your request for this advertisement {advertisement.Title} accepted .";
+                    body = $"Hey {jobSeeker.FirstName} ! Your request for advertisement {advertisement.Title} successfuly accepted";
+                    break;
+                case RequestStatus.Fail:
+                    subject = $"Your request for this advertisement {advertisement.Title} failed !";
+                    body = $"Hi {jobSeeker.FirstName} ! Unfortunately your request for advertisement {advertisement.Title} cancelled !";
+                    break;
+                default:
+                    return;
+            }
+
+            await _emailService.SendEmailAsync(recipientEmail, subject, body, true, cancellationToken);
+        }
     }
 }

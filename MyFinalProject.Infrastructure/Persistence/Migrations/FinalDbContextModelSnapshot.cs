@@ -253,10 +253,19 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.Property<DateTime>("ExpireDate")
                         .HasColumnType("DATETIME");
 
+                    b.Property<DateTime?>("FeaturedUntil")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("IsApproved")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsFeatured")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedAt")
@@ -485,7 +494,7 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.CompanyFeature", b =>
+            modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.Features.CompanyFeature", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -655,6 +664,71 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.ToTable("Payment");
                 });
 
+            modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.RefreshToken", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CreateById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("DeletedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRevoked")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("ModifiedById")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ReplacedByToken")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("RevokeReason")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("RevokedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreateById");
+
+                    b.HasIndex("CreatedAt");
+
+                    b.HasIndex("DeletedById");
+
+                    b.HasIndex("ModifiedById");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RefreshTokens");
+                });
+
             modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.RequestResume", b =>
                 {
                     b.Property<Guid>("Id")
@@ -682,6 +756,10 @@ namespace MyFinalProject.Infrastructure.Migrations
 
                     b.Property<Guid?>("DeletedById")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ExpireDate")
                         .HasColumnType("DATETIME");
@@ -713,6 +791,10 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
@@ -737,6 +819,32 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .HasFilter("[IsDeleted] = 0");
 
                     b.ToTable("Resumes");
+                });
+
+            modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.RevokedToken", b =>
+                {
+                    b.Property<Guid>("RevokeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ExpiresAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Jti")
+                        .IsRequired()
+                        .HasColumnType("NVARCHAR(100)");
+
+                    b.Property<DateTime>("RevokedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("RevokeId");
+
+                    b.HasIndex("ExpiresAtUtc");
+
+                    b.HasIndex("Jti")
+                        .IsUnique();
+
+                    b.ToTable("RevokedTokens");
                 });
 
             modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.Skill", b =>
@@ -890,6 +998,9 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("NVARCHAR(150)");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("IsApproved")
                         .HasColumnType("bit");
 
@@ -962,62 +1073,6 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("MyFinalProject.Domain.Entities.RefreshToken", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CreateById")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("DeletedById")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsRevoked")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime?>("ModifiedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("ModifiedById")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Token")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreateById");
-
-                    b.HasIndex("CreatedAt");
-
-                    b.HasIndex("DeletedById");
-
-                    b.HasIndex("ModifiedById");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -1253,7 +1308,7 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.CompanyFeature", b =>
+            modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.Features.CompanyFeature", b =>
                 {
                     b.HasOne("MyFinalProject.Domain.Entities.MainModels.Company", "Company")
                         .WithMany("CompanyFeatures")
@@ -1353,6 +1408,38 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.Navigation("Feature");
 
                     b.Navigation("Modifier");
+                });
+
+            modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.RefreshToken", b =>
+                {
+                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Creater")
+                        .WithMany()
+                        .HasForeignKey("CreateById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Deleter")
+                        .WithMany()
+                        .HasForeignKey("DeletedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Modifier")
+                        .WithMany()
+                        .HasForeignKey("ModifiedById")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Creater");
+
+                    b.Navigation("Deleter");
+
+                    b.Navigation("Modifier");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.RequestResume", b =>
@@ -1486,38 +1573,6 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.Navigation("Deleter");
 
                     b.Navigation("Modifier");
-                });
-
-            modelBuilder.Entity("MyFinalProject.Domain.Entities.RefreshToken", b =>
-                {
-                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Creater")
-                        .WithMany()
-                        .HasForeignKey("CreateById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Deleter")
-                        .WithMany()
-                        .HasForeignKey("DeletedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "Modifier")
-                        .WithMany()
-                        .HasForeignKey("ModifiedById")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("MyFinalProject.Domain.Entities.MainModels.User", "User")
-                        .WithMany("RefreshTokens")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Creater");
-
-                    b.Navigation("Deleter");
-
-                    b.Navigation("Modifier");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MyFinalProject.Domain.Entities.MainModels.Advertisement", b =>

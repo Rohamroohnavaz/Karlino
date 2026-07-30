@@ -1,5 +1,6 @@
 ﻿using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Infrastructure.Repositories.Generics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,16 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
 
         Task<User?> GetUserWithPhoneNumber(string phoneNumber);
 
+        Task<User?> GetUserWithCompany(Guid employerId);
+
         Task<List<User>> GetUsersByRole(string userRole);
 
         Task<bool> IsEmailUnique(string email);
+
+        Task<User?> GetUserByResumes(Guid jobSeekerId);
+
+        Task<int> GetCountByRole(string userRole);
+
+        Task<int> GetPendingEmployersCount();
     }
 }

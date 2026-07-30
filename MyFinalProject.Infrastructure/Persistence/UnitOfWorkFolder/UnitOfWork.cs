@@ -16,11 +16,14 @@ namespace MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder
         public UnitOfWork(FinalDbContext dbContext)
         {
             _dbContext = dbContext;
+            advertisementRepository = new AdvertisementRepository(dbContext);
         }
 
-        public async Task<int> SaveChangesAsync()
+        public AdvertisementRepository advertisementRepository { get; set; }
+
+        public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
-            return await _dbContext.SaveChangesAsync();
+            return await _dbContext.SaveChangesAsync(cancellationToken);
         }
     }
 }

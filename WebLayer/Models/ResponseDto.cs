@@ -1,15 +1,24 @@
 ﻿namespace WebLayer.Models
 {
-    public class ResponseDto : BaseResponseDto<General>
+    public class ResponseDto
     {
-        public ResponseDto(Guid id) : base(new General(id))
+        public bool IsSuccess { get; set; }
+        public BaseError? BaseError { get; set; }
+
+        public ResponseDto() { }
+
+        public static ResponseDto Success()
         {
-            
+            return new ResponseDto { IsSuccess = true };
         }
 
-        public ResponseDto(string message ,string code) : base(message, code) 
+        public static ResponseDto Failure(string code, string message)
         {
-            
+            return new ResponseDto
+            {
+                IsSuccess = false,
+                BaseError = new BaseError { Code = code, Message = message }
+            };
         }
     }
 }

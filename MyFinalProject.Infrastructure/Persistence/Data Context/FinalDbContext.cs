@@ -25,6 +25,7 @@ namespace MyFinalProject.Infrastructure
         public DbSet<Attach> Attaches { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<RevokedToken> RevokedTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

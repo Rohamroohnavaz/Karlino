@@ -5,11 +5,13 @@ using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.Services.ServiceInterfaces;
 using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Infrastructure.DTO;
+using WebLayer.Models;
 
 namespace WebLayer.Controllers
 {
     [ApiController]
     [Route("api/companies")]
+    [Authorize]
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
@@ -20,7 +22,7 @@ namespace WebLayer.Controllers
         }
 
         [HttpGet("/GetMyCompany")]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = RoleConstants.EmployerRole)]
         public async Task<IActionResult> GetMyCompany()
         {
             var company = await _companyService.GetMyCompanyAsync();
@@ -32,12 +34,12 @@ namespace WebLayer.Controllers
         }
 
         [HttpPost("/CreateCompany")]
-        [Authorize(Roles = "Employer")]
+        [Authorize(Roles = RoleConstants.EmployerRole)]
         public async Task<IActionResult> AddNewCompany([FromBody] CreateCompanyDto dto,
             [FromRoute] Guid companyId)
         {
             await _companyService.CreateNewCompanyAsync(dto, companyId);
-            return Ok();
+            return Ok(ResponseDto.Success());
         }
     }
 }
