@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyFinalProject.Application.Commands;
 using MyFinalProject.Application.DTOs;
+using MyFinalProject.Application.Results;
 using MyFinalProject.Application.Services.MainServices.AuthServices;
 using System.Diagnostics.Eventing.Reader;
 using System.IdentityModel.Tokens.Jwt;
@@ -28,7 +29,7 @@ namespace WebLayer.Controllers
         public async Task<IActionResult> RegisterEmployer([FromBody] RegisterEmployerCommand command)
         {
             var employerResult = await _authenticationService.RegisterEmployerAsync(command);
-            return Ok(employerResult);
+            return Ok(BaseResponseDto<RegisterResult>.Success());
         }
 
         [AllowAnonymous]
@@ -36,7 +37,7 @@ namespace WebLayer.Controllers
         public async Task<IActionResult> RegisterJobSeeker([FromBody] RegisterJobSeekerCommand command)
         {
             var jobSeekerResult = await _authenticationService.RegisterJobSeekerAsync(command);
-            return Ok(new ResponseDto(jobSeekerResult.ResultId));
+            return Ok(BaseResponseDto<RegisterResult>.Success());
         }
 
         [AllowAnonymous]
@@ -44,7 +45,7 @@ namespace WebLayer.Controllers
         public async Task<IActionResult> LoginUser([FromBody] LoginUserCommand command)
         {
             var loginResult = await _authenticationService.LoginAsync(command);
-            return Ok(loginResult);
+            return Ok(BaseResponseDto<LoginResultForRefresh>.Success());
         }
 
         [Authorize]

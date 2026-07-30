@@ -1,16 +1,20 @@
 ﻿namespace WebLayer.Models
 {
-    public class BaseResponseDto<TData>
+    public class BaseResponseDto<T> : ResponseDto
     {
-        public BaseResponseDto(TData data)
+        public T? Data { get; set; }
+
+        public BaseResponseDto() { }
+
+        public BaseResponseDto(T data)
         {
             Data = data;
-            IsSuccesss = true;
+            IsSuccess = true;
         }
 
-        public BaseResponseDto(string code ,string message)
+        public BaseResponseDto(string code, string message)
         {
-            IsSuccesss = false;
+            IsSuccess = false;
             BaseError = new BaseError
             {
                 Code = code,
@@ -18,10 +22,14 @@
             };
         }
 
-        public TData? Data { get; set; }
+        public static BaseResponseDto<T> Success(T data)
+        {
+            return new BaseResponseDto<T>(data);
+        }
 
-        public bool IsSuccesss { get; set; }
-
-        public BaseError? BaseError { get; set; }
+        public static new BaseResponseDto<T> Failure(string code, string message)
+        {
+            return new BaseResponseDto<T>(code, message);
+        }
     }
 }

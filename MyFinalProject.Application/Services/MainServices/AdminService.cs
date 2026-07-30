@@ -106,7 +106,6 @@ namespace MyFinalProject.Application.Services.MainServices
             {
                 var isHtml = request.isHtml ?? _emailSetting.DefaultHtml;
 
-
                 await _emailService.SendEmailAsync(request.To, request.Subject, request.Body, isHtml, cancellationToken);
 
                 return new SendEmailResponse
@@ -114,24 +113,14 @@ namespace MyFinalProject.Application.Services.MainServices
                     Success = true,
                     Message = "Send"
                 };
-
             }
             catch (Exception ex)
             {
-                //_logger.LogError($"Error {request.To}");
-
-
-                //return StatusCode(StatusCodes.Status500InternalServerError, new SendEmailResponse()
-                //{
-                //    Success = false,
-                //    Message = "error"
-                //});
                 return new SendEmailResponse
                 {
                     Success = false,
-                    Message = "Error!"
+                    Message = $"It was not approved ! {ex.Message}"
                 };
-
             }
         }
 
@@ -158,16 +147,15 @@ namespace MyFinalProject.Application.Services.MainServices
                     Success = true,
                     Message = "Send"
                 };
-
             }
             catch (Exception ex)
             {
-
                 return new SendEmailResponse
                 {
                     Success = false,
-                    Message = "Error!"
+                    Message = $"It was not rejected !{ex.Message}"
                 };
+                
             }
         }
 

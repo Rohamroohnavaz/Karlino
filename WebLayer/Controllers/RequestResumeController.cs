@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MyFinalProject.Application.Constants;
 using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.Services.ServiceInterfaces;
+using MyFinalProject.Domain.Entities.MainModels;
 using WebLayer.Models;
 
 namespace WebLayer.Controllers
@@ -23,14 +24,14 @@ namespace WebLayer.Controllers
         public async Task<IActionResult> ChangeStatus([FromBody]ChangeRequestStatusDto dto)
         {
             await _requestResumeService.ChangeRequestStatusAsync(dto);
-            return Ok();
+            return Ok(ResponseDto.Success());
         }
 
         [HttpGet("/{advertisementId:guid}")]
         public async Task<IActionResult> GetRequestsAsync([FromRoute]Guid advertisementId)
         {
             var result = await _requestResumeService.GetRequestsByAdverIdAsync(advertisementId);
-            return Ok(result);
+            return Ok(BaseResponseDto<List<RequestResume>>.Success());
         }
 
         [HttpPost("/CreateResume")]
@@ -38,9 +39,8 @@ namespace WebLayer.Controllers
         public async Task<IActionResult> CreateRequestResumeAsync([FromBody] CreateRequestResumeDto dto ,Guid adverId)
         {
             await _requestResumeService.CreateResumeRequest(adverId, dto);
-            return Ok();
+            return Ok(ResponseDto.Success());
         }
-
 
         [HttpGet("/GetRequests/{adverId:guid}")]
         [Authorize(Roles = RoleConstants.EmployerRole)]
@@ -51,7 +51,7 @@ namespace WebLayer.Controllers
             if(request is null)
                 return NotFound();
 
-            return Ok(request);
+            return Ok(BaseResponseDto<List<RequestResume>>.Success());
         }
 
         [HttpPost("/UploadFile")]
@@ -59,7 +59,7 @@ namespace WebLayer.Controllers
             [FromRoute] Guid requestId)
         {
             await _requestResumeService.UploadFileAttachAsync(requestId ,dto);
-            return Ok();
+            return Ok(ResponseDto.Success());
         }
 
         [HttpPost("/ReplaceFile")]
@@ -67,7 +67,7 @@ namespace WebLayer.Controllers
             [FromRoute] Guid requestId)
         {
             await _requestResumeService.ReplaceFileAttachAsync(requestId ,dto);
-            return Ok();
+            return Ok(ResponseDto.Success());
         }
 
     }

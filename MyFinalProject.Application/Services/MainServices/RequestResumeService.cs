@@ -194,7 +194,8 @@ namespace MyFinalProject.Application.Services.MainServices
             return request;
         }
 
-        public async Task ChangeStatusAsync(Guid requestId, RequestStatus newStatus)
+        public async Task ChangeStatusAsync(Guid requestId, 
+            RequestStatus newStatus ,CancellationToken cancellationToken)
         {
             var requestResume = await _requestRepository.GetByIdAsync(requestId);
             if (requestResume is null)
@@ -205,17 +206,50 @@ namespace MyFinalProject.Application.Services.MainServices
             await _requestRepository.UpdateAsync(requestResume);
             await _unitOfWork.SaveChangesAsync();
 
-            await SendStatusChangedEmailAsync(requestResume , newStatus);
+            await SendStatusChangedEmailAsync(requestResume, newStatus ,cancellationToken);
 
         }
 
-        public async Task SendStatusChangedEmailAsync(RequestResume request, RequestStatus status)
+        public async Task SendStatusChangedEmailAsync(RequestResume request,
+            RequestStatus status, CancellationToken cancellationToken)
         {
+            var jobSeeker = await _userManager.FindByIdAsync(request.UserId.ToString());
+            var advertisement = await _advertiserRepository.GetByIdAsync(request.AdvertisementId);
+
+            if (jobSeeker is null || advertisement is null)
+                return;
+
+            string recipientEmail = jobSeeker.Email;
+            string subject = "";
+            string body = "";
+
             switch (status)
             {
-                //case RequestStatus.Pending:
-                //    await _emailService.SendEmailAsync()
+                case RequestStatus.Pending:
+                    subject = $"Your request for this advertisement {advertisement.Title} is pending...";
+                    body = $"Hey {jobSeeker.FirstName} ! Your request for advertisement {advertisement.Title} is pending . Please be patient ";
+                    break;
+                case RequestStatus.CurrentlyViewing:
+                    subject = $"Your request for this advertisement {advertisement.Title} is viewing ! ";
+                    body = $"Hi {jobSeeker.FirstName} ! Your request for advertisement {advertisement.Title} is viewing . Await the result";
+                    break;
+                case RequestStatus.Interview:
+                    subject = $"Your request for this advertisement {advertisement.Title} accepted for interview !";
+                    body = $"Hello {jobSeeker.FirstName} ! Congratulation Your request for advertisement {advertisement.Title} accepted for interview ";
+                    break;
+                case RequestStatus.Success:
+                    subject = $"Your request for this advertisement {advertisement.Title} accepted .";
+                    body = $"Hey {jobSeeker.FirstName} ! Your request for advertisement {advertisement.Title} successfuly accepted";
+                    break;
+                case RequestStatus.Fail:
+                    subject = $"Your request for this advertisement {advertisement.Title} failed !";
+                    body = $"Hi {jobSeeker.FirstName} ! Unfortunately your request for advertisement {advertisement.Title} cancelled !";
+                    break;
+                default:
+                    return;
             }
+
+            await _emailService.SendEmailAsync(recipientEmail, subject, body, true, cancellationToken);
         }
     }
 }

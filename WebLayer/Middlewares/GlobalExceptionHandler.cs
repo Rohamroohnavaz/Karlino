@@ -65,6 +65,10 @@ namespace WebLayer.Middlewares
                     await WriteResponseAsync(context, StatusCodes.Status401Unauthorized, "Unauthorized_401", ex.Message);
                     break;
 
+                case KeyNotFoundException ex:
+                    await WriteResponseAsync(context, StatusCodes.Status400BadRequest, "BadRequest_400", ex.Message);
+                    break;
+
                 case ArgumentException ex:
                     await WriteResponseAsync(context, StatusCodes.Status400BadRequest, "BadRequest_400", ex.Message);
                     break;

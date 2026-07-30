@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyFinalProject.Application.Commands.ViewModels;
 using MyFinalProject.Application.Constants;
 using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.Services.ServiceInterfaces;
@@ -27,8 +28,9 @@ namespace WebLayer.Controllers
             var user = await _userService.GetJobSeekerProfile(userId);
 
             if (user == null)
-                return BadRequest(new ResponseDto("user not found","404"));
-            return Ok(user);
+                return BadRequest();
+
+            return Ok(BaseResponseDto<UsersViewModel>.Success());
         } 
 
         [HttpPut("/UpdateProfile")]
@@ -36,7 +38,7 @@ namespace WebLayer.Controllers
         public async Task<IActionResult> UpdateProfile([FromBody] UpdateUserProfileDto dto)
         {
             await _userService.UpdateProfileUser(dto);
-            return Ok();
+            return Ok(ResponseDto.Success());
         }
     }
 }

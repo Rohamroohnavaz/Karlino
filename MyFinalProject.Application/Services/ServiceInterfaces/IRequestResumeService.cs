@@ -27,8 +27,8 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
 
         Task<RequestResume?> GetRequestResumeWithAttachByCompanyIdAsync(Guid resumeId, Guid companyId);
 
-        Task ChangeStatusAsync(Guid requestId, RequestStatus newStatus);
+        Task ChangeStatusAsync(Guid requestId, RequestStatus newStatus , CancellationToken cancellationToken);
 
-        Task SendStatusChangedEmailAsync(RequestResume request, RequestStatus status);
+        Task SendStatusChangedEmailAsync(RequestResume request, RequestStatus status, CancellationToken cancellationToken);
     }
 }

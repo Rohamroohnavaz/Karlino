@@ -5,6 +5,7 @@ using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.Services.ServiceInterfaces;
 using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Infrastructure.DTO;
+using WebLayer.Models;
 
 namespace WebLayer.Controllers
 {
@@ -38,7 +39,7 @@ namespace WebLayer.Controllers
             [FromRoute] Guid companyId)
         {
             await _companyService.CreateNewCompanyAsync(dto, companyId);
-            return Ok();
+            return Ok(ResponseDto.Success());
         }
     }
 }

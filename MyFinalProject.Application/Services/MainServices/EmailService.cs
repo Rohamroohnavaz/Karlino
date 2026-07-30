@@ -56,7 +56,7 @@ namespace MyFinalProject.Application.Services.MainServices
 
             await client.DisconnectAsync(true, cancellationToken);
 
-            _logger.LogInformation("Send");
+            _logger.LogInformation("Sent");
         }
     }
 }
