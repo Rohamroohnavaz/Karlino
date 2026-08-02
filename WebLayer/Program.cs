@@ -1,4 +1,3 @@
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -6,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using MyFinalProject.Application.Seed;
 using MyFinalProject.Application.Services.MainServices;
+using MyFinalProject.Application.Services.MainServices.AuthServices;
 using MyFinalProject.Application.Services.ServiceInterfaces;
 using MyFinalProject.Application.Services.Settings;
 using MyFinalProject.Domain.Entities.MainModels;
@@ -156,6 +156,7 @@ namespace WebLayer
 
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<UserManager<User>>();
             builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
             builder.Services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
             builder.Services.AddScoped<IRequestResumeRepository, RequestResumeRepository>();
@@ -168,6 +169,8 @@ namespace WebLayer
             builder.Services.AddScoped<IAdvertisementService, AdvertisementService>();
             builder.Services.AddScoped<IRequestResumeService, RequestResumeService>();
             builder.Services.AddScoped<IAttachService, AttachService>();
+            builder.Services.AddScoped<IAdminService, AdminService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddTransient<GlobalExceptionHandler>();
 
             // Add services to the container.

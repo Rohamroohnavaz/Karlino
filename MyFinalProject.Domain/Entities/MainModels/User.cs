@@ -24,6 +24,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
             LastName = lastName;
             PhoneNumber = phoneNumber;
             Email = email;
+            CreatedAt = DateTime.UtcNow;
             UserValidation();
         }
 
