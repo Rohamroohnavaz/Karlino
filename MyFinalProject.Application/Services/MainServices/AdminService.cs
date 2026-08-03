@@ -12,6 +12,7 @@ using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
+using Org.BouncyCastle.Asn1.X509;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -96,6 +97,9 @@ namespace MyFinalProject.Application.Services.MainServices
             var user = await _userManager.FindByIdAsync(employerId.ToString());
             if (user == null || user.Role != UserRole.Employer)
                 throw new KeyNotFoundException("Employer Not Found !!");
+
+            if (user.IsApproved)
+                throw new InvalidOperationException("Employer already approved !!");
 
             user.IsApproved = true;
 
@@ -210,6 +214,78 @@ namespace MyFinalProject.Application.Services.MainServices
             return true;
         }
 
+        public async Task<SendEmailResponse> ApproveJobSeekerAsync(SendEmailRequest request, Guid jobSeekerId
+            , CancellationToken cancellationToken)
+        {
+            var user = await _userManager.FindByIdAsync(jobSeekerId.ToString());
+            if (user is null || user.Role != UserRole.JobSeeker)
+                throw new KeyNotFoundException("JobSeeker Not Found !");
+
+            if (user.IsApproved)
+                throw new InvalidOperationException("Jobseeker already approved !");
+
+            user.IsApproved = true;
+
+            await _userManager.UpdateAsync(user);
+            await _unitOfWork.SaveChangesAsync();
+
+            try
+            {
+                var isHtml = request.isHtml ?? _emailSetting.DefaultHtml;
+
+                await _emailService.SendEmailAsync(request.To, request.Subject, request.Body, isHtml, cancellationToken);
+
+                return new SendEmailResponse
+                {
+                    Success = true,
+                    Message = "Send"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new SendEmailResponse
+                {
+                    Success = false,
+                    Message = $"It was not approved ! {ex.Message}"
+                };
+            }
+
+        }
+
+        public async Task<SendEmailResponse> RejectJobSeekerAsync(SendEmailRequest request, Guid jobSeekerId, CancellationToken cancellationToken)
+        {
+            var user = await _userManager.FindByIdAsync(jobSeekerId.ToString());
+            if (user == null || user.Role != UserRole.Employer)
+                throw new KeyNotFoundException("Employer Not Found !!");
+
+            user.IsApproved = false;
+
+            await _userManager.UpdateAsync(user);
+            await _unitOfWork.SaveChangesAsync();
+
+            try
+            {
+                var isHtml = request.isHtml ?? _emailSetting.DefaultHtml;
+
+                await _emailService.SendEmailAsync(request.To, request.Subject, request.Body, isHtml, cancellationToken);
+
+                return new SendEmailResponse
+                {
+                    Success = true,
+                    Message = "Send"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new SendEmailResponse
+                {
+                    Success = false,
+                    Message = $"It was not rejected !{ex.Message}"
+                };
+
+            }
+        }
+
         #endregion
 
         #region Advertisement Implementation
@@ -301,5 +377,7 @@ namespace MyFinalProject.Application.Services.MainServices
 
             return dashboard;
         }
+
+        
     }
 }

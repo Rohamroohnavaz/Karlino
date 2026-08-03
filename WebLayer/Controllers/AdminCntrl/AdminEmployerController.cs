@@ -34,22 +34,22 @@ namespace WebLayer.Controllers.AdminCntrl
             return Ok(BaseResponseDto<AdminEmployerDetailsDto>.Success());
         }
 
-        [HttpPut("/{emploayerId:guid}/approve")]
+        [HttpPut("/{emploayerId:guid}/approve_employer")]
         public async Task<IActionResult> ApproveEmployer([FromBody] SendEmailRequest request
-            ,[FromRoute] Guid employerId
+            , [FromRoute] Guid employerId
             , CancellationToken cancellationToken)
         {
             await _adminService.ApproveEmployerAsync(request, employerId, cancellationToken);
-            return Ok(ResponseDto.Success());
+            return Ok(new { message = "Employer Successfuly Approved !!" });
         }
 
-        [HttpPut("/{employerId:guid}/reject")]
+        [HttpPut("/{employerId:guid}/reject_employer")]
         public async Task<IActionResult> RejectEmployer([FromBody] SendEmailRequest request
-            ,[FromRoute] Guid employerId
+            , [FromRoute] Guid employerId
             , CancellationToken cancellationToken)
         {
             await _adminService.RejectEmployersAsync(request, employerId, cancellationToken);
-            return Ok(ResponseDto.Success());
+            return Ok(new { message = "Employer Successfuly Rejected !!"});
         }
     }
 }

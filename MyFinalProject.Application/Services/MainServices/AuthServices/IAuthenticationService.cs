@@ -19,6 +19,8 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
 
         Task<GenerateTokenResult> GenerateTokenAsync(User user);
 
-        Task LogoutAsync(string jti ,DateTime expiresAtUtc);
+        Task LogoutAsync(string jti, DateTime expiresAtUtc);
+
+        Task ChangeRoleAsync(Guid userId, string roleName);
     }
 }

@@ -31,6 +31,12 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
 
         Task<bool> ToggleJobSeekerStatusAsync(Guid jobSeekerId, bool isActive);
 
+        Task<SendEmailResponse> ApproveJobSeekerAsync(SendEmailRequest request, Guid jobSeekerId
+            , CancellationToken cancellation);
+
+        Task<SendEmailResponse> RejectJobSeekerAsync(SendEmailRequest request, Guid employerId
+            , CancellationToken cancellationToken);
+
         /////////////
 
         ///Advertisement

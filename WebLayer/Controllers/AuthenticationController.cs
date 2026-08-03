@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MyFinalProject.Application.Commands;
+using MyFinalProject.Application.Constants;
 using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.Results;
 using MyFinalProject.Application.Services.MainServices.AuthServices;
@@ -45,7 +46,15 @@ namespace WebLayer.Controllers
         public async Task<IActionResult> LoginUser([FromBody] LoginUserCommand command)
         {
             var loginResult = await _authenticationService.LoginAsync(command);
-            return Ok(BaseResponseDto<LoginResultForRefresh>.Success());
+
+            return Ok(new
+            {
+                isSuccess = true,
+                accessToken = loginResult.AccessToken,
+                refreshToken = loginResult.RefreshToken,
+                accessTokenExpiresAt = loginResult.AccessTokenExpiresAt,
+                refreshTokenExpiresAt = loginResult.RefreshTokenExpiresAt
+            });
         }
 
         [Authorize]
@@ -63,6 +72,15 @@ namespace WebLayer.Controllers
 
             await _authenticationService.LogoutAsync(jti , expiresAtUtc);
             return NoContent();
+        }
+
+        [HttpPut("/{userId:guid}changeRole")]
+        [Authorize(Roles = RoleConstants.AdminRole)]
+        public async Task<IActionResult> ChangeRole([FromRoute] Guid userId,
+            [FromBody] ChangeRoleRequest request)
+        {
+            await _authenticationService.ChangeRoleAsync(userId, request.RoleName);
+            return Ok(new { message = $"User role changed to {request.RoleName}" });
         }
     }
 }
