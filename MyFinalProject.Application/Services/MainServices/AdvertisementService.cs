@@ -35,7 +35,7 @@ namespace MyFinalProject.Application.Services.MainServices
                 throw new InvalidAdvertisementException("This Advertisement Already Exist !!");
 
             var advertisement = new Advertisement(dto.Title , dto.Description ,dto.Salary 
-                ,dto.Province ,dto.City ,dto.CompanyName ,dto.CompanyId ,dto.CategoryId);
+                ,dto.Province ,dto.City ,dto.CompanyName ,dto.CompanyId);
 
             await _advertisementRepository.AddAsync(advertisement);
             await _unitOfWork.SaveChangesAsync();
@@ -43,10 +43,9 @@ namespace MyFinalProject.Application.Services.MainServices
 
         public async Task<List<AdvertisementViewModel>> GetActiveAdvertisementAsync()
         {
-            var advertisements = await _advertisementRepository.QueryAsync(a => true);
+            var advertisements = await _advertisementRepository.QueryAsync(a => a.IsActive);
 
-            return advertisements
-               .Where(a => a.IsActive)
+            return  advertisements
                .OrderByDescending(a => a.CreatedAt)
                .Select(a => new AdvertisementViewModel
                {

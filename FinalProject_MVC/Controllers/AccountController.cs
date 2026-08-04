@@ -29,18 +29,14 @@ public class AccountController : Controller
 
         try
         {
-            // Call API Login endpoint
             var loginResult = await _apiService.PostAsync<LoginResponse>("/LoginUser", new
             {
                 model.Email,
                 model.Password,
-                Username = ""
             });
 
-            // Store token in session
             HttpContext.Session.SetString("Token", loginResult.AccessToken);
 
-            // Store user info in claims
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, model.Email),
@@ -54,7 +50,6 @@ public class AccountController : Controller
             var authProperties = new AuthenticationProperties
             {
                 IsPersistent = model.RememberMe,
-               // ExpiresUtc = response
             };
 
             await HttpContext.SignInAsync(

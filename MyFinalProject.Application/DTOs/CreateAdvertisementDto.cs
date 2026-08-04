@@ -33,8 +33,7 @@ namespace MyFinalProject.Application.DTOs
         [MinLength(3, ErrorMessage = "City should be at least 3 characters long.")]
         public string City { get; set; }
 
-        public Guid CategoryId { get; private set; }
-
-        public Guid CompanyId { get; private set; }
+        [Required(ErrorMessage = "Invalid CompanyId !!")]
+        public Guid CompanyId { get; set; }
     }
 }

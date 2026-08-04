@@ -14,7 +14,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
         private Advertisement() { }
 
         public Advertisement(string title, string description, decimal salary
-            , string province, string city, string companyName, Guid companyId, Guid categoryId)
+            , string province, string city, string companyName, Guid companyId)
         {
             Title = title;
             Description = description;
@@ -23,7 +23,6 @@ namespace MyFinalProject.Domain.Entities.MainModels
             City = city;
             CompanyName = companyName;
             CompanyId = companyId;
-            CategoryId = categoryId;
             StartDate = DateTime.UtcNow;
             ExpireDate = DateTime.UtcNow.AddDays(30);
             Validation();

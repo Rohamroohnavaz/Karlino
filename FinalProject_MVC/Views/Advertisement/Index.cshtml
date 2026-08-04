@@ -1,0 +1,44 @@
+﻿@model List<FinalProject_MVC.Models.AdvertisementViewModel>
+
+@{
+    ViewData["Title"] = "لیست آگهی‌ها";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">لیست آگهی‌های شغلی</h2>
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+    }
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var ad in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">@ad.Title</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">@ad.CompanyName</h6>
+                            <p class="card-text">@ad.Description</p>
+                            <ul class="list-unstyled">
+                                <li><strong>CompanyLocation:</strong> @ad.Province - @ad.City</li>
+                                <li><strong>Salary:</strong> @ad.Salary Tooman</li>
+                                <li><strong>ExpireDate:</strong> @ad.ExpireDate.ToString("yyyy/MM/dd")</li>
+                            </ul>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="btn btn-outline-primary btn-sm">More Detail</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">هیچ آگهی‌ای یافت نشد.</div>
+    }
+</div>

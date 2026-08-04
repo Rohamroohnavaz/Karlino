@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace MyFinalProject.Application.Commands
 {
-    public record LoginUserCommand(string Username, string Password ,string Email);
+    public record LoginUserCommand(string Email ,string Password);
 }

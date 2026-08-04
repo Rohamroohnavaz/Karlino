@@ -26,6 +26,10 @@ public class ApiService : IApiService
     public async Task<T> PostAsync<T>(string endpoint, object data)
     {
         await SetAuthHeader();
+
+        var fullUrl = new Uri(_httpClient.BaseAddress, endpoint).ToString();
+        System.Diagnostics.Debug.WriteLine($"Calling API at: {fullUrl}");
+
         var content = new StringContent(
             JsonConvert.SerializeObject(data),
             Encoding.UTF8,
