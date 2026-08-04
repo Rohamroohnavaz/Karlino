@@ -1,11 +1,11 @@
 ﻿@model List<FinalProject_MVC.Models.AdvertisementViewModel>
 
 @{
-    ViewData["Title"] = "لیست آگهی‌ها";
+    ViewData["Title"] = "‌Adverisements List";
 }
 
 <div class="container mt-4">
-    <h2 class="mb-4">لیست آگهی‌های شغلی</h2>
+    <h2 class="mb-4">Job Advertisement List</h2>
 
     @if (ViewBag.ErrorMessage != null)
     {
@@ -39,6 +39,6 @@
     }
     else
     {
-        <div class="alert alert-info">هیچ آگهی‌ای یافت نشد.</div>
+        <div class="alert alert-info">Not found any advertisement !</div>
     }
 </div>

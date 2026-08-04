@@ -1,10 +1,12 @@
 ﻿using FinalProject_MVC.Models;
 using FinalProject_MVC.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace FinalProject_MVC.Controllers
 {
+    [Authorize]
     public class AdvertisementMvcController : Controller
     {
         private readonly IApiService _apiService;
@@ -19,13 +21,13 @@ namespace FinalProject_MVC.Controllers
         {
             try
             {
-                var advertisement = await _apiService.GetAsync<List<AdvertisementViewModel>>("/Advertisements");
+                var advertisements = await _apiService.GetAsync<List<AdvertisementViewModel>>("/GetActiveAdvertisements");
 
-                return View();
+                return View(advertisements);
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage =  "Getting Advertisements Failed !!" + ex.Message;
+                ViewBag.ErrorMessage = "Getting Advertisements Failed !!" + ex.Message;
                 return View(new List<AdvertisementViewModel>());
             }
         }

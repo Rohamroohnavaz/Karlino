@@ -38,7 +38,7 @@ namespace WebLayer.Controllers
         public async Task<IActionResult> GetActiveAdvers()
         {
             var advers = await _advertisementService.GetActiveAdvertisementAsync();
-            return Ok(BaseResponseDto<List<AdvertisementViewModel>>.Success());
+            return Ok(advers);
         }
 
         [HttpGet("/SearchAdvertisement")]

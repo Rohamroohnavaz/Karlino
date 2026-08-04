@@ -20,8 +20,8 @@ namespace MyFinalProject.Application.Services.MainServices
         private readonly IAdvertisementRepository _advertisementRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public AdvertisementService(IAdvertisementRepository advertisementRepository 
-            ,IUnitOfWork unitOfWork)
+        public AdvertisementService(IAdvertisementRepository advertisementRepository
+            , IUnitOfWork unitOfWork)
         {
             _advertisementRepository = advertisementRepository;
             _unitOfWork = unitOfWork;
@@ -34,8 +34,8 @@ namespace MyFinalProject.Application.Services.MainServices
             if (IsfindAdvertisement)
                 throw new InvalidAdvertisementException("This Advertisement Already Exist !!");
 
-            var advertisement = new Advertisement(dto.Title , dto.Description ,dto.Salary 
-                ,dto.Province ,dto.City ,dto.CompanyName ,dto.CompanyId);
+            var advertisement = new Advertisement(dto.Title, dto.Description, dto.Salary
+                , dto.Province, dto.City, dto.CompanyName, dto.CompanyId);
 
             await _advertisementRepository.AddAsync(advertisement);
             await _unitOfWork.SaveChangesAsync();
@@ -43,9 +43,10 @@ namespace MyFinalProject.Application.Services.MainServices
 
         public async Task<List<AdvertisementViewModel>> GetActiveAdvertisementAsync()
         {
-            var advertisements = await _advertisementRepository.QueryAsync(a => a.IsActive);
+            var advertisements = await _advertisementRepository
+                .QueryAsync(a => a.IsActive && a.ExpireDate > DateTime.UtcNow);
 
-            return  advertisements
+            return advertisements
                .OrderByDescending(a => a.CreatedAt)
                .Select(a => new AdvertisementViewModel
                {
@@ -56,7 +57,7 @@ namespace MyFinalProject.Application.Services.MainServices
                    CompanyName = a.CompanyName,
                    Province = a.Province,
                    City = a.City,
-                   CreatedAt = a.CreatedAt
+                   CreatedAt = a.CreatedAt,
                })
                .ToList();
         }
@@ -89,7 +90,7 @@ namespace MyFinalProject.Application.Services.MainServices
             if (!string.IsNullOrEmpty(filter.SearchTerm))
             {
                 query = query.Where(a => a.Title.Contains(filter.SearchTerm)
-                || a.City.Contains(filter.SearchTerm));              
+                || a.City.Contains(filter.SearchTerm));
             }
 
             if (filter.CategoryId.HasValue)
