@@ -24,8 +24,8 @@ namespace MyFinalProject.Domain.Entities.MainModels
             CompanyName = companyName;
             CompanyId = companyId;
             CategoryId = categoryId;
-            //StartDate = startDate;
-            //ExpireDate = expireDate;
+            StartDate = DateTime.UtcNow;
+            ExpireDate = DateTime.UtcNow.AddDays(30);
             Validation();
         }
 

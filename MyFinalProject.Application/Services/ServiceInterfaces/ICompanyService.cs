@@ -13,7 +13,7 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
     {
         Task<CompanyDto> GetMyCompanyAsync();
         
-        Task CreateNewCompanyAsync(CreateCompanyDto dto ,Guid companyId);
+        Task CreateNewCompanyAsync(CreateCompanyDto dto);
 
         Task<List<CompanyDto>> GetAllActiveCompanies();
     }

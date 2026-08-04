@@ -65,7 +65,7 @@ namespace WebLayer.Controllers
             var expire = User.FindFirstValue(JwtRegisteredClaimNames.Exp);
 
             if (string.IsNullOrWhiteSpace(jti) || string.IsNullOrWhiteSpace(expire)
-                || long.TryParse(expire, out var expireTime))
+                || !long.TryParse(expire, out var expireTime))
                 return BadRequest("Invalid Token !");
 
             var expiresAtUtc = DateTimeOffset.FromUnixTimeSeconds(expireTime).UtcDateTime;
