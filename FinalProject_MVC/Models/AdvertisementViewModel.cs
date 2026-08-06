@@ -11,5 +11,8 @@
         public string City { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime ExpireDate { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public Guid CompanyId { get; set; }
+        public bool IsActive { get; set; }
     }
 }

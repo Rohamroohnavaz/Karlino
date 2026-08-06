@@ -48,5 +48,13 @@ namespace WebLayer.Controllers
             var result = await _advertisementService.SearchAndFilterAdsAsync(filter);
             return Ok(BaseResponseDto<List<AdvertisementViewModel>>.Success());
         }
+
+        [HttpGet("/GetAdvertisementByCompanyId/{companyId:guid}")]
+        [Authorize(Roles = RoleConstants.EmployerRole)]
+        public async Task<IActionResult> GetAdvertisementByCompanyId(Guid companyId)
+        {
+            var adver = await _advertisementService.GetAdvertisementByCompanyIdAsync(companyId);
+            return Ok(adver);
+        }
     }
 }

@@ -4,8 +4,14 @@
     ViewData["Title"] = "‌Adverisements List";
 }
 
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>‌Job Advertisement List</h2>
+    <a asp-action="Create" class="btn btn-success">
+        <i class="bi bi-plus-circle"></i> Add New Advertisement
+    </a>
+</div>
+
 <div class="container mt-4">
-    <h2 class="mb-4">Job Advertisement List</h2>
 
     @if (ViewBag.ErrorMessage != null)
     {
@@ -26,12 +32,20 @@
                             <ul class="list-unstyled">
                                 <li><strong>CompanyLocation:</strong> @ad.Province - @ad.City</li>
                                 <li><strong>Salary:</strong> @ad.Salary Tooman</li>
-                                <li><strong>ExpireDate:</strong> @ad.ExpireDate.ToString("yyyy/MM/dd")</li>
+                                <li>
+                                    <strong>ExpireDate</strong>
+                                    @(ad.ExpireDate.Year > 1 ? ad.ExpireDate.ToString("yyyy/MM/dd") : "Unspecified")
+                                </li>
+
+                                <li>
+                                    <strong>CreatedAt</strong>
+                                    @(ad.CreatedAt.Year > 1 ? ad.CreatedAt.ToString("yyyy/MM/dd") : "Unspecified")
+                                </li>
                             </ul>
                         </div>
-                        <div class="card-footer">
-                            <a href="#" class="btn btn-outline-primary btn-sm">More Detail</a>
-                        </div>
+                        <a asp-action="Details" asp-route-id="@ad.Id" class="btn btn-outline-primary btn-sm">
+                            More Detail
+                        </a>
                     </div>
                 </div>
             }

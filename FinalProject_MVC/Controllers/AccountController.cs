@@ -43,6 +43,11 @@ public class AccountController : Controller
                 new Claim("Token", loginResult.AccessToken)
             };
 
+            if (!string.IsNullOrEmpty(loginResult.Role))
+            {
+                claims.Add(new Claim(ClaimTypes.Role, loginResult.Role));
+            }
+
             var identity = new ClaimsIdentity(
                 claims,
                 CookieAuthenticationDefaults.AuthenticationScheme);
