@@ -1,43 +1,56 @@
-﻿@model LoginViewModel
+﻿@model FinalProject_MVC.Models.LoginViewModel
 
 @{
     ViewData["Title"] = "Login";
 }
 
 <div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h4>Login</h4>
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow-lg">
+            <div class="card-header bg-primary text-white text-center py-4">
+                <h3 class="mb-0">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Login To Account   
+                </h3>
             </div>
-            <div class="card-body">
-                <form asp-action="Login" method="post">
-                    <div asp-validation-summary="All" class="text-danger"></div>
 
-                    <div class="form-group mb-3">
-                        <label asp-for="Email"></label>
-                        <input asp-for="Email" class="form-control" />
+            <div class="card-body p-5">
+                <form asp-action="Login" method="post">
+                    <div asp-validation-summary="All" class="alert alert-danger"></div>
+
+                    <div class="mb-4">
+                        <label asp-for="Email" class="form-label fw-bold">
+                            <i class="bi bi-envelope me-1"></i>Email
+                        </label>
+                        <input asp-for="Email" class="form-control form-control-lg" placeholder="example@email.com" />
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group mb-3">
-                        <label asp-for="Password"></label>
-                        <input asp-for="Password" class="form-control" />
+                    <div class="mb-4">
+                        <label asp-for="Password" class="form-label fw-bold">
+                            <i class="bi bi-lock me-1"></i>Password
+                        </label>
+                        <input asp-for="Password" class="form-control form-control-lg" type="password" />
                         <span asp-validation-for="Password" class="text-danger"></span>
                     </div>
 
-                    <div class="form-group mb-3">
-                        <div class="form-check">
-                            <input asp-for="RememberMe" class="form-check-input" />
-                            <label asp-for="RememberMe" class="form-check-label"></label>
-                        </div>
+                    <div class="mb-4 form-check">
+                        <input asp-for="RememberMe" class="form-check-input" />
+                        <label asp-for="RememberMe" class="form-check-label">
+                            Remember me
+                        </label>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100">Login</button>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+                        </button>
+                    </div>
                 </form>
             </div>
-            <div class="card-footer text-center">
-                <a asp-action="Register">Don't have an account? Register</a>
+
+            <div class="card-footer text-center py-3">
+                <span class="text-muted">Don't have an account ? </span>
+                <a asp-action="Register" class="text-decoration-none">Register‌ </a>
             </div>
         </div>
     </div>

@@ -4,70 +4,89 @@
     ViewData["Title"] = "Add New Advertisement";
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0">Add New Job Advertisement</h4>
+<div class="mb-4">
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-right me-1"></i>Back To List  
+    </a>
+</div>
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">
+            <i class="bi bi-plus-circle me-2"></i>Record New Advertisement   
+        </h3>
+    </div>
+
+    <div class="card-body">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="All" class="alert alert-danger"></div>
+
+            <div class="mb-4">
+                <label asp-for="Title" class="form-label fw-bold">
+                    <i class="bi bi-tag me-1"></i>Advertisement Title 
+                </label>
+                <input asp-for="Title" class="form-control form-control-lg" placeholder="For Example : Full Stack Developer" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="Description" class="form-label fw-bold">
+                    <i class="bi bi-file-text me-1"></i>Totally Description 
+                </label>
+                <textarea asp-for="Description" class="form-control" rows="6" placeholder="Explain Job ..."></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <label asp-for="Salary" class="form-label fw-bold">
+                        <i class="bi bi-cash me-1"></i>Salary (Tooman)
+                    </label>
+                    <input asp-for="Salary" class="form-control form-control-lg" type="number" placeholder="Example : 6000000" />
+                    <span asp-validation-for="Salary" class="text-danger"></span>
                 </div>
-                <div class="card-body">
-                    <form asp-action="Create" method="post">
-                        <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
-                        <div class="mb-3">
-                            <label asp-for="Title" class="form-label">Title</label>
-                            <input asp-for="Title" class="form-control" />
-                            <span asp-validation-for="Title" class="text-danger"></span>
-                        </div>
-
-                        <div class="mb-3">
-                            <label asp-for="Description" class="form-label">Description</label>
-                            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
-                            <span asp-validation-for="Description" class="text-danger"></span>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Salary" class="form-label">Salary (Tooman)</label>
-                                <input asp-for="Salary" class="form-control" type="number" />
-                                <span asp-validation-for="Salary" class="text-danger"></span>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="CompanyName" class="form-label">Company Name</label>
-                                <input asp-for="CompanyName" class="form-control" />
-                                <span asp-validation-for="CompanyName" class="text-danger"></span>
-                            </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Province" class="form-label">Province</label>
-                                <input asp-for="Province" class="form-control" />
-                                <span asp-validation-for="Province" class="text-danger"></span>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="City" class="form-label">City</label>
-                                <input asp-for="City" class="form-control" />
-                                <span asp-validation-for="City" class="text-danger"></span>
-                            </div>
-
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="CompanyId" class="form-label">CompanyId</label>
-                                <input asp-for="CompanyId" class="form-control" />
-                                <span asp-validation-for="CompanyId" class="text-danger"></span>
-                            </div>
-                        </div>
-
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary btn-lg">Submit</button>
-                            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-                        </div>
-                    </form>
+                <div class="col-md-6 mb-4">
+                    <label asp-for="CompanyName" class="form-label fw-bold">
+                        <i class="bi bi-building me-1"></i>Company Name 
+                    </label>
+                    <input asp-for="CompanyName" class="form-control form-control-lg" placeholder="Example : IT Company" />
+                    <span asp-validation-for="CompanyName" class="text-danger"></span>
                 </div>
             </div>
-        </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <label asp-for="Province" class="form-label fw-bold">
+                        <i class="bi bi-geo-alt me-1"></i>Province
+                    </label>
+                    <input asp-for="Province" class="form-control form-control-lg" placeholder="Example : Tehran " />
+                    <span asp-validation-for="Province" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <label asp-for="City" class="form-label fw-bold">
+                        <i class="bi bi-geo me-1"></i>City
+                    </label>
+                    <input asp-for="City" class="form-control form-control-lg" placeholder="Example : Tehran" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <a asp-action="Index" class="btn btn-secondary btn-lg">
+                    <i class="bi bi-x-circle me-1"></i>Cancel
+                </a>
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <i class="bi bi-check-circle me-1"></i>Submit 
+                </button>
+            </div>
+        </form>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
