@@ -86,22 +86,23 @@ public class AccountController : Controller
 
         try
         {
-            await _apiService.PostAsync<RegisterResponse>("/RegisterJobSeeker", new
+            var registerData = new
             {
-                model.Firstname,
-                model.Lastname,
-                model.Username,
+                model.FirstName,
+                model.LastName,
                 model.Email,
+                model.PhoneNumber,
                 model.Password,
-                model.Phonenumber
-            });
+            };
 
-            TempData["SuccessMessage"] = "Registration successful! Please login.";
+            await _apiService.PostAsync<object>("/RegisterEmployer", registerData);
+
+            TempData["SuccessMessage"] = "ثبت‌نام با موفقیت انجام شد. لطفاً وارد شوید.";
             return RedirectToAction("Login");
         }
         catch (Exception ex)
         {
-            ModelState.AddModelError("", "Registration failed: " + ex.Message);
+            ModelState.AddModelError("", "ثبت‌نام ناموفق بود: " + ex.Message);
             return View(model);
         }
     }

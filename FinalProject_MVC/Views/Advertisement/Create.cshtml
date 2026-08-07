@@ -1,19 +1,19 @@
 ﻿@model FinalProject_MVC.Models.CreateAdvertisementViewModel
 
 @{
-    ViewData["Title"] = "Add New Advertisement";
+    ViewData["Title"] = "ثبت آگهی جدید";
 }
 
 <div class="mb-4">
     <a asp-action="Index" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-right me-1"></i>Back To List  
+        <i class="bi bi-arrow-right me-1"></i>بازگشت به لیست
     </a>
 </div>
 
 <div class="card">
     <div class="card-header bg-primary text-white">
         <h3 class="mb-0">
-            <i class="bi bi-plus-circle me-2"></i>Record New Advertisement   
+            <i class="bi bi-plus-circle me-2"></i>ثبت آگهی شغلی جدید
         </h3>
     </div>
 
@@ -23,34 +23,34 @@
 
             <div class="mb-4">
                 <label asp-for="Title" class="form-label fw-bold">
-                    <i class="bi bi-tag me-1"></i>Advertisement Title 
+                    <i class="bi bi-tag me-1"></i>عنوان آگهی
                 </label>
-                <input asp-for="Title" class="form-control form-control-lg" placeholder="For Example : Full Stack Developer" />
+                <input asp-for="Title" class="form-control form-control-lg" placeholder="مثلاً: برنامه‌نویس Full Stack" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
 
             <div class="mb-4">
                 <label asp-for="Description" class="form-label fw-bold">
-                    <i class="bi bi-file-text me-1"></i>Totally Description 
+                    <i class="bi bi-file-text me-1"></i>توضیحات کامل
                 </label>
-                <textarea asp-for="Description" class="form-control" rows="6" placeholder="Explain Job ..."></textarea>
+                <textarea asp-for="Description" class="form-control" rows="6" placeholder="شرح کامل موقعیت شغلی، مهارت‌های مورد نیاز و..."></textarea>
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-4">
                     <label asp-for="Salary" class="form-label fw-bold">
-                        <i class="bi bi-cash me-1"></i>Salary (Tooman)
+                        <i class="bi bi-cash me-1"></i>حقوق (تومان)
                     </label>
-                    <input asp-for="Salary" class="form-control form-control-lg" type="number" placeholder="Example : 6000000" />
+                    <input asp-for="Salary" class="form-control form-control-lg" type="number" placeholder="مثلاً: 50000000" />
                     <span asp-validation-for="Salary" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-6 mb-4">
                     <label asp-for="CompanyName" class="form-label fw-bold">
-                        <i class="bi bi-building me-1"></i>Company Name 
+                        <i class="bi bi-building me-1"></i>نام شرکت
                     </label>
-                    <input asp-for="CompanyName" class="form-control form-control-lg" placeholder="Example : IT Company" />
+                    <input asp-for="CompanyName" class="form-control form-control-lg" placeholder="مثلاً: شرکت فناوری اطلاعات" />
                     <span asp-validation-for="CompanyName" class="text-danger"></span>
                 </div>
             </div>
@@ -58,27 +58,39 @@
             <div class="row">
                 <div class="col-md-6 mb-4">
                     <label asp-for="Province" class="form-label fw-bold">
-                        <i class="bi bi-geo-alt me-1"></i>Province
+                        <i class="bi bi-geo-alt me-1"></i>استان
                     </label>
-                    <input asp-for="Province" class="form-control form-control-lg" placeholder="Example : Tehran " />
+                    <input asp-for="Province" class="form-control form-control-lg" placeholder="مثلاً: تهران" />
                     <span asp-validation-for="Province" class="text-danger"></span>
                 </div>
 
                 <div class="col-md-6 mb-4">
                     <label asp-for="City" class="form-label fw-bold">
-                        <i class="bi bi-geo me-1"></i>City
+                        <i class="bi bi-geo me-1"></i>شهر
                     </label>
-                    <input asp-for="City" class="form-control form-control-lg" placeholder="Example : Tehran" />
+                    <input asp-for="City" class="form-control form-control-lg" placeholder="مثلاً: تهران" />
                     <span asp-validation-for="City" class="text-danger"></span>
                 </div>
+
+                <div class="mb-4">
+                    <label asp-for="CompanyId" class="form-label fw-bold">
+                        <i class="bi bi-building-check me-1"></i>Company ID
+                    </label>
+                    <input asp-for="CompanyId" class="form-control form-control-lg" placeholder="مثلاً: 019fceb3-f887-7000-8189-b20f3ddc83ea" />
+                    <span asp-validation-for="CompanyId" class="text-danger"></span>
+                    <div class="form-text small text-muted">
+                        شناسه یکتای شرکت (GUID) - از دیتابیس یا Swagger بردارید
+                    </div>
+                </div>
+
             </div>
 
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <a asp-action="Index" class="btn btn-secondary btn-lg">
-                    <i class="bi bi-x-circle me-1"></i>Cancel
+                    <i class="bi bi-x-circle me-1"></i>انصراف
                 </a>
                 <button type="submit" class="btn btn-primary btn-lg">
-                    <i class="bi bi-check-circle me-1"></i>Submit 
+                    <i class="bi bi-check-circle me-1"></i>ثبت آگهی
                 </button>
             </div>
         </form>

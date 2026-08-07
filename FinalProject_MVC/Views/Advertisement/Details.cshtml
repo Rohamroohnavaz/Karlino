@@ -1,12 +1,12 @@
 ﻿@model FinalProject_MVC.Models.AdvertisementViewModel
 
 @{
-    ViewData["Title"] = "Advertisement Details";
+    ViewData["Title"] = "جزئیات آگهی";
 }
 
 <div class="mb-4">
     <a asp-action="Index" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-right me-1"></i> Back To List 
+        <i class="bi bi-arrow-right me-1"></i>بازگشت به لیست
     </a>
 </div>
 
@@ -33,7 +33,7 @@
             </div>
             <div class="col-md-4 text-md-end">
                 <span class="badge bg-success fs-6">
-                    <i class="bi bi-check-circle me-1"></i>Active
+                    <i class="bi bi-check-circle me-1"></i>فعال
                 </span>
             </div>
         </div>
@@ -46,7 +46,7 @@
                     <div class="d-flex align-items-center">
                         <i class="bi bi-geo-alt-fill text-primary fs-4 me-3"></i>
                         <div>
-                            <small class="text-muted d-block">Location </small>
+                            <small class="text-muted d-block">موقعیت مکانی</small>
                             <strong>@Model.Province - @Model.City</strong>
                         </div>
                     </div>
@@ -58,10 +58,8 @@
                     <div class="d-flex align-items-center">
                         <i class="bi bi-cash-stack text-success fs-4 me-3"></i>
                         <div>
-                            <small class="text-muted d-block">
-                                Proposed salary
-                            </small>
-                            <strong class="text-success">@Model.Salary.ToString("N0") Tooman</strong>
+                            <small class="text-muted d-block">حقوق پیشنهادی</small>
+                            <strong class="text-success">@Model.Salary.ToString("N0") تومان</strong>
                         </div>
                     </div>
                 </div>
@@ -72,8 +70,8 @@
                     <div class="d-flex align-items-center">
                         <i class="bi bi-calendar-check text-info fs-4 me-3"></i>
                         <div>
-                            <small class="text-muted d-block">ExpireDate </small>
-                            <strong>@(Model.ExpireDate.Year > 1 ? Model.ExpireDate.ToString("yyyy/MM/dd") : "Unspecified")</strong>
+                            <small class="text-muted d-block">تاریخ انقضا</small>
+                            <strong>@(Model.ExpireDate.Year > 1 ? Model.ExpireDate.ToString("yyyy/MM/dd") : "نامشخص")</strong>
                         </div>
                     </div>
                 </div>
@@ -84,8 +82,8 @@
                     <div class="d-flex align-items-center">
                         <i class="bi bi-clock-history text-warning fs-4 me-3"></i>
                         <div>
-                            <small class="text-muted d-block">CreatedTime</small>
-                            <strong>@(Model.CreatedAt.Year > 1 ? Model.CreatedAt.ToString("yyyy/MM/dd") : "Unspecified")</strong>
+                            <small class="text-muted d-block">تاریخ ثبت</small>
+                            <strong>@(Model.CreatedAt.Year > 1 ? Model.CreatedAt.ToString("yyyy/MM/dd") : "نامشخص")</strong>
                         </div>
                     </div>
                 </div>
@@ -96,7 +94,7 @@
 
         <div class="mb-4">
             <h5 class="text-primary mb-3">
-                <i class="bi bi-file-text me-2"></i>Description
+                <i class="bi bi-file-text me-2"></i>توضیحات آگهی
             </h5>
             <div class="p-4 bg-light rounded" style="white-space: pre-wrap; line-height: 1.8;">
                 @Model.Description
@@ -107,15 +105,15 @@
     <div class="card-footer bg-white">
         <div class="d-flex justify-content-between">
             <a asp-action="Index" class="btn btn-secondary">
-                <i class="bi bi-arrow-right me-1"></i>Back
+                <i class="bi bi-arrow-right me-1"></i>بازگشت
             </a>
             <div>
                 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
-                    <i class="bi bi-pencil me-1"></i>Edit
+                    <i class="bi bi-pencil me-1"></i>ویرایش
                 </a>
                 <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger"
-                   onclick="return confirm('Are you sure to delete this ?')">
-                    <i class="bi bi-trash me-1"></i>Delete
+                   onclick="return confirm('آیا از حذف این آگهی اطمینان دارید؟')">
+                    <i class="bi bi-trash me-1"></i>حذف
                 </a>
             </div>
         </div>

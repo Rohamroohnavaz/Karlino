@@ -48,8 +48,6 @@ namespace FinalProject_MVC.Controllers
 
             try
             {
-                var companyId = User.FindFirst("CompanyId")?.Value;
-
                 var advertisementData = new
                 {
                     adverModel.Title,
@@ -58,7 +56,7 @@ namespace FinalProject_MVC.Controllers
                     adverModel.CompanyName,
                     adverModel.Province,
                     adverModel.City,
-                    adverModel.CompanyId
+                    companyId = adverModel.CompanyId
                 };
 
                 await _apiService.PostAsync<object>("/CreateAdvertisement", advertisementData);
@@ -87,7 +85,7 @@ namespace FinalProject_MVC.Controllers
             }
             catch (Exception ex)
             {
-                ViewBag.ErrorMessage = "Error getting advertisement details: " + ex.Message;
+                ViewBag.ErrorMessage = "خطا هنگام دریافت جزئیات آگهی ! " + ex.Message;
                 return View(new AdvertisementViewModel());
             }
         }

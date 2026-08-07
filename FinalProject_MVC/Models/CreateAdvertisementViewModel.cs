@@ -4,25 +4,25 @@ namespace FinalProject_MVC.Models
 {
     public class CreateAdvertisementViewModel
     {
-        [Required(ErrorMessage = "Title is required !")]
+        [Required(ErrorMessage = "عنوان آگهی الزامی است")]
         public string Title { get; set; }
 
-        [Required(ErrorMessage = "Description is required !")]
+        [Required(ErrorMessage = "توضیحات الزامی است")]
         public string Description { get; set; }
 
-        [Required(ErrorMessage = "Salary is required !")]
+        [Required(ErrorMessage = "حقوق الزامی است")]
         public decimal Salary { get; set; }
 
-        [Required(ErrorMessage = "CompanyName is required !")]
+        [Required(ErrorMessage = "نام شرکت الزامی است")]
         public string CompanyName { get; set; }
 
-        [Required(ErrorMessage = "Province is required !")]
+        [Required(ErrorMessage = "استان الزامی است")]
         public string Province { get; set; }
 
-        [Required(ErrorMessage = "City is required !")]
+        [Required(ErrorMessage = "شهر الزامی است")]
         public string City { get; set; }
 
-        [Required(ErrorMessage = "CompanyId is required !")]
-        public string CompanyId { get; set; }
+        [Required(ErrorMessage = "Company ID الزامی است")]
+        public Guid CompanyId { get; set; }
     }
 }

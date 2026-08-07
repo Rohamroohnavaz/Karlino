@@ -1,4 +1,5 @@
-﻿using MyFinalProject.Application.Commands.ViewModels;
+﻿using MyFinalProject.Application.Commands.AdverCommands;
+using MyFinalProject.Application.Commands.ViewModels;
 using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.Filters;
 using MyFinalProject.Application.Services.ServiceInterfaces;
@@ -72,14 +73,23 @@ namespace MyFinalProject.Application.Services.MainServices
             return advertisement;
         }
 
-        public async Task<Advertisement?> GetCompanyAdvertisementAsync(Guid adverId)
+        public async Task<CreateAdvertisementDto?> GetAdvertisementByIdAsync(Guid adverId)
         {
             var advertisement = await _advertisementRepository.GetCompanyAdvertisement(adverId);
 
             if (advertisement == null)
                 throw new InvalidAdvertisementException("Advertisement not found !!");
 
-            return advertisement;
+            return new CreateAdvertisementDto
+            {
+                Title = advertisement.Title,
+                Description = advertisement.Description,
+                Salary = advertisement.Salary,
+                CompanyName = advertisement.CompanyName,
+                Province = advertisement.Province,
+                City = advertisement.City,
+            };
+
         }
 
         public async Task<List<AdvertisementViewModel>> SearchAndFilterAdsAsync(AdverSearchFilterDto filter)
@@ -112,6 +122,31 @@ namespace MyFinalProject.Application.Services.MainServices
                 Salary = a.Salary,
                 CreatedAt = a.CreatedAt
             }).ToList();
+        }
+
+        public async Task UpdateAdvertisement(UpdateAdvertisementCommand command)
+        {
+            var advertisement = await _advertisementRepository.GetByIdAsync(command.Id);
+
+            if (advertisement is null)
+                throw new Exception("Advertisement Not Found !");
+
+            if (advertisement.CompanyId != command.CompanyId)
+                throw new Exception("You don't have permission to edit this advertisement");
+
+            await _advertisementRepository.UpdateAsync(advertisement);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task DeleteAdvertisement(DeleteAdvertisementCommand command)
+        {
+            var advertisement = await _advertisementRepository.GetByIdAsync(command.Id);
+
+            if (advertisement is null)
+                throw new Exception("Advertisement Not Found !");
+
+            await _advertisementRepository.SoftDeleteAsync(command.Id);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

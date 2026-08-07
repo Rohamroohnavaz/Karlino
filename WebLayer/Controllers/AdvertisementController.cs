@@ -56,5 +56,12 @@ namespace WebLayer.Controllers
             var adver = await _advertisementService.GetAdvertisementByCompanyIdAsync(companyId);
             return Ok(adver);
         }
+
+        [HttpGet("/GetAdvertisementById/{id:guid}")]
+        public async Task<IActionResult> GetAdvertisementById(Guid id)
+        {
+            var adver = await _advertisementService.GetAdvertisementByIdAsync(id);
+            return Ok(adver);
+        }
     }
 }

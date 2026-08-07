@@ -4,23 +4,30 @@ namespace FinalProject_MVC.Models
 {
     public class RegisterViewModel
     {
-        [Required]
-        public string Firstname { get; set; }
+        [Required(ErrorMessage = "نام الزامی است")]
+        public string FirstName { get; set; }
 
-        [Required]
-        public string Lastname { get; set; }
+        [Required(ErrorMessage = "نام خانوادگی الزامی است")]
+        public string LastName { get; set; }
 
-        [Required]
-        public string Username { get; set; }
-
-        [Required]
-        [EmailAddress]
+        [Required(ErrorMessage = "ایمیل الزامی است")]
+        [EmailAddress(ErrorMessage = "فرمت ایمیل صحیح نیست")]
         public string Email { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "شماره تلفن الزامی است")]
+        public string PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "نام کاربری الزامی است")]
+        public string UserName { get; set; }
+
+        [Required(ErrorMessage = "رمز عبور الزامی است")]
         [DataType(DataType.Password)]
+        [MinLength(8, ErrorMessage = "رمز عبور باید حداقل 8 کاراکتر باشد")]
         public string Password { get; set; }
 
-        public string Phonenumber { get; set; }
+        [Required(ErrorMessage = "تایید رمز عبور الزامی است")]
+        [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage = "رمز عبور و تایید آن مطابقت ندارند")]
+        public string ConfirmPassword { get; set; }
     }
 }
