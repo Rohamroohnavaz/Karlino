@@ -27,29 +27,29 @@ namespace WebLayer.Controllers.AdminCntrl
             return Ok(BaseResponseDto<List<AdminEmployerListDto>>.Success());
         }
 
-        [HttpGet("/{employerId:guid}")]
+        [HttpGet("/GetDetail/{employerId:guid}")]
         public async Task<IActionResult> GetEmployerDetail([FromRoute] Guid employerId)
         {
             var employerDetail = await _adminService.GetEmployerDetailsAsync(employerId);
             return Ok(BaseResponseDto<AdminEmployerDetailsDto>.Success());
         }
 
-        [HttpPut("/{emploayerId:guid}/approve")]
+        [HttpPut("/approve_employer/{employerId:guid}")]
         public async Task<IActionResult> ApproveEmployer([FromBody] SendEmailRequest request
-            ,[FromRoute] Guid employerId
+            , [FromRoute] Guid employerId
             , CancellationToken cancellationToken)
         {
             await _adminService.ApproveEmployerAsync(request, employerId, cancellationToken);
-            return Ok(ResponseDto.Success());
+            return Ok(new { message = "Employer Successfuly Approved !!" });
         }
 
-        [HttpPut("/{employerId:guid}/reject")]
+        [HttpPut("/reject_employer/{employerId:guid}")]
         public async Task<IActionResult> RejectEmployer([FromBody] SendEmailRequest request
-            ,[FromRoute] Guid employerId
+            , [FromRoute] Guid employerId
             , CancellationToken cancellationToken)
         {
             await _adminService.RejectEmployersAsync(request, employerId, cancellationToken);
-            return Ok(ResponseDto.Success());
+            return Ok(new { message = "Employer Successfuly Rejected !!"});
         }
     }
 }

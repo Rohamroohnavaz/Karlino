@@ -1,0 +1,123 @@
+﻿@model FinalProject_MVC.Models.AdvertisementViewModel
+
+@{
+    ViewData["Title"] = "Advertisement Details";
+}
+
+<div class="mb-4">
+    <a asp-action="Index" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-right me-1"></i> Back To List 
+    </a>
+</div>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger">
+        <i class="bi bi-exclamation-triangle me-2"></i>@ViewBag.ErrorMessage
+    </div>
+}
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h3 class="mb-0">
+            <i class="bi bi-megaphone me-2"></i>@Model.Title
+        </h3>
+    </div>
+
+    <div class="card-body">
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h5 class="text-muted mb-3">
+                    <i class="bi bi-building me-2"></i>@Model.CompanyName
+                </h5>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <span class="badge bg-success fs-6">
+                    <i class="bi bi-check-circle me-1"></i>Active
+                </span>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-6">
+                <div class="p-3 bg-light rounded">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-geo-alt-fill text-primary fs-4 me-3"></i>
+                        <div>
+                            <small class="text-muted d-block">Location </small>
+                            <strong>@Model.Province - @Model.City</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-3 bg-light rounded">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-cash-stack text-success fs-4 me-3"></i>
+                        <div>
+                            <small class="text-muted d-block">
+                                Proposed salary
+                            </small>
+                            <strong class="text-success">@Model.Salary.ToString("N0") Tooman</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-3 bg-light rounded">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-calendar-check text-info fs-4 me-3"></i>
+                        <div>
+                            <small class="text-muted d-block">ExpireDate </small>
+                            <strong>@(Model.ExpireDate.Year > 1 ? Model.ExpireDate.ToString("yyyy/MM/dd") : "Unspecified")</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="p-3 bg-light rounded">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-clock-history text-warning fs-4 me-3"></i>
+                        <div>
+                            <small class="text-muted d-block">CreatedTime</small>
+                            <strong>@(Model.CreatedAt.Year > 1 ? Model.CreatedAt.ToString("yyyy/MM/dd") : "Unspecified")</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+
+        <div class="mb-4">
+            <h5 class="text-primary mb-3">
+                <i class="bi bi-file-text me-2"></i>Description
+            </h5>
+            <div class="p-4 bg-light rounded" style="white-space: pre-wrap; line-height: 1.8;">
+                @Model.Description
+            </div>
+        </div>
+    </div>
+
+    <div class="card-footer bg-white">
+        <div class="d-flex justify-content-between">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-right me-1"></i>Back
+            </a>
+            <div>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
+                    <i class="bi bi-pencil me-1"></i>Edit
+                </a>
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger"
+                   onclick="return confirm('Are you sure to delete this ?')">
+                    <i class="bi bi-trash me-1"></i>Delete
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

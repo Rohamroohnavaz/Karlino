@@ -139,7 +139,7 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
             {
                 UserName = command.Username,
                 Role = UserRole.JobSeeker,
-                IsApproved = true
+                IsApproved = false
             };
 
             var createResult = await _userManager.CreateAsync(user, command.Password);
@@ -182,9 +182,10 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
 
             var claims = new List<Claim>
             {
-              new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-              new Claim(ClaimTypes.Email, user.Email),
-              new Claim(ClaimTypes.Role, user.Role.ToString())
+               new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+               new Claim(ClaimTypes.Email, user.Email),
+               new Claim(ClaimTypes.Role, user.Role.ToString()),
+               new Claim(JwtRegisteredClaimNames.Jti ,Guid.NewGuid().ToString())
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
@@ -353,6 +354,31 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
                 RefreshToken = newRefreshToken.Token,
                 RefreshTokenExpiresAt = newRefreshToken.ExpiresAt
             };
+        }
+
+        public async Task ChangeRoleAsync(Guid userId, string roleName)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user is null)
+                throw new UserNotFoundException($"{nameof(user)} not found !!");
+
+            var currentRole = await _userManager.GetRolesAsync(user);
+            if (currentRole.Any())
+                await _userManager.RemoveFromRolesAsync(user, currentRole);
+
+            var roleExist = await _roleManager.RoleExistsAsync(roleName);
+            if (!roleExist)
+                throw new InvalidOperationException();
+
+            await _userManager.AddToRoleAsync(user, roleName);
+
+            if(Enum.TryParse<UserRole>(roleName, out var userRole))
+            {
+                user.Role = userRole;
+                await _userManager.UpdateAsync(user);
+            }
+
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

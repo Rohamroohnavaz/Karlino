@@ -13,10 +13,4 @@ namespace MyFinalProject.Application.Results
         public DateTime AccessTokenExpiresAt { get; set; }
         public DateTime RefreshTokenExpiresAt { get; set; }
     }
-    //(
-    //     string AccessToken,
-    //     Guid RefreshToken,
-    //     //DateTime AccessTokenExpiresAt,
-    //     DateTime RefreshTokenExpiresAt
-    //);
 }

@@ -27,7 +27,7 @@ namespace WebLayer.Controllers
         {
             var company = await _companyService.GetMyCompanyAsync();
 
-            if(company == null)
+            if (company == null)
                 return NotFound();
 
             return Ok(company);
@@ -35,10 +35,9 @@ namespace WebLayer.Controllers
 
         [HttpPost("/CreateCompany")]
         [Authorize(Roles = RoleConstants.EmployerRole)]
-        public async Task<IActionResult> AddNewCompany([FromBody] CreateCompanyDto dto,
-            [FromRoute] Guid companyId)
+        public async Task<IActionResult> AddNewCompany([FromBody] CreateCompanyDto dto)
         {
-            await _companyService.CreateNewCompanyAsync(dto, companyId);
+            await _companyService.CreateNewCompanyAsync(dto);
             return Ok(ResponseDto.Success());
         }
     }

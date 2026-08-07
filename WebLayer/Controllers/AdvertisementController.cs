@@ -19,7 +19,7 @@ namespace WebLayer.Controllers
         private readonly ICurrentUserService _currentUserService;
 
         public AdvertisementController(IAdvertisementService advertisementService
-            ,ICurrentUserService currentUserService)
+            , ICurrentUserService currentUserService)
         {
             _advertisementService = advertisementService;
             _currentUserService = currentUserService;
@@ -27,10 +27,10 @@ namespace WebLayer.Controllers
 
         [HttpPost("/CreateAdvertisement")]
         [Authorize(Roles = RoleConstants.EmployerRole)]
-        public async Task<IActionResult> CreateAdver([FromBody]CreateAdvertisementDto dto)
-        { 
-               await _advertisementService.CreateAdvertisementAsync(dto);
-               return Ok(ResponseDto.Success());
+        public async Task<IActionResult> CreateAdver([FromBody] CreateAdvertisementDto dto)
+        {
+            await _advertisementService.CreateAdvertisementAsync(dto);
+            return Ok(ResponseDto.Success());
         }
 
         [HttpGet("/GetActiveAdvertisements")]
@@ -38,15 +38,23 @@ namespace WebLayer.Controllers
         public async Task<IActionResult> GetActiveAdvers()
         {
             var advers = await _advertisementService.GetActiveAdvertisementAsync();
-            return Ok(BaseResponseDto<List<AdvertisementViewModel>>.Success());
+            return Ok(advers);
         }
 
         [HttpGet("/SearchAdvertisement")]
         [AllowAnonymous]
         public async Task<IActionResult> SearchAdvertisement([FromBody] AdverSearchFilterDto filter)
         {
-            var result = await _advertisementService.SearchAndFilterAdsAsync(filter); 
+            var result = await _advertisementService.SearchAndFilterAdsAsync(filter);
             return Ok(BaseResponseDto<List<AdvertisementViewModel>>.Success());
+        }
+
+        [HttpGet("/GetAdvertisementByCompanyId/{companyId:guid}")]
+        [Authorize(Roles = RoleConstants.EmployerRole)]
+        public async Task<IActionResult> GetAdvertisementByCompanyId(Guid companyId)
+        {
+            var adver = await _advertisementService.GetAdvertisementByCompanyIdAsync(companyId);
+            return Ok(adver);
         }
     }
 }

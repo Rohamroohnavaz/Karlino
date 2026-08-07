@@ -4,6 +4,7 @@ using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.ServiceExceptions;
 using MyFinalProject.Domain.Exceptions;
 using System;
+using System.Net;
 using System.Security.Authentication;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -69,8 +70,19 @@ namespace WebLayer.Middlewares
                     await WriteResponseAsync(context, StatusCodes.Status400BadRequest, "BadRequest_400", ex.Message);
                     break;
 
+                case EnforceApproveException ex:
+                    await WriteResponseAsync(context, StatusCodes.Status400BadRequest, "BadRequest_400", ex.Message);
+                    break;
+
                 case ArgumentException ex:
                     await WriteResponseAsync(context, StatusCodes.Status400BadRequest, "BadRequest_400", ex.Message);
+                    break;
+
+                case InvalidOperationException ex:
+                    context.Response.StatusCode = (int)HttpStatusCode.BadRequest; // 400
+                    context.Response.ContentType = "application/json";
+                    var result = JsonSerializer.Serialize(new { error = ex.Message });
+                    await context.Response.WriteAsync(result);
                     break;
 
                 case BaseBussinessException ex:

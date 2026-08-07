@@ -29,12 +29,12 @@ namespace MyFinalProject.Application.Services.MainServices
             _unitOfWork = unitOfWork;
         }
 
-        public async Task CreateNewCompanyAsync(CreateCompanyDto dto, Guid companyId)
+        public async Task CreateNewCompanyAsync(CreateCompanyDto dto)
         {
-            var existCompany = await _companyRepository.ExistCompanyAsync(companyId);
+            //var existCompany = await _companyRepository.ExistCompanyAsync(dto.Id);
 
-            if (existCompany)
-                throw new InvalidCompanyException("This Company Is Already Exist !");
+            //if (existCompany)
+            //    throw new InvalidCompanyException("This Company Is Already Exist !");
 
             var checkApprovedUser = await _currentUserService.GetAndEnsureApprovedAsync();
 
