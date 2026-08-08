@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyFinalProject.Application.Commands.AdverCommands;
 using MyFinalProject.Application.Commands.ViewModels;
 using MyFinalProject.Application.Constants;
 using MyFinalProject.Application.DTOs;
@@ -12,7 +13,6 @@ namespace WebLayer.Controllers
 {
     [ApiController]
     [Route("api/adv")]
-    [Authorize]
     public class AdvertisementController : ControllerBase
     {
         private readonly IAdvertisementService _advertisementService;
@@ -62,6 +62,36 @@ namespace WebLayer.Controllers
         {
             var adver = await _advertisementService.GetAdvertisementByIdAsync(id);
             return Ok(adver);
+        }
+
+        [HttpPut("/UpdateAdvertisement")]
+        [Authorize(Roles = RoleConstants.EmployerRole)]
+        public async Task<IActionResult> UpdateAdvertisement([FromBody] UpdateAdvertisementCommand command)
+        {
+            try
+            {
+                await _advertisementService.UpdateAdvertisement(command);
+                return Ok(new { message = "Advertisement Updated Successfully !" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpDelete("/DeleteAdvertisement")]
+        [Authorize(Roles = RoleConstants.EmployerRole)]
+        public async Task<IActionResult> DeleteAdvertisement([FromBody] DeleteAdvertisementCommand command)
+        {
+            try
+            {
+                await _advertisementService.DeleteAdvertisement(command);
+                return Ok(new {message = "Advertisement Deleted Successfully !"});
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new {message = ex.Message});
+            }
         }
     }
 }

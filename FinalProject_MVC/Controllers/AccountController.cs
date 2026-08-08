@@ -40,12 +40,17 @@ public class AccountController : Controller
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, model.Email),
-                new Claim("Token", loginResult.AccessToken)
+                new Claim("Token", loginResult.AccessToken),
             };
 
             if (!string.IsNullOrEmpty(loginResult.Role))
             {
                 claims.Add(new Claim(ClaimTypes.Role, loginResult.Role));
+            }
+
+            if (!string.IsNullOrEmpty(loginResult.CompanyId))
+            {
+                claims.Add(new Claim("CompanyId", loginResult.CompanyId));
             }
 
             var identity = new ClaimsIdentity(

@@ -129,10 +129,17 @@ namespace MyFinalProject.Application.Services.MainServices
             var advertisement = await _advertisementRepository.GetByIdAsync(command.Id);
 
             if (advertisement is null)
-                throw new Exception("Advertisement Not Found !");
+                throw new ArgumentException("Advertisement Not Found !");
 
             if (advertisement.CompanyId != command.CompanyId)
-                throw new Exception("You don't have permission to edit this advertisement");
+                throw new ArgumentException("You don't have permission to edit this advertisement");
+
+            advertisement.ChangeTitle(command.Title);
+            advertisement.ChangeDescription(command.Description);
+            advertisement.ChangeSalary(command.Salary);
+            advertisement.ChangeCompanyName(command.CompanyName);
+            advertisement.ChangeProvince(command.Province);
+            advertisement.ChangeCity(command.City);
 
             await _advertisementRepository.UpdateAsync(advertisement);
             await _unitOfWork.SaveChangesAsync();
@@ -143,9 +150,9 @@ namespace MyFinalProject.Application.Services.MainServices
             var advertisement = await _advertisementRepository.GetByIdAsync(command.Id);
 
             if (advertisement is null)
-                throw new Exception("Advertisement Not Found !");
+                throw new ArgumentException("Advertisement Not Found !");
 
-            await _advertisementRepository.SoftDeleteAsync(command.Id);
+            await _advertisementRepository.HardDeleteAsync(command.Id);
             await _unitOfWork.SaveChangesAsync();
         }
     }

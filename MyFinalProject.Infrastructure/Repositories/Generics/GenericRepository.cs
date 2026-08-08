@@ -37,12 +37,9 @@ namespace MyFinalProject.Infrastructure.Repositories.Generics
                 .ToListAsync();
         }
 
-        public async Task<T?> GetByIdAsync(Guid id, bool tracking = false)
+        public async Task<T?> GetByIdAsync(Guid id)
         {
             var query = _dbContext.Set<T>().AsQueryable().Where(q => q.IsDeleted == false);
-
-            if (!tracking)
-                query = query.AsNoTracking();
 
             return await query.FirstOrDefaultAsync(q => q.Id == id);
         }
