@@ -128,7 +128,23 @@ namespace FinalProject_MVC.Controllers
 
             try
             {
-                var companyIdFromClaim = "019FCEB3-F887-7000-8189-B20F3DDC83EA";
+                var token = HttpContext.Session.GetString("Token");
+
+                var existAdvertisement = await _apiService.GetAsync<AdvertisementViewModel>($"/GetAdvertisementById{id}");
+
+                if(existAdvertisement == null)
+                {
+                    ModelState.AddModelError("", " (returned null) آگهی یافت نشد !");
+                    return View(model);
+                }
+
+                var companyId = existAdvertisement.CompanyId;
+
+                if(companyId == Guid.Empty)
+                {
+                    ModelState.AddModelError("", "آگهی خالی است !");
+                    return View(model);
+                }
 
                 var advertisementData = new
                 {
@@ -139,8 +155,14 @@ namespace FinalProject_MVC.Controllers
                     CompanyName = model.CompanyName,
                     Province = model.Province,
                     City = model.City,
-                    CompanyId = Guid.Parse(companyIdFromClaim)
+                    CompanyId = companyId
                 };
+
+                ViewBag.DebugInfo = $@"
+                     Token: {(string.IsNullOrEmpty(token) ? "NULL ❌" : "Exists ✅")}
+                     <br/>CompanyId from API: {companyId}
+                     <br/>JSON: {Newtonsoft.Json.JsonConvert.SerializeObject(advertisementData)}
+        ";
 
                 await _apiService.PutAsync<object>("/UpdateAdvertisement", advertisementData);
 
@@ -150,12 +172,12 @@ namespace FinalProject_MVC.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", "خطا هنگام اپدیت آگهی : " + ex.Message);
-                ViewBag.DebugInfo = ex.Message;
+                ViewBag.DebugInfo = $"Error Message : {ex.Message}";
                 return View(model);
             }
         }
 
-        [HttpGet("Delete/{id}")]
+        [HttpGet("/Delete/{id}")]
         public async Task<IActionResult> Delete(Guid id)
         {
             try
@@ -176,13 +198,13 @@ namespace FinalProject_MVC.Controllers
             }
         }
 
-        [HttpPost("Delete/{id}")]
+        [HttpPost("/Delete/{id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
         {
             try
             {
-                await _apiService.PostAsync<object>($"/DeleteAdvertisement/{id}", null);
+                await _apiService.PostAsync<object>($"/DeleteAdvertisement", new {Id = id});
 
                 TempData["SuccessMessage"] = "آگهی با موفقیت حذف شد !";
                 return RedirectToAction("Index");
@@ -191,7 +213,7 @@ namespace FinalProject_MVC.Controllers
             {
                 ViewBag.ErrorMessage = "خطا هنگام حذف آگهی : " + ex.Message;
                 var advertisement = await _apiService.GetAsync<AdvertisementViewModel>($"/GetAdvertisementById/{id}");
-                return View(advertisement);
+                return View("Delete", advertisement);
             }
         }
     }

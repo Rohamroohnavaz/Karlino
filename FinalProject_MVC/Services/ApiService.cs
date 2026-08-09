@@ -70,6 +70,9 @@ public class ApiService : IApiService
     private async Task SetAuthHeader()
     {
         var token = _httpContextAccessor.HttpContext?.Session.GetString("Token");
+
+        System.Diagnostics.Debug.WriteLine($"Token: {token ?? "NULL"}");
+
         if (!string.IsNullOrEmpty(token))
         {
             _httpClient.DefaultRequestHeaders.Authorization =

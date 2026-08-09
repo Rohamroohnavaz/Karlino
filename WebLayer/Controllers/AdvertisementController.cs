@@ -68,6 +68,17 @@ namespace WebLayer.Controllers
         [Authorize(Roles = RoleConstants.EmployerRole)]
         public async Task<IActionResult> UpdateAdvertisement([FromBody] UpdateAdvertisementCommand command)
         {
+            if (command == null)
+                return BadRequest(new { message = "Command is null - JSON deserialization failed" });
+
+            if (command.Id == Guid.Empty)
+                return BadRequest(new { message = "Id is empty (Guid.Empty)" });
+
+            if (string.IsNullOrEmpty(command.Title))
+                return BadRequest(new { message = "Title is empty" });
+
+            if (command.CompanyId == Guid.Empty)
+                return BadRequest(new { message = "CompanyId is empty (Guid.Empty)" });
             try
             {
                 await _advertisementService.UpdateAdvertisement(command);
@@ -79,7 +90,7 @@ namespace WebLayer.Controllers
             }
         }
 
-        [HttpDelete("/DeleteAdvertisement")]
+        [HttpPost("/DeleteAdvertisement")]
         [Authorize(Roles = RoleConstants.EmployerRole)]
         public async Task<IActionResult> DeleteAdvertisement([FromBody] DeleteAdvertisementCommand command)
         {
