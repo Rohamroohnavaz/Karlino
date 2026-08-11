@@ -3,6 +3,7 @@ using FinalProject_MVC.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using MyFinalProject.Application.Constants;
 using System.Security.Claims;
 
 public class AccountController : Controller
@@ -22,7 +23,7 @@ public class AccountController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(LoginViewModel model)
+    public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
     {
         if (!ModelState.IsValid)
             return View(model);
@@ -33,19 +34,21 @@ public class AccountController : Controller
             {
                 model.Email,
                 model.Password,
+                model.RememberMe,
             });
 
             HttpContext.Session.SetString("Token", loginResult.AccessToken);
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, model.Email),
-                new Claim("Token", loginResult.AccessToken),
+               new Claim(ClaimTypes.Email, model.Email),
+               new Claim(ClaimTypes.Name, model.Email),
+               new Claim("Token", loginResult.AccessToken),
             };
 
             if (!string.IsNullOrEmpty(loginResult.Role))
             {
-                claims.Add(new Claim(ClaimTypes.Role, loginResult.Role));
+                claims.Add(new Claim(ClaimTypes.Role, loginResult.Role.Trim()));
             }
 
             if (!string.IsNullOrEmpty(loginResult.CompanyId))
@@ -66,6 +69,23 @@ public class AccountController : Controller
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(identity),
                 authProperties);
+
+            var role = loginResult.Role?.Trim();
+
+            if (string.Equals(role, RoleConstants.AdminRole, StringComparison.OrdinalIgnoreCase))
+            {
+                return Redirect("/Admin/Dashboard");
+            }
+
+            if (string.Equals(role, RoleConstants.EmployerRole, StringComparison.OrdinalIgnoreCase))
+            {
+                return RedirectToAction("Index", "EmployerDashboard");
+            }
+
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
 
             return RedirectToAction("Index", "Home");
         }
