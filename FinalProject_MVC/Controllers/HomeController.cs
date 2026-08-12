@@ -30,5 +30,26 @@ namespace FinalProject_MVC.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
+        [AllowAnonymous]
+        public IActionResult DebugClaims()
+        {
+            var isAuthenticated = User.Identity?.IsAuthenticated ?? false;
+
+            var claims = string.Join(
+                "<br>",
+                User.Claims.Select(c => $"{c.Type} = {c.Value}")
+            );
+
+            var html = $@"
+            <h2>Debug Claims</h2>
+            <p><b>IsAuthenticated:</b> {isAuthenticated}</p>
+            <p><b>AuthenticationType:</b> {User.Identity?.AuthenticationType}</p>
+            <p><b>Claims:</b></p>
+            <div>{claims}</div>
+        ";
+            return Content(html, "text/html");
+        }
     }
 }
+

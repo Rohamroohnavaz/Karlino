@@ -1,4 +1,5 @@
-﻿using FinalProject_MVC.Models;
+﻿using FinalProject_MVC.Helpers;
+using FinalProject_MVC.Models;
 using FinalProject_MVC.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -39,6 +40,13 @@ public class AccountController : Controller
 
             HttpContext.Session.SetString("Token", loginResult.AccessToken);
 
+            var role = loginResult.Role?.Trim();
+
+            if (string.IsNullOrWhiteSpace(role))
+            {
+                role = JwtHelper.GetRoleFromJwt(loginResult.AccessToken)?.Trim();
+            }
+
             var claims = new List<Claim>
             {
                new Claim(ClaimTypes.Email, model.Email),
@@ -46,9 +54,9 @@ public class AccountController : Controller
                new Claim("Token", loginResult.AccessToken),
             };
 
-            if (!string.IsNullOrEmpty(loginResult.Role))
+            if (!string.IsNullOrWhiteSpace(role))
             {
-                claims.Add(new Claim(ClaimTypes.Role, loginResult.Role.Trim()));
+                claims.Add(new Claim(ClaimTypes.Role, role));
             }
 
             if (!string.IsNullOrEmpty(loginResult.CompanyId))
@@ -69,8 +77,6 @@ public class AccountController : Controller
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(identity),
                 authProperties);
-
-            var role = loginResult.Role?.Trim();
 
             if (string.Equals(role, RoleConstants.AdminRole, StringComparison.OrdinalIgnoreCase))
             {
