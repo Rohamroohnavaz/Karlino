@@ -2,38 +2,86 @@
     ViewData["Title"] = "داشبورد مدیریت";
 }
 
-<div class="admin-dashboard">
+<div class="sb-cards">
 
-    <h2 style="color:red"> این صفحه داشبورد ادمین است</h2>
-
-    <div class="row">
-        <div class="col-md-3">
-            <div class="card">
-                <h4>کاربران</h4>
-                <p>0</p>
+    <div class="sb-card sb-card-warning">
+        <div class="sb-card-row">
+            <div>
+                <div class="text-xs">آگهی‌های در انتظار تأیید</div>
+                <div class="sb-value">0</div>
             </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card">
-                <h4>کارفرماها</h4>
-                <p>0</p>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card">
-                <h4>آگهی‌ها</h4>
-                <p>0</p>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card">
-                <h4>آگهی‌های در انتظار تأیید</h4>
-                <p>0</p>
-            </div>
+            <i class="fa-solid fa-hourglass-half sb-icon"></i>
         </div>
     </div>
 
+    <div class="sb-card sb-card-success">
+        <div class="sb-card-row">
+            <div>
+                <div class="text-xs">آگهی‌های فعال</div>
+                <div class="sb-value">0</div>
+            </div>
+            <i class="fa-solid fa-briefcase sb-icon"></i>
+        </div>
+    </div>
+
+    <div class="sb-card sb-card-info">
+        <div class="sb-card-row">
+            <div>
+                <div class="text-xs">کارفرماها</div>
+                <div class="sb-value">0</div>
+            </div>
+            <i class="fa-solid fa-building sb-icon"></i>
+        </div>
+    </div>
+
+    <div class="sb-card sb-card-primary">
+        <div class="sb-card-row">
+            <div>
+                <div class="text-xs">کاربران</div>
+                <div class="sb-value">0</div>
+            </div>
+            <i class="fa-solid fa-users sb-icon"></i>
+        </div>
+    </div>
+
+</div>
+
+<div class="sb-table-card">
+    <h5>آخرین آگهی‌ها</h5>
+
+    <table class="sb-table">
+        <thead>
+            <tr>
+                <th>عنوان آگهی</th>
+                <th>کارفرما</th>
+                <th>شهر</th>
+                <th>تاریخ ثبت</th>
+                <th>وضعیت</th>
+                <th>عملیات</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>توسعه‌دهنده .NET</td>
+                <td>شرکت نمونه</td>
+                <td>تهران</td>
+                <td>1405/05/21</td>
+                <td><span class="badge badge-warning">در انتظار تأیید</span></td>
+                <td>
+                    <button class="btn-sb btn-sb-success">تأیید</button>
+                    <button class="btn-sb btn-sb-danger">رد</button>
+                </td>
+            </tr>
+            <tr>
+                <td>طراح UI/UX</td>
+                <td>استارتاپ نمونه</td>
+                <td>اصفهان</td>
+                <td>1405/05/20</td>
+                <td><span class="badge badge-success">فعال</span></td>
+                <td>
+                    <button class="btn-sb btn-sb-danger">حذف</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
 </div>

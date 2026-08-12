@@ -1,161 +1,90 @@
 ﻿<!DOCTYPE html>
-<html dir="rtl">
+<html lang="fa" dir="rtl">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"] - پنل مدیریت</title>
 
-    <style>
-        body {
-            font-family: Tahoma, Arial;
-            background: #f4f6f9;
-            margin: 0;
-        }
-
-        .admin-wrapper {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .sidebar {
-            width: 230px;
-            background: #222;
-            color: #fff;
-            padding: 15px;
-        }
-
-        .sidebar h3 {
-            color: #fff;
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
-
-        .sidebar ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .sidebar ul li {
-            margin-bottom: 10px;
-        }
-
-        .sidebar ul li a {
-            color: #ddd;
-            text-decoration: none;
-            display: block;
-            padding: 8px 10px;
-            border-radius: 6px;
-        }
-
-        .sidebar ul li a:hover {
-            background: #444;
-            color: #fff;
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 20px;
-        }
-
-        .card {
-            background: #fff;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            margin-bottom: 20px;
-        }
-
-        .row {
-            display: flex;
-            flex-wrap: wrap;
-            margin-left: -10px;
-            margin-right: -10px;
-        }
-
-        .col-md-3 {
-            width: 25%;
-            padding: 10px;
-            box-sizing: border-box;
-        }
-
-        @@media(max-width: 768px) {
-            .admin-wrapper {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-            }
-
-            .col-md-3 {
-                width: 100%;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/admin-sb.css" asp-append-version="true" />
 </head>
 <body>
 
-    <div class="admin-wrapper">
+    <div id="wrapper">
 
-        <aside class="sidebar">
-            <h3>پنل مدیریت</h3>
+        <aside id="sidebar">
+            <a class="sidebar-brand" href="/Admin/Dashboard">
+                <i class="fa-solid fa-gear"></i>
+                <span>پنل مدیریت</span>
+            </a>
 
-            <ul>
-                <li>
-                    <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index">
-                        داشبورد
-                    </a>
-                </li>
+            <hr class="sidebar-divider" />
 
-                <li>
-                    <a asp-area="Admin" asp-controller="Users" asp-action="Index">
-                        کاربران
-                    </a>
-                </li>
+            <div class="sidebar-heading">مدیریت</div>
 
-                <li>
-                    <a asp-area="Admin" asp-controller="Employers" asp-action="Index">
-                        کارفرماها
-                    </a>
-                </li>
+            <a class="nav-link" href="/Admin/Dashboard">
+                <i class="fa-solid fa-gauge"></i><span>داشبورد</span>
+            </a>
+            <a class="nav-link" href="/Admin/Jobs">
+                <i class="fa-solid fa-briefcase"></i><span>آگهی‌ها</span>
+            </a>
+            <a class="nav-link" href="/Admin/Employers">
+                <i class="fa-solid fa-building"></i><span>کارفرماها</span>
+            </a>
+            <a class="nav-link" href="/Admin/Users">
+                <i class="fa-solid fa-users"></i><span>کاربران</span>
+            </a>
 
-                <li>
-                    <a asp-area="Admin" asp-controller="Jobs" asp-action="Index">
-                        آگهی‌ها
-                    </a>
-                </li>
+            <div class="sidebar-heading">تنظیمات</div>
 
-                <li>
-                    <a asp-area="Admin" asp-controller="Categories" asp-action="Index">
-                        دسته‌بندی‌ها
-                    </a>
-                </li>
+            <a class="nav-link" href="/Admin/Categories">
+                <i class="fa-solid fa-tags"></i><span>دسته‌بندی‌ها</span>
+            </a>
+            <a class="nav-link" href="/Admin/Cities">
+                <i class="fa-solid fa-city"></i><span>شهرها</span>
+            </a>
+            <a class="nav-link" href="/Admin/Settings">
+                <i class="fa-solid fa-sliders"></i><span>تنظیمات</span>
+            </a>
 
-                <li>
-                    <a asp-area="Admin" asp-controller="Cities" asp-action="Index">
-                        شهرها
-                    </a>
-                </li>
+            <hr class="sidebar-divider" />
 
-                <li>
-                    <a asp-area="Admin" asp-controller="Reports" asp-action="Index">
-                        گزارش‌ها
-                    </a>
-                </li>
-
-                <li>
-                    <a asp-area="Admin" asp-controller="Settings" asp-action="Index">
-                        تنظیمات
-                    </a>
-                </li>
-            </ul>
+            <a class="nav-link" href="/">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i><span>بازگشت به سایت</span>
+            </a>
         </aside>
 
-        <main class="main-content">
-            @RenderBody()
-        </main>
+        <div id="content-wrapper">
 
+            <nav id="topbar">
+                <form class="topbar-search">
+                    <input type="text" placeholder="جستجو..." />
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+
+                <div class="topbar-actions">
+                    <a class="topbar-icon" href="#">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="dot"></span>
+                    </a>
+
+                    <div class="topbar-user">
+                        <i class="fa-solid fa-user"></i>
+                        <span>@User.Identity?.Name</span>
+                    </div>
+
+                    <form asp-controller="Account" asp-action="Logout" method="post">
+                        <button class="btn-logout" type="submit">خروج</button>
+                    </form>
+                </div>
+            </nav>
+
+            <main class="container-fluid">
+                @RenderBody()
+            </main>
+
+        </div>
     </div>
 
 </body>
