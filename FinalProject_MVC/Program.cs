@@ -1,6 +1,11 @@
 using FinalProject_MVC.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using MyFinalProject.Application.Services.MainServices;
+using MyFinalProject.Application.Services.ServiceInterfaces;
+using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
+using MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos;
 using System.Globalization;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +35,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
     });
 
+builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IRequestResumeRepository, RequestResumeRepository>();
+builder.Services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();

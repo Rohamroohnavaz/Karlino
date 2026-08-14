@@ -1,4 +1,6 @@
-﻿@{
+﻿@model MyFinalProject.Application.DTOs.AdminDTOs.AdminDashboardDto
+
+@{
     ViewData["Title"] = "داشبورد مدیریت";
 }
 
@@ -7,10 +9,10 @@
     <div class="sb-card sb-card-warning">
         <div class="sb-card-row">
             <div>
-                <div class="text-xs">آگهی‌های در انتظار تأیید</div>
-                <div class="sb-value">0</div>
+                <div class="text-xs">کارفرماهای در انتظار تأیید</div>
+                <div class="sb-value">@Model.PendingEmployersCount</div>
             </div>
-            <i class="fa-solid fa-hourglass-half sb-icon"></i>
+            <i class="fa-solid fa-user-clock sb-icon"></i>
         </div>
     </div>
 
@@ -18,7 +20,17 @@
         <div class="sb-card-row">
             <div>
                 <div class="text-xs">آگهی‌های فعال</div>
-                <div class="sb-value">0</div>
+                <div class="sb-value">@Model.ActiveJobPostings</div>
+            </div>
+            <i class="fa-solid fa-briefcase sb-icon"></i>
+        </div>
+    </div>
+
+    <div class="sb-card sb-card-danger">
+        <div class="sb-card-row">
+            <div>
+                <div class="text-xs">آگهی‌های غیرفعال</div>
+                <div class="sb-value">@Model.InactiveJobPostings</div>
             </div>
             <i class="fa-solid fa-briefcase sb-icon"></i>
         </div>
@@ -28,7 +40,7 @@
         <div class="sb-card-row">
             <div>
                 <div class="text-xs">کارفرماها</div>
-                <div class="sb-value">0</div>
+                <div class="sb-value">@Model.TotalEmployers</div>
             </div>
             <i class="fa-solid fa-building sb-icon"></i>
         </div>
@@ -37,8 +49,8 @@
     <div class="sb-card sb-card-primary">
         <div class="sb-card-row">
             <div>
-                <div class="text-xs">کاربران</div>
-                <div class="sb-value">0</div>
+                <div class="text-xs">کارجوها</div>
+                <div class="sb-value">@Model.TotalJobSeekers</div>
             </div>
             <i class="fa-solid fa-users sb-icon"></i>
         </div>
@@ -47,41 +59,22 @@
 </div>
 
 <div class="sb-table-card">
-    <h5>آخرین آگهی‌ها</h5>
+    <h5>آمار درخواست رزومه</h5>
 
-    <table class="sb-table">
-        <thead>
-            <tr>
-                <th>عنوان آگهی</th>
-                <th>کارفرما</th>
-                <th>شهر</th>
-                <th>تاریخ ثبت</th>
-                <th>وضعیت</th>
-                <th>عملیات</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>توسعه‌دهنده .NET</td>
-                <td>شرکت نمونه</td>
-                <td>تهران</td>
-                <td>1405/05/21</td>
-                <td><span class="badge badge-warning">در انتظار تأیید</span></td>
-                <td>
-                    <button class="btn-sb btn-sb-success">تأیید</button>
-                    <button class="btn-sb btn-sb-danger">رد</button>
-                </td>
-            </tr>
-            <tr>
-                <td>طراح UI/UX</td>
-                <td>استارتاپ نمونه</td>
-                <td>اصفهان</td>
-                <td>1405/05/20</td>
-                <td><span class="badge badge-success">فعال</span></td>
-                <td>
-                    <button class="btn-sb btn-sb-danger">حذف</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="sb-cards">
+        @foreach (var stat in Model.RequestResumeStats)
+        {
+            <div class="sb-card sb-card-info">
+                <div class="sb-card-row">
+                    <div>
+                        <div class="text-xs">@DisplayHelper.RequestStatusTitle(stat.Key)</div>
+                        <div class="sb-value">@stat.Value</div>
+                    </div>
+                    <i class="fa-solid fa-file-lines sb-icon"></i>
+                </div>
+            </div>
+        }
+    </div>
 </div>
+
+
