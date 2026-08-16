@@ -25,6 +25,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
             PhoneNumber = phoneNumber;
             Email = email;
             CreatedAt = DateTime.UtcNow;
+            RegisteredAt = DateTime.UtcNow;
             UserValidation();
         }
 
@@ -44,6 +45,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public DateTime? ModifiedAt { get; private set; }
         public bool IsDeleted { get; private set; }
         public DateTime? DeletedAt { get; private set; }
+        public DateTime RegisteredAt { get; private set; }
 
         public Guid? CreateById { get; private set; }
 

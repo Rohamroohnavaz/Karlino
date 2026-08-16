@@ -26,7 +26,7 @@ namespace FinalProject_MVC.Areas.Admin.Controllers
 
             var model = await _adminService.GetDashboardStatsAsync();
 
-            return View();
+            return View(model);
         }
     }
 }

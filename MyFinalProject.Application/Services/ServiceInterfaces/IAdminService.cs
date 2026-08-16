@@ -1,11 +1,13 @@
 ﻿using MyFinalProject.Application.DTOs.AdminDTOs;
 using MyFinalProject.Application.Requests;
 using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Infrastructure.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AdminEmployerTableDto = MyFinalProject.Infrastructure.DTO.AdminEmployerTableDto;
 
 namespace MyFinalProject.Application.Services.ServiceInterfaces
 {
@@ -21,6 +23,12 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
 
         Task<SendEmailResponse> RejectEmployersAsync(SendEmailRequest request, Guid employerId
             , CancellationToken cancellationToken);
+
+        Task<List<AdminEmployerTableDto>> GetPendingEmployersAsync();
+
+        Task<bool> ApproveEmployerAsync(Guid id);
+
+        Task<bool> RejectEmployerAsync(Guid id);
 
         /////////////
 
@@ -47,6 +55,10 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
         Task<bool> FeatureAdvertisementAsync(Guid adverId, bool isFeatured, int? days = null);
 
         Task<bool> SoftDeleteAdvertisementAsync(Guid adverId);
+
+        Task<List<Infrastructure.DTO.AdminAdvertisementTableDto>> GetLatestJobPostingsAsync(int count = 10);
+
+        Task<bool> SetJobPostingActiveAsync(Guid id, bool isActive);
 
         /////////////
 

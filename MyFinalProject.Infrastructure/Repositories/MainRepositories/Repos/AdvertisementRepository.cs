@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Infrastructure.DTO;
 using MyFinalProject.Infrastructure.RepoExceptions;
 using MyFinalProject.Infrastructure.Repositories.Generics;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
@@ -70,6 +71,22 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
         {
             return await _dbContext.Advertisements
                 .CountAsync(a => a.IsActive == isActive);
+        }
+
+        public async Task<List<AdminAdvertisementTableDto>> GetLatestForAdminAsync(int count)
+        {
+            return await _dbContext.Advertisements
+                .OrderByDescending(a => a.CreatedAt)
+                .Take(count)
+                .Select(a => new AdminAdvertisementTableDto
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    EmployerName = a.CompanyName,
+                    CityName = a.City,
+                    CreatedAt = a.CreatedAt,
+                    IsActive = a.IsActive
+                }).ToListAsync();
         }
     }
 }

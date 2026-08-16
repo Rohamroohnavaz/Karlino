@@ -1,4 +1,5 @@
 ﻿using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Infrastructure.DTO;
 using MyFinalProject.Infrastructure.Repositories.Generics;
 using System;
 using System.Collections.Generic;
@@ -23,5 +24,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
         Task<List<Advertisement>> GetAllWithSoftDelete();
 
         Task<int> GetCountByStatus(bool isActive);
+
+        Task<List<AdminAdvertisementTableDto>> GetLatestForAdminAsync(int count);
     }
 }

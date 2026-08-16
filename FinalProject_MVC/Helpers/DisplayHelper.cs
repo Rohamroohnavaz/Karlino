@@ -14,5 +14,13 @@
                 _ => key
             };
         }
+
+        public static string FormatDate(DateTime? date)
+        {
+            if (date == null || date.Value == default || date.Value == DateTime.MinValue)
+                return "-";
+
+            return date.Value.ToString("yyyy/MM/dd");
+        }
     }
 }

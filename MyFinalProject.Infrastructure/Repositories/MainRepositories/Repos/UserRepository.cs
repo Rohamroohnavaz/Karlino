@@ -4,6 +4,7 @@ using MyFinalProject.Domain.Entities.Abstraction;
 using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Domain.Exceptions;
+using MyFinalProject.Infrastructure.DTO;
 using MyFinalProject.Infrastructure.RepoExceptions;
 using MyFinalProject.Infrastructure.Repositories.Generics;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
@@ -108,7 +109,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
         public async Task<int> GetPendingEmployersCount()
         {
             var employer = await _roleManager.FindByNameAsync("Employer");
-            if(employer is null)
+            if (employer is null)
                 return 0;
 
             return await (from user in _userManager.Users
@@ -117,6 +118,36 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                                 && !user.IsApproved
                                 && !user.IsDeleted
                           select user).CountAsync();
+        }
+
+        public async Task<List<AdminEmployerTableDto>> GetPendingEmployersAsync()
+        {
+            return await _dbContext.Users
+                .Where(u => u.IsApproved == false
+                && u.IsDeleted == false
+                && u.Role == UserRole.Employer)
+                .OrderBy(u => u.ModifiedAt)             
+                .Select(u => new AdminEmployerTableDto
+                {
+                    Id = u.Id,
+                    Email = u.Email,
+                    CompanyName = u.Company.CompanyName,
+                    RegisteredAt = u.RegisteredAt
+                }).ToListAsync();
+        }
+
+        public async Task<bool> SetEmployerApprovalAsync(Guid id, bool approved)
+        {
+            var employer = await _dbContext.Users.FindAsync(id);
+
+            if (employer == null)
+                return false;
+
+            employer.IsApproved = approved;
+
+            await _dbContext.SaveChangesAsync();
+
+            return true;
         }
     }
 }
