@@ -149,5 +149,18 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
 
             return true;
         }
+
+        public async Task<List<AdminUserTableDto>> GetAllUsersForAdminAsync()
+        {
+            return await _dbContext.Users
+                .Select(u => new AdminUserTableDto
+                {
+                    Id = u.Id,
+                    Email = u.Email,
+                    FullName = u.FirstName + " " + u.LastName,
+                    RoleName = u.Role != null ? u.Role.ToString() : "بدون نقش"
+                })
+                .ToListAsync();
+        }
     }
 }

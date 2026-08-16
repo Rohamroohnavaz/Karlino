@@ -45,6 +45,8 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
         Task<SendEmailResponse> RejectJobSeekerAsync(SendEmailRequest request, Guid employerId
             , CancellationToken cancellationToken);
 
+        Task<List<AdminUserTableDto>> GetAllUsersAsync();
+
         /////////////
 
         ///Advertisement

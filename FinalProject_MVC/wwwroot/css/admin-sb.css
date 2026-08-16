@@ -343,3 +343,39 @@ body {
         display: none;
     }
 }
+
+.sb-add-form,
+.sb-edit-form {
+    display: flex;
+    gap: .6rem;
+    margin-bottom: 1rem;
+}
+
+.sb-edit-form {
+    margin-bottom: 0;
+}
+
+    .sb-add-form input,
+    .sb-edit-form input {
+        flex: 1;
+        border: 1px solid var(--sb-border);
+        border-radius: .35rem;
+        padding: .5rem .8rem;
+        font-family: var(--sb-font);
+        font-size: .85rem;
+    }
+
+        .sb-add-form input:focus,
+        .sb-edit-form input:focus {
+            outline: 2px solid var(--sb-primary);
+            border-color: transparent;
+        }
+
+.sb-error {
+    background: #f8d7da;
+    color: var(--sb-danger);
+    border-radius: .35rem;
+    padding: .7rem 1rem;
+    margin-bottom: 1rem;
+    font-size: .85rem;
+}

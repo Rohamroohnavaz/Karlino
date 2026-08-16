@@ -299,8 +299,12 @@ namespace MyFinalProject.Application.Services.MainServices
                     Success = false,
                     Message = $"It was not rejected !{ex.Message}"
                 };
-
             }
+        }
+
+        public async Task<List<AdminUserTableDto>> GetAllUsersAsync()
+        {
+            return await _userRepository.GetAllUsersForAdminAsync();
         }
 
         #endregion

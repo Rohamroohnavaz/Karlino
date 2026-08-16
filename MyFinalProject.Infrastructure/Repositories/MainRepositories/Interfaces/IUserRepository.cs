@@ -34,5 +34,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
         Task<List<AdminEmployerTableDto>> GetPendingEmployersAsync();
 
         Task<bool> SetEmployerApprovalAsync(Guid id, bool approved);
+
+        Task<List<AdminUserTableDto>> GetAllUsersForAdminAsync();
     }
 }

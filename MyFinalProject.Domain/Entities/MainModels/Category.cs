@@ -29,6 +29,14 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         public ICollection<Advertisement> Advertisements { get; set; } = new List<Advertisement>();
 
+        public void SetCategoryName(string categoryName)
+        {
+            if (string.IsNullOrWhiteSpace(categoryName))
+                throw new InvalidNameException("CategoryName is invalid !!");
+
+            CategoryName = categoryName;
+        }
+
         public override void Validation()
         {
             if (string.IsNullOrWhiteSpace(CategoryName))

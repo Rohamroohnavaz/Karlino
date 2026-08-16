@@ -1,0 +1,45 @@
+﻿@model List<MyFinalProject.Infrastructure.DTO.AdminUserTableDto>
+
+@{
+    ViewData["Title"] = "مدیریت کاربران";
+}
+
+<div class="sb-table-card">
+    <h5>لیست کاربران</h5>
+
+    <table class="sb-table">
+        <thead>
+            <tr>
+                <th>ایمیل</th>
+                <th>نام</th>
+                <th>نقش</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Email</td>
+                    <td>@user.FullName</td>
+                    <td>
+                        @switch (user.RoleName)
+                        {
+                            case "Admin":
+                                <span class="badge badge-danger">مدیر</span>
+                                break;
+                            case "Employer":
+                                <span class="badge badge-info">کارفرما</span>
+                                break;
+                            case "JobSeeker":
+                                <span class="badge badge-success">کارجو</span>
+                                break;
+                            default:
+                                <span class="badge badge-secondary">@user.RoleName</span>
+                                break;
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
