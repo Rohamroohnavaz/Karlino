@@ -394,6 +394,11 @@ namespace MyFinalProject.Application.Services.MainServices
             return true;
         }
 
+        public async Task<(List<Infrastructure.DTO.AdminAdvertisementTableDto> Items, int TotalCount)> GetPagedJobPostingsAsync(string? search, bool? isActive, int page, int pageSize)
+        {
+            return await _advertisementRepository.GetPagedForAdminAsync(search, isActive, page, pageSize);
+        }
+
         #endregion
 
         #region Dashboard Implementation

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using MyFinalProject.Application.Constants;
+using MyFinalProject.Application.Results;
 using System.Security.Claims;
 
 public class AccountController : Controller
@@ -105,7 +106,7 @@ public class AccountController : Controller
     [HttpGet]
     public IActionResult Register()
     {
-        return View();
+        return View(new RegisterViewModel());
     }
 
     [HttpPost]
@@ -117,18 +118,36 @@ public class AccountController : Controller
 
         try
         {
-            var registerData = new
+            if (model.IsEmployer)   
             {
-                model.FirstName,
-                model.LastName,
-                model.Email,
-                model.PhoneNumber,
-                model.Password,
-            };
+                await _apiService.PostAsync<RegisterResult>("/RegisterEmployer", new
+                {
+                    model.FirstName,
+                    model.LastName,
+                    model.PhoneNumber,
+                    model.Email,
+                    model.Password,
+                    Username = model.Email,
+                    model.CompanyName,
+                    model.CompanyLocation,
+                    model.Province,
+                    model.City
+                });
+            }
+            else
+            {
+                await _apiService.PostAsync<RegisterResult>("/RegisterJobSeeker", new
+                {
+                    model.FirstName,
+                    model.LastName,
+                    model.PhoneNumber,
+                    model.Email,
+                    model.Password,
+                    Username = model.Email
+                });
+            }
 
-            await _apiService.PostAsync<object>("/RegisterEmployer", registerData);
-
-            TempData["SuccessMessage"] = "ثبت‌نام با موفقیت انجام شد. لطفاً وارد شوید.";
+            TempData["Success"] = "ثبت‌نام با موفقیت انجام شد. حالا وارد شوید.";
             return RedirectToAction("Login");
         }
         catch (Exception ex)

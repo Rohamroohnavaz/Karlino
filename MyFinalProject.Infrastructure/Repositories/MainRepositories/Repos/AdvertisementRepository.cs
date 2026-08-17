@@ -88,5 +88,40 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                     IsActive = a.IsActive
                 }).ToListAsync();
         }
+
+        public async Task<(List<AdminAdvertisementTableDto>, int)> GetPagedForAdminAsync(
+             string? search,bool? isActive, int page,int pageSize)
+        {
+            var query = _dbContext.Advertisements.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                query = query.Where(a => a.Title.Contains(search));
+            }
+
+            if (isActive.HasValue)
+            {
+                query = query.Where(a => a.IsActive == isActive.Value);
+            }
+
+            var totalCount = await query.CountAsync();
+
+            var items = await query
+                .OrderByDescending(a => a.CreatedAt)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .Select(a => new AdminAdvertisementTableDto
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    EmployerName = a.CompanyName,  
+                    CityName = a.City,
+                    CreatedAt = a.CreatedAt,
+                    IsActive = a.IsActive
+                })
+                .ToListAsync();
+
+            return (items, totalCount);
+        }
     }
 }

@@ -15,8 +15,6 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
 
         Task<Advertisement?> GetCompanyAdvertisement(Guid adverId);
 
-        //Task<Advertisement?> GetAdvertisementWithRequestResume(Guid resumeId);
-
         Task<bool> ExistAdvertisementAsync(Guid adverId);
 
         Task<bool> ExistByTitle(string title);
@@ -26,5 +24,8 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
         Task<int> GetCountByStatus(bool isActive);
 
         Task<List<AdminAdvertisementTableDto>> GetLatestForAdminAsync(int count);
+
+        Task<(List<AdminAdvertisementTableDto> Items, int TotalCount)> GetPagedForAdminAsync(
+            string? search,bool? isActive,int page,int pageSize);
     }
 }

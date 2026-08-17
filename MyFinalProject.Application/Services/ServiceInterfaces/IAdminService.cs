@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AdminAdvertisementTableDto = MyFinalProject.Infrastructure.DTO.AdminAdvertisementTableDto;
 using AdminEmployerTableDto = MyFinalProject.Infrastructure.DTO.AdminEmployerTableDto;
 
 namespace MyFinalProject.Application.Services.ServiceInterfaces
@@ -58,9 +59,12 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
 
         Task<bool> SoftDeleteAdvertisementAsync(Guid adverId);
 
-        Task<List<Infrastructure.DTO.AdminAdvertisementTableDto>> GetLatestJobPostingsAsync(int count = 10);
+        Task<List<AdminAdvertisementTableDto>> GetLatestJobPostingsAsync(int count = 10);
 
         Task<bool> SetJobPostingActiveAsync(Guid id, bool isActive);
+
+        Task<(List<AdminAdvertisementTableDto> Items, int TotalCount)> GetPagedJobPostingsAsync(
+              string? search,bool? isActive,int page,int pageSize);
 
         /////////////
 

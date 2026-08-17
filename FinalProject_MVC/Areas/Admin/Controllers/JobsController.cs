@@ -13,13 +13,23 @@ namespace FinalProject_MVC.Areas.Admin.Controllers
             _adminService = adminService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? search, bool? isActive, int page = 1)
         {
-            ViewData["Title"] = "مدیریت آگهی ها";
+            ViewData["Title"] = "مدیریت آگهی‌ها";
 
-            var model = await _adminService.GetLatestJobPostingsAsync(10);
+            const int pageSize = 10;
 
-            return View(model);
+            if (page < 1) page = 1;
+
+            var (items, totalCount) = await _adminService.GetPagedJobPostingsAsync(
+                search, isActive, page, pageSize);
+
+            ViewBag.Search = search;
+            ViewBag.IsActive = isActive;
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = (int)Math.Ceiling((double)totalCount / pageSize);
+
+            return View(items);
         }
 
         [HttpPost]
