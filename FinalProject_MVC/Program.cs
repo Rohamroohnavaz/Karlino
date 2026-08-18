@@ -52,6 +52,7 @@ builder.Services.AddScoped<IAdvertisementRepository, AdvertisementRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<UserManager<User>>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services
     .AddIdentityCore<User>(options =>
     {

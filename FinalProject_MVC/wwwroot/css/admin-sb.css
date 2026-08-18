@@ -428,3 +428,37 @@ body {
         color: #fff;
         border-color: var(--sb-primary);
     }
+
+.sb-details {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    gap: .7rem 1rem;
+    font-size: .9rem;
+}
+
+    .sb-details dt {
+        color: var(--sb-secondary);
+        font-weight: 700;
+    }
+
+    .sb-details dd {
+        margin: 0;
+        color: var(--sb-dark);
+    }
+
+.sb-details-desc {
+    background: var(--sb-light);
+    border-radius: .35rem;
+    padding: 1rem;
+    margin-top: 1rem;
+    white-space: pre-wrap;
+    font-size: .88rem;
+    color: var(--sb-dark);
+    line-height: 1.9;
+}
+
+.sb-actions {
+    display: flex;
+    gap: .6rem;
+    margin-top: 1.5rem;
+}

@@ -66,6 +66,8 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
         Task<(List<AdminAdvertisementTableDto> Items, int TotalCount)> GetPagedJobPostingsAsync(
               string? search,bool? isActive,int page,int pageSize);
 
+        Task<AdminAdvertisementDetailsDto?> GetJobPostingDetailsAsync(Guid id);
+
         /////////////
 
         ///Dashboard

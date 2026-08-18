@@ -1,0 +1,61 @@
+﻿@model MyFinalProject.Infrastructure.DTO.AdminAdvertisementDetailsDto
+
+@{
+    ViewData["Title"] = "جزئیات آگهی";
+}
+
+<div class="sb-table-card">
+    <h5>@Model.Title</h5>
+
+    <div style="margin-bottom:1rem;">
+        @if (Model.IsActive)
+        {
+            <span class="badge badge-success">فعال</span>
+        }
+        else
+        {
+            <span class="badge badge-danger">غیرفعال</span>
+        }
+    </div>
+
+    <dl class="sb-details">
+        <dt>کارفرما</dt>
+        <dd>@Model.EmployerName</dd>
+
+        <dt>ایمیل کارفرما</dt>
+        <dd>@Model.EmployerEmail</dd>
+
+        <dt>شهر</dt>
+        <dd>@Model.CityName</dd>
+
+        <dt>دسته‌بندی</dt>
+        <dd>@Model.CategoryTitle</dd>
+
+        <dt>تاریخ ثبت</dt>
+        <dd>@DisplayHelper.FormatDate(Model.CreatedAt)</dd>
+    </dl>
+
+    <h6 style="margin-top:1.5rem; color:var(--sb-secondary);">شرح آگهی</h6>
+    <div class="sb-details-desc">@Model.Description</div>
+
+    <div class="sb-actions">
+        @if (!Model.IsActive)
+        {
+            <form asp-area="Admin" asp-controller="Jobs" asp-action="Approve" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="btn-sb btn-sb-success">تأیید آگهی</button>
+            </form>
+        }
+        else
+        {
+            <form asp-area="Admin" asp-controller="Jobs" asp-action="Reject" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button type="submit" class="btn-sb btn-sb-danger">رد آگهی</button>
+            </form>
+        }
+
+        <a asp-area="Admin" asp-controller="Jobs" asp-action="Index" class="btn-sb btn-sb-primary">
+            بازگشت به لیست
+        </a>
+    </div>
+</div>

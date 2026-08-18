@@ -73,6 +73,25 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 .CountAsync(a => a.IsActive == isActive);
         }
 
+        public async Task<AdminAdvertisementDetailsDto?> GetDetailsForAdminAsync(Guid id)
+        {
+            return await _dbContext.Advertisements
+                .Where(a => a.Id == id)
+                .Select(a => new AdminAdvertisementDetailsDto
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    Description = a.Description,
+                    EmployerName = a.User.FirstName + " " + a.User.LastName,  
+                    EmployerEmail = a.User.Email,                                  
+                    CityName = a.City,                                           
+                    CategoryTitle = a.Category.CategoryName,                                
+                    CreatedAt = a.CreatedAt,
+                    IsActive = a.IsActive
+                })
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<List<AdminAdvertisementTableDto>> GetLatestForAdminAsync(int count)
         {
             return await _dbContext.Advertisements

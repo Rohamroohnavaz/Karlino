@@ -60,6 +60,9 @@
                             }
                         </td>
                         <td style="display:flex; gap:.4rem;">
+                            <a asp-area="Admin" asp-controller="Jobs" asp-action="Details" asp-route-id="@job.Id"
+                               class="btn-sb btn-sb-primary">جزئیات</a>
+
                             @if (!job.IsActive)
                             {
                                 <form asp-area="Admin" asp-controller="Jobs" asp-action="Approve" method="post">

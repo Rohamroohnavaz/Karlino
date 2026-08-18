@@ -399,6 +399,11 @@ namespace MyFinalProject.Application.Services.MainServices
             return await _advertisementRepository.GetPagedForAdminAsync(search, isActive, page, pageSize);
         }
 
+        public async Task<AdminAdvertisementDetailsDto?> GetJobPostingDetailsAsync(Guid id)
+        {
+            return await _advertisementRepository.GetDetailsForAdminAsync(id);
+        }
+
         #endregion
 
         #region Dashboard Implementation

@@ -47,5 +47,17 @@ namespace FinalProject_MVC.Areas.Admin.Controllers
             await _adminService.SetJobPostingActiveAsync(id, false);
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var model = await _adminService.GetJobPostingDetailsAsync(id);
+
+            if (model == null)
+                return NotFound();
+
+            ViewData["Title"] = "جزئیات آگهی";
+
+            return View(model);
+        }
     }
 }

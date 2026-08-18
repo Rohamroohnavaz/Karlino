@@ -27,5 +27,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
 
         Task<(List<AdminAdvertisementTableDto> Items, int TotalCount)> GetPagedForAdminAsync(
             string? search,bool? isActive,int page,int pageSize);
+
+        Task<AdminAdvertisementDetailsDto?> GetDetailsForAdminAsync(Guid id);
     }
 }
