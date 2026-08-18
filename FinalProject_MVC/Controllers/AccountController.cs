@@ -6,15 +6,19 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using MyFinalProject.Application.Constants;
 using MyFinalProject.Application.Results;
+using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 public class AccountController : Controller
 {
     private readonly IApiService _apiService;
+    private readonly ISettingRepository _settingRepository;
 
-    public AccountController(IApiService apiService)
+    public AccountController(IApiService apiService ,ISettingRepository settingRepository)
     {
         _apiService = apiService;
+        _settingRepository = settingRepository;
     }
 
     [HttpGet]
@@ -104,8 +108,14 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    public IActionResult Register()
+    public async Task<IActionResult> Register()
     {
+        if (!await IsRegistrationOpenAsync())
+        {
+            ModelState.AddModelError("", "ثبت‌نام در حال حاضر غیرفعال است.");
+            return View("Login", new LoginViewModel());
+        }
+
         return View(new RegisterViewModel());
     }
 
@@ -113,6 +123,12 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
+        if (!await IsRegistrationOpenAsync())
+        {
+            ModelState.AddModelError("", "ثبت‌نام در حال حاضر غیرفعال است.");
+            return View("Login", new LoginViewModel());
+        }
+
         if (!ModelState.IsValid)
             return View(model);
 
@@ -172,5 +188,11 @@ public class AccountController : Controller
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
         return RedirectToAction("Login");
+    }
+
+    private async Task<bool> IsRegistrationOpenAsync()
+    {
+        var value = await _settingRepository.GetValueAsync("IsRegistrationOpen");
+        return !string.Equals(value, "false", StringComparison.OrdinalIgnoreCase);
     }
 }

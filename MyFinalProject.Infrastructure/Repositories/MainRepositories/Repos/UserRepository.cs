@@ -126,7 +126,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 .Where(u => u.IsApproved == false
                 && u.IsDeleted == false
                 && u.Role == UserRole.Employer)
-                .OrderBy(u => u.ModifiedAt)             
+                .OrderBy(u => u.ModifiedAt)
                 .Select(u => new AdminEmployerTableDto
                 {
                     Id = u.Id,
@@ -161,6 +161,14 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                     RoleName = u.Role != null ? u.Role.ToString() : "بدون نقش"
                 })
                 .ToListAsync();
+        }
+
+        public async Task<Guid?> GetIdByEmailAsync(string email)
+        {
+            return await _dbContext.Users
+                  .Where(u => u.Email == email)
+                  .Select(u => (Guid?)u.Id)
+                  .FirstOrDefaultAsync();
         }
     }
 }

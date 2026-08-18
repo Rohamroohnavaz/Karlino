@@ -30,6 +30,12 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 .AnyAsync(a => a.Title == title);
         }
 
+        public async Task<int> GetActiveCountByEmployerAsync(Guid employerId)
+        {
+            return await _dbContext.Advertisements
+                .CountAsync(a => a.CompanyId == employerId && a.IsActive == true);
+        }
+
         public async Task<Advertisement?> GetAdvertisementByCompanyId(Guid companyId)
         {
             var advertisement = await _dbContext.Advertisements

@@ -202,6 +202,7 @@ namespace WebLayer
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddTransient<GlobalExceptionHandler>();
             builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+            builder.Services.AddScoped<ISettingRepository, SettingRepository>();
 
             // Add services to the container.
 

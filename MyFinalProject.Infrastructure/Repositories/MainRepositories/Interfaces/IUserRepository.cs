@@ -36,5 +36,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
         Task<bool> SetEmployerApprovalAsync(Guid id, bool approved);
 
         Task<List<AdminUserTableDto>> GetAllUsersForAdminAsync();
+
+        Task<Guid?> GetIdByEmailAsync(string email);
     }
 }

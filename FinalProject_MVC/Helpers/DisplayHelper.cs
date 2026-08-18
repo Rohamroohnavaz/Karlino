@@ -22,5 +22,18 @@
 
             return date.Value.ToString("yyyy/MM/dd");
         }
+
+        public static string SettingTitle(string key)
+        {
+            return key switch
+            {
+                "SiteName" => "نام سایت",
+                "SiteDescription" => "توضیح سایت",
+                "ContactEmail" => "ایمیل پشتیبانی",
+                "IsRegistrationOpen" => "ثبت‌نام باز است؟ (true / false)",
+                "MaxActiveAdsPerEmployer" => "حداکثر آگهی فعال هر کارفرما",
+                _ => key
+            };
+        }
     }
 }

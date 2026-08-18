@@ -29,5 +29,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
             string? search,bool? isActive,int page,int pageSize);
 
         Task<AdminAdvertisementDetailsDto?> GetDetailsForAdminAsync(Guid id);
+
+        Task<int> GetActiveCountByEmployerAsync(Guid employerId);
     }
 }

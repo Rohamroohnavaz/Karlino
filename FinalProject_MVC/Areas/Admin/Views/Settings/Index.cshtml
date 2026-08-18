@@ -1,0 +1,36 @@
+﻿@using FinalProject_MVC.Helpers
+@model List<MyFinalProject.Domain.Entities.MainModels.Setting>
+
+@{
+    ViewData["Title"] = "تنظیمات سایت";
+}
+
+@if (TempData["Success"] != null)
+{
+    <div class="sb-error" style="background:#d1e7dd; color:#1cc88a;">
+        @TempData["Success"]
+    </div>
+}
+
+<div class="sb-table-card">
+    <h5>تنظیمات سایت</h5>
+
+    <form asp-area="Admin" asp-controller="Settings" asp-action="Save" method="post">
+
+        @foreach (var setting in Model)
+        {
+            <div style="margin-bottom:1.2rem;">
+                <label style="display:block; font-weight:700; font-size:.85rem; color:var(--sb-dark); margin-bottom:.4rem;">
+                    @DisplayHelper.SettingTitle(setting.Key)
+                </label>
+
+                <input type="text"
+                       name="setting_@setting.Key"
+                       value="@setting.Value"
+                       style="width:100%; max-width:480px; border:1px solid var(--sb-border); border-radius:.35rem; padding:.55rem .8rem; font-family:var(--sb-font); font-size:.88rem;" />
+            </div>
+        }
+
+        <button type="submit" class="btn-sb btn-sb-primary">ذخیره تنظیمات</button>
+    </form>
+</div>

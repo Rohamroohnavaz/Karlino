@@ -27,6 +27,7 @@ namespace MyFinalProject.Infrastructure
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<RevokedToken> RevokedTokens { get; set; }
         public DbSet<Report> Reports { get; set; }
+        public DbSet<Setting> Settings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
