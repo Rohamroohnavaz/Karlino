@@ -1,22 +1,38 @@
 using FinalProject_MVC.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyFinalProject.Application.Constants;
+using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace FinalProject_MVC.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IAdvertisementRepository _advertisementRepository;
+        private readonly IUserRepository _userRepository;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger
+            , IAdvertisementRepository advertisementRepository
+            , IUserRepository userRepository)
         {
             _logger = logger;
+            _advertisementRepository = advertisementRepository;
+            _userRepository = userRepository;
         }
 
         [AllowAnonymous]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            ViewBag.ActiveJobs = await _advertisementRepository.GetCountByStatus(isActive: true);
+            ViewBag.Employers = await _userRepository.GetCountByRole(RoleConstants.EmployerRole);
+            ViewBag.JobSeekers = await _userRepository.GetCountByRole(RoleConstants.JobSeekerRole);
+
+            var (latest, _) = await _advertisementRepository.GetPagedForAdminAsync(null, true, 1, 6);
+            ViewBag.LatestJobs = latest;
+
             return View();
         }
 

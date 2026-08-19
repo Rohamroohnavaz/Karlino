@@ -462,3 +462,182 @@ body {
     gap: .6rem;
     margin-top: 1.5rem;
 }
+
+.sb-job-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.2rem;
+}
+
+.sb-job-card {
+    background: #fff;
+    border-radius: .35rem;
+    box-shadow: var(--sb-shadow);
+    padding: 1.1rem;
+    border-inline-start: .25rem solid var(--sb-primary);
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+}
+
+    .sb-job-card h6 {
+        margin: 0;
+        color: var(--sb-dark);
+        font-weight: 800;
+    }
+
+    .sb-job-card .meta {
+        color: var(--sb-secondary);
+        font-size: .8rem;
+        display: flex;
+        gap: .9rem;
+        flex-wrap: wrap;
+    }
+
+    .sb-job-card .btn-sb {
+        margin-top: auto;
+        text-decoration: none;
+        text-align: center;
+    }
+
+/* ---------- Auth Pages (Login / Register) ---------- */
+.sb-auth-body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(180deg, var(--sb-primary) 10%, var(--sb-primary-dark) 100%);
+    font-family: var(--sb-font);
+    padding: 1.5rem 1rem;
+}
+
+.sb-auth-card {
+    background: #fff;
+    border-radius: .6rem;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, .25);
+    width: 100%;
+    max-width: 420px;
+    padding: 2rem;
+}
+
+.sb-auth-wide {
+    max-width: 680px;
+}
+
+.sb-auth-header {
+    text-align: center;
+    margin-bottom: 1.6rem;
+}
+
+    .sb-auth-header i {
+        font-size: 2.3rem;
+        color: var(--sb-primary);
+    }
+
+    .sb-auth-header h4 {
+        margin: .5rem 0 .2rem;
+        color: var(--sb-dark);
+        font-weight: 800;
+    }
+
+    .sb-auth-header p {
+        color: var(--sb-secondary);
+        font-size: .85rem;
+        margin: 0;
+    }
+
+.sb-field {
+    margin-bottom: 1.1rem;
+}
+
+    .sb-field label {
+        display: block;
+        font-size: .8rem;
+        font-weight: 700;
+        color: var(--sb-dark);
+        margin-bottom: .4rem;
+    }
+
+    .sb-field input,
+    .sb-field textarea {
+        width: 100%;
+        border: 1px solid var(--sb-border);
+        border-radius: .35rem;
+        padding: .65rem .9rem;
+        font-family: var(--sb-font);
+        font-size: .9rem;
+    }
+
+        .sb-field input:focus,
+        .sb-field textarea:focus {
+            outline: 2px solid var(--sb-primary);
+            border-color: transparent;
+        }
+
+.sb-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 1rem;
+}
+
+@media (max-width: 640px) {
+    .sb-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.sb-submit {
+    width: 100%;
+    border: 0;
+    border-radius: .35rem;
+    background: var(--sb-primary);
+    color: #fff;
+    padding: .75rem;
+    font-weight: 700;
+    font-family: var(--sb-font);
+    font-size: .95rem;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+    .sb-submit:hover {
+        background: var(--sb-primary-dark);
+    }
+
+.sb-auth-footer {
+    text-align: center;
+    margin-top: 1.3rem;
+    font-size: .85rem;
+    color: var(--sb-secondary);
+}
+
+    .sb-auth-footer a {
+        color: var(--sb-primary);
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+.sb-radio-row {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 1.2rem;
+}
+
+    .sb-radio-row label {
+        display: flex;
+        align-items: center;
+        gap: .4rem;
+        font-size: .88rem;
+        color: var(--sb-dark);
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+.btn-sb-info {
+    background: #36b9cc;
+    color: #fff;
+}
+
+    .btn-sb-info:hover {
+        background: #2c9faf;
+    }

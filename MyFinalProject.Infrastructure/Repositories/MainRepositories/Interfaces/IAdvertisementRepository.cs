@@ -31,5 +31,11 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
         Task<AdminAdvertisementDetailsDto?> GetDetailsForAdminAsync(Guid id);
 
         Task<int> GetActiveCountByEmployerAsync(Guid employerId);
+
+        Task<List<AdminAdvertisementTableDto>> GetMyAdsAsync(string email);
+
+        Task<bool> IsOwnerAsync(Guid advertisementId, string email);
+
+        Task<Guid?> GetCompanyIdByUserEmailAsync(string email);
     }
 }

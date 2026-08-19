@@ -90,7 +90,7 @@ public class AccountController : Controller
 
             if (string.Equals(role, RoleConstants.EmployerRole, StringComparison.OrdinalIgnoreCase))
             {
-                return RedirectToAction("Index", "EmployerDashboard");
+                return RedirectToAction("Index", "Home");
             }
 
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))

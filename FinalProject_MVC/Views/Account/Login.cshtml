@@ -1,63 +1,63 @@
 ﻿@model FinalProject_MVC.Models.LoginViewModel
 
 @{
-    ViewData["Title"] = "ورود به سیستم";
+    Layout = null;
+    ViewData["Title"] = "ورود";
 }
 
-<div class="row justify-content-center">
-    <div class="col-md-6 col-lg-5">
-        <div class="card shadow-lg">
-            <div class="card-header bg-primary text-white text-center py-4">
-                <h3 class="mb-0">
-                    <i class="bi bi-box-arrow-in-right me-2"></i>ورود به حساب کاربری
-                </h3>
-            </div>
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ورود - کارلینو</title>
 
-            <div class="card-body p-5">
-                <form asp-action="Login" method="post">
-                    <div asp-validation-summary="All" class="alert alert-danger"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/admin-sb.css" asp-append-version="true" />
+</head>
+<body class="sb-auth-body">
 
-                    <div class="mb-4">
-                        <label asp-for="Email" class="form-label fw-bold">
-                            <i class="bi bi-envelope me-1"></i>ایمیل
-                        </label>
-                        <input asp-for="Email" class="form-control form-control-lg" placeholder="example@email.com" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
+    <div class="sb-auth-card">
 
-                    <div class="mb-4">
-                        <label asp-for="Password" class="form-label fw-bold">
-                            <i class="bi bi-lock me-1"></i>رمز عبور
-                        </label>
-                        <input asp-for="Password" class="form-control form-control-lg" type="password" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-
-                    <div class="mb-4 form-check">
-                        <input asp-for="RememberMe" class="form-check-input" />
-                        <label asp-for="RememberMe" class="form-check-label">
-                            مرا به خاطر بسپار
-                        </label>
-                    </div>
-
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-primary btn-lg">
-                            <i class="bi bi-box-arrow-in-right me-2"></i>ورود
-                        </button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="card-footer text-center py-3">
-                <span class="text-muted">حساب کاربری ندارید؟ </span>
-                <a asp-action="Register" class="text-decoration-none">ثبت‌نام کنید</a>
-            </div>
+        <div class="sb-auth-header">
+            <i class="fa-solid fa-briefcase"></i>
+            <h4>ورود به کارلینو</h4>
+            <p>خوش برگشتی! اطلاعاتت رو وارد کن</p>
         </div>
-    </div>
-</div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+        @if (TempData["Success"] != null)
+        {
+            <div class="sb-error" style="background:#d1e7dd; color:#1cc88a; margin-bottom:1rem;">
+                @TempData["Success"]
+            </div>
+        }
+
+        <form asp-action="Login" method="post">
+            <div asp-validation-summary="All" class="sb-error" style="margin-bottom:1rem;"></div>
+
+            <div class="sb-field">
+                <label asp-for="Email">ایمیل</label>
+                <input asp-for="Email" type="email" placeholder="example@email.com" />
+                <span asp-validation-for="Email" class="text-danger" style="font-size:.75rem;"></span>
+            </div>
+
+            <div class="sb-field">
+                <label asp-for="Password">رمز عبور</label>
+                <input asp-for="Password" type="password" placeholder="••••••••" />
+                <span asp-validation-for="Password" class="text-danger" style="font-size:.75rem;"></span>
+            </div>
+
+            <button type="submit" class="sb-submit">
+                <i class="fa-solid fa-right-to-bracket"></i> ورود
+            </button>
+        </form>
+
+        <div class="sb-auth-footer">
+            حساب نداری؟ <a href="/Account/Register">ثبت‌نام کن</a>
+        </div>
+
+    </div>
+
+</body>
+</html>

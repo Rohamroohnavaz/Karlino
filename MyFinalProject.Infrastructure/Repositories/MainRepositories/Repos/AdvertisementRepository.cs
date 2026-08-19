@@ -73,6 +73,14 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 .FirstOrDefaultAsync(a => a.Id == adverId);
         }
 
+        public async Task<Guid?> GetCompanyIdByUserEmailAsync(string email)
+        {
+            return await _dbContext.Companies
+                .Where(c => c.User.Email == email)
+                .Select(c => (Guid?)c.Id)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<int> GetCountByStatus(bool isActive)
         {
             return await _dbContext.Advertisements
@@ -114,6 +122,23 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 }).ToListAsync();
         }
 
+        public async Task<List<AdminAdvertisementTableDto>> GetMyAdsAsync(string email)
+        {
+            return await _dbContext.Advertisements
+                .Where(a => a.Company.User.Email == email)
+                .OrderByDescending(a => a.CreatedAt)
+                .Select(a => new AdminAdvertisementTableDto
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    EmployerName = a.CompanyName,           
+                    CityName = a.City,                  
+                    CreatedAt = a.CreatedAt,
+                    IsActive = a.IsActive
+                })
+                .ToListAsync();
+        }
+
         public async Task<(List<AdminAdvertisementTableDto>, int)> GetPagedForAdminAsync(
              string? search,bool? isActive, int page,int pageSize)
         {
@@ -147,6 +172,13 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 .ToListAsync();
 
             return (items, totalCount);
+        }
+
+        public async Task<bool> IsOwnerAsync(Guid advertisementId, string email)
+        {
+            return await _dbContext.Advertisements
+                .AnyAsync(a => a.Id == advertisementId
+                            && a.Company.User.Email == email); 
         }
     }
 }

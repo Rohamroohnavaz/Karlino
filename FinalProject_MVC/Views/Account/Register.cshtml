@@ -1,166 +1,138 @@
-﻿@model RegisterViewModel
+﻿@model FinalProject_MVC.Models.RegisterViewModel
 
 @{
+    Layout = null;
     ViewData["Title"] = "ثبت‌نام";
 }
 
-<form asp-action="Register" method="post" id="registerForm">
-    <div asp-validation-summary="All" class="alert alert-danger"></div>
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ثبت‌نام - کارلینو</title>
 
-    <!-- 🎯 انتخاب نوع کاربر -->
-    <div class="mb-4">
-        <label class="form-label fw-bold">
-            <i class="bi bi-people-fill me-1"></i>من ثبت‌نام می‌کنم به عنوان:
-        </label>
-        <div class="d-flex gap-4">
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="IsEmployer" id="roleJobSeeker" value="false" @(Model.IsEmployer ? "" : "checked") />
-                <label class="form-check-label" for="roleJobSeeker">
-                    <i class="bi bi-person-workspace"></i> کارجو (جستجوی شغل)
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/admin-sb.css" asp-append-version="true" />
+</head>
+<body class="sb-auth-body">
+
+    <div class="sb-auth-card sb-auth-wide">
+
+        <div class="sb-auth-header">
+            <i class="fa-solid fa-user-plus"></i>
+            <h4>ثبت‌نام در کارلینو</h4>
+            <p>اطلاعات خود را وارد کنید</p>
+        </div>
+
+        <form asp-action="Register" method="post">
+            <div asp-validation-summary="All" class="sb-error" style="margin-bottom:1rem;"></div>
+
+            <!-- انتخاب نقش -->
+            <div class="sb-radio-row">
+                <label>
+                    <input type="radio" name="IsEmployer" value="false" @(Model.IsEmployer ? "" : "checked") id="roleJobSeeker" />
+                    <i class="fa-solid fa-user"></i> کارجو
+                </label>
+                <label>
+                    <input type="radio" name="IsEmployer" value="true" @(Model.IsEmployer ? "checked" : "") id="roleEmployer" />
+                    <i class="fa-solid fa-building"></i> کارفرما
                 </label>
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="radio" name="IsEmployer" id="roleEmployer" value="true" @(Model.IsEmployer ? "checked" : "") />
-                <label class="form-check-label" for="roleEmployer">
-                    <i class="bi bi-building"></i> کارفرما (درج آگهی)
-                </label>
-            </div>
-        </div>
-    </div>
 
-    <!-- 👤 اطلاعات شخصی -->
-    <h6 class="text-muted mb-3">اطلاعات شخصی</h6>
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <label asp-for="FirstName" class="form-label fw-bold">
-                <i class="bi bi-person me-1"></i>نام
-            </label>
-            <input asp-for="FirstName" class="form-control" placeholder="مثلاً: رهام" />
-            <span asp-validation-for="FirstName" class="text-danger"></span>
-        </div>
+            <div class="sb-grid">
+                <div class="sb-field">
+                    <label asp-for="FirstName">نام</label>
+                    <input asp-for="FirstName" placeholder="مثلاً: رهام" />
+                    <span asp-validation-for="FirstName" class="text-danger" style="font-size:.75rem;"></span>
+                </div>
 
-        <div class="col-md-6 mb-4">
-            <label asp-for="LastName" class="form-label fw-bold">
-                <i class="bi bi-person me-1"></i>نام خانوادگی
-            </label>
-            <input asp-for="LastName" class="form-control" placeholder="مثلاً: روح نواز" />
-            <span asp-validation-for="LastName" class="text-danger"></span>
-        </div>
-    </div>
-
-    <div class="mb-4">
-        <label asp-for="Email" class="form-label fw-bold">
-            <i class="bi bi-envelope me-1"></i>ایمیل
-        </label>
-        <input asp-for="Email" class="form-control" placeholder="example@email.com" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-        <div class="form-text">ایمیل خود را با دقت وارد کنید</div>
-    </div>
-
-    <div class="mb-4">
-        <label asp-for="PhoneNumber" class="form-label fw-bold">
-            <i class="bi bi-telephone me-1"></i>شماره تلفن
-        </label>
-        <input asp-for="PhoneNumber" class="form-control" placeholder="مثلاً: 09123456789" />
-        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-    </div>
-
-    <div class="row">
-        <div class="col-md-6 mb-4">
-            <label asp-for="Password" class="form-label fw-bold">
-                <i class="bi bi-lock me-1"></i>رمز عبور
-            </label>
-            <input asp-for="Password" class="form-control" type="password" />
-            <span asp-validation-for="Password" class="text-danger"></span>
-            <div class="form-text small">حداقل ۸ کاراکتر، شامل حرف بزرگ، کوچک و عدد</div>
-        </div>
-
-        <div class="col-md-6 mb-4">
-            <label asp-for="ConfirmPassword" class="form-label fw-bold">
-                <i class="bi bi-lock-fill me-1"></i>تایید رمز عبور
-            </label>
-            <input asp-for="ConfirmPassword" class="form-control" type="password" />
-            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-        </div>
-    </div>
-
-    <!-- 🏢 اطلاعات شرکت (فقط برای کارفرما) -->
-    <div id="employerFields" style="display: @(Model.IsEmployer ? "block" : "none");">
-        <hr />
-        <h6 class="text-muted mb-3">
-            <i class="bi bi-building"></i> اطلاعات شرکت
-        </h6>
-
-        <div class="mb-4">
-            <label asp-for="CompanyName" class="form-label fw-bold">نام شرکت</label>
-            <input asp-for="CompanyName" class="form-control" placeholder="مثلاً: شرکت فناوری نوین" />
-            <span asp-validation-for="CompanyName" class="text-danger"></span>
-        </div>
-
-        <div class="mb-4">
-            <label asp-for="CompanyLocation" class="form-label fw-bold">آدرس شرکت</label>
-            <textarea asp-for="CompanyLocation" class="form-control" rows="2" placeholder="آدرس کامل شرکت"></textarea>
-            <span asp-validation-for="CompanyLocation" class="text-danger"></span>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <label asp-for="Province" class="form-label fw-bold">استان</label>
-                <input asp-for="Province" class="form-control" placeholder="مثلاً: تهران" />
-                <span asp-validation-for="Province" class="text-danger"></span>
+                <div class="sb-field">
+                    <label asp-for="LastName">نام خانوادگی</label>
+                    <input asp-for="LastName" placeholder="مثلاً: روح‌نواز" />
+                    <span asp-validation-for="LastName" class="text-danger" style="font-size:.75rem;"></span>
+                </div>
             </div>
 
-            <div class="col-md-6 mb-4">
-                <label asp-for="City" class="form-label fw-bold">شهر</label>
-                <input asp-for="City" class="form-control" placeholder="مثلاً: تهران" />
-                <span asp-validation-for="City" class="text-danger"></span>
+            <div class="sb-grid">
+                <div class="sb-field">
+                    <label asp-for="Email">ایمیل</label>
+                    <input asp-for="Email" type="email" placeholder="example@email.com" />
+                    <span asp-validation-for="Email" class="text-danger" style="font-size:.75rem;"></span>
+                </div>
+
+                <div class="sb-field">
+                    <label asp-for="PhoneNumber">شماره تلفن</label>
+                    <input asp-for="PhoneNumber" placeholder="09123456789" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger" style="font-size:.75rem;"></span>
+                </div>
             </div>
+
+            <div class="sb-grid">
+                <div class="sb-field">
+                    <label asp-for="Password">رمز عبور</label>
+                    <input asp-for="Password" type="password" />
+                    <span asp-validation-for="Password" class="text-danger" style="font-size:.75rem;"></span>
+                </div>
+
+                <div class="sb-field">
+                    <label asp-for="ConfirmPassword">تأیید رمز عبور</label>
+                    <input asp-for="ConfirmPassword" type="password" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger" style="font-size:.75rem;"></span>
+                </div>
+            </div>
+
+            <!-- فیلدهای کارفرما -->
+            <div id="employerFields" style="display:@(Model.IsEmployer ? "block" : "none");">
+                <div class="sb-field">
+                    <label asp-for="CompanyName">نام شرکت</label>
+                    <input asp-for="CompanyName" placeholder="مثلاً: شرکت فناوری نوین" />
+                </div>
+
+                <div class="sb-field">
+                    <label asp-for="CompanyLocation">آدرس شرکت</label>
+                    <textarea asp-for="CompanyLocation" rows="2" placeholder="آدرس کامل شرکت"></textarea>
+                </div>
+
+                <div class="sb-grid">
+                    <div class="sb-field">
+                        <label asp-for="Province">استان</label>
+                        <input asp-for="Province" placeholder="مثلاً: تهران" />
+                    </div>
+
+                    <div class="sb-field">
+                        <label asp-for="City">شهر</label>
+                        <input asp-for="City" placeholder="مثلاً: تهران" />
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="sb-submit">
+                <i class="fa-solid fa-user-plus"></i> ثبت‌نام
+            </button>
+        </form>
+
+        <div class="sb-auth-footer">
+            حساب داری؟ <a href="/Account/Login">وارد شو</a>
         </div>
+
     </div>
 
-    <hr />
-
-    <div class="mb-4 form-check">
-        <input type="checkbox" class="form-check-input" id="acceptTerms" required />
-        <label class="form-check-label" for="acceptTerms">
-            <a href="#" class="text-primary">قوانین و مقررات</a> را مطالعه کرده و می‌پذیرم
-        </label>
-    </div>
-
-    <div class="d-grid gap-2">
-        <button type="submit" class="btn btn-primary btn-lg">
-            <i class="bi bi-check-circle me-2"></i>ثبت‌نام
-        </button>
-    </div>
-</form>
-
-@section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const radios = document.querySelectorAll('input[name="IsEmployer"]');
             const employerFields = document.getElementById('employerFields');
 
-            function toggleEmployerFields() {
+            function toggle() {
                 const isEmployer = document.getElementById('roleEmployer').checked;
                 employerFields.style.display = isEmployer ? 'block' : 'none';
-
-                // فیلدها رو required کن یا آزاد کن
-                const inputs = employerFields.querySelectorAll('input, textarea');
-                inputs.forEach(input => {
-                    if (isEmployer) {
-                        input.setAttribute('required', 'required');
-                    } else {
-                        input.removeAttribute('required');
-                    }
-                });
             }
 
-            radios.forEach(radio => {
-                radio.addEventListener('change', toggleEmployerFields);
-            });
-
-            // بار اول هم اجرا کن
-            toggleEmployerFields();
+            radios.forEach(r => r.addEventListener('change', toggle));
+            toggle();
         });
     </script>
-}
+
+</body>
+</html>

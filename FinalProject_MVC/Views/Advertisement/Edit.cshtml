@@ -4,93 +4,72 @@
     ViewData["Title"] = "ویرایش آگهی";
 }
 
+<div class="sb-table-card" style="max-width:860px; margin:0 auto;">
 
+    <h5 style="margin-bottom:1.5rem;">
+        <i class="fa-solid fa-pen-to-square"></i> ویرایش آگهی
+    </h5>
 
+    <form asp-controller="Advertisement" asp-action="Edit" asp-route-id="@Model.Id" method="post">
 
-@if (ViewBag.DebugInfo != null)
-{
-    <div class="alert alert-danger" style="white-space: pre-wrap; font-family: monospace;">
-        <strong>DEBUG ERROR:</strong>
-        @ViewBag.DebugInfo
-    </div>
-}
+        <div asp-validation-summary="All" class="sb-error" style="margin-bottom:1rem;"></div>
 
-<div class="mb-4">
-    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-right me-1"></i>بازگشت
-    </a>
+        <!-- عنوان -->
+        <div class="sb-field">
+            <label asp-for="Title">عنوان آگهی</label>
+            <input asp-for="Title" placeholder="مثلاً: استخدام برنامه‌نویس C#" />
+            <span asp-validation-for="Title" class="text-danger" style="font-size:.75rem;"></span>
+        </div>
+
+        <!-- حقوق + شرکت -->
+        <div class="sb-grid">
+            <div class="sb-field">
+                <label asp-for="Salary">حقوق پیشنهادی</label>
+                <input asp-for="Salary" placeholder="مثلاً: ۲۵,۰۰۰,۰۰۰ تومان" />
+                <span asp-validation-for="Salary" class="text-danger" style="font-size:.75rem;"></span>
+            </div>
+
+            <div class="sb-field">
+                <label asp-for="CompanyName">نام شرکت</label>
+                <input asp-for="CompanyName" placeholder="نام شرکت" />
+                <span asp-validation-for="CompanyName" class="text-danger" style="font-size:.75rem;"></span>
+            </div>
+        </div>
+
+        <!-- استان + شهر -->
+        <div class="sb-grid">
+            <div class="sb-field">
+                <label asp-for="Province">استان</label>
+                <input asp-for="Province" placeholder="مثلاً: تهران" />
+                <span asp-validation-for="Province" class="text-danger" style="font-size:.75rem;"></span>
+            </div>
+
+            <div class="sb-field">
+                <label asp-for="City">شهر</label>
+                <input asp-for="City" placeholder="مثلاً: تهران" />
+                <span asp-validation-for="City" class="text-danger" style="font-size:.75rem;"></span>
+            </div>
+        </div>
+
+        <!-- شرح آگهی -->
+        <div class="sb-field">
+            <label asp-for="Description">شرح آگهی</label>
+            <textarea asp-for="Description" rows="7" placeholder="شرح کامل موقعیت شغلی، شرایط و مهارت‌های مورد نیاز..."></textarea>
+            <span asp-validation-for="Description" class="text-danger" style="font-size:.75rem;"></span>
+        </div>
+
+        <!-- دکمه‌ها -->
+        <div class="sb-actions">
+            <button type="submit" class="sb-submit" style="width:auto; padding:.7rem 2.2rem;">
+                <i class="fa-solid fa-floppy-disk"></i> ذخیره تغییرات
+            </button>
+
+            <a asp-controller="Advertisement" asp-action="MyAds"
+               class="btn-sb btn-sb-primary" style="text-decoration:none;">
+                انصراف و بازگشت
+            </a>
+        </div>
+
+    </form>
+
 </div>
-
-<div class="card">
-    <div class="card-header bg-warning text-dark">
-        <h3 class="mb-0">
-            <i class="bi bi-pencil me-2"></i>ویرایش آگهی
-        </h3>
-    </div>
-
-    <div class="card-body">
-        @if (ViewBag.ErrorMessage != null)
-        {
-            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
-        }
-
-        <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
-            <div asp-validation-summary="All" class="alert alert-danger"></div>
-
-            <div class="mb-3">
-                <label asp-for="Title" class="form-label fw-bold">عنوان آگهی</label>
-                <input asp-for="Title" class="form-control" />
-                <span asp-validation-for="Title" class="text-danger"></span>
-            </div>
-
-            <div class="mb-3">
-                <label asp-for="Description" class="form-label fw-bold">توضیحات</label>
-                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Salary" class="form-label fw-bold">حقوق (تومان)</label>
-                    <input asp-for="Salary" class="form-control" type="number" />
-                    <span asp-validation-for="Salary" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label asp-for="CompanyName" class="form-label fw-bold">نام شرکت</label>
-                    <input asp-for="CompanyName" class="form-control" />
-                    <span asp-validation-for="CompanyName" class="text-danger"></span>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label asp-for="Province" class="form-label fw-bold">استان</label>
-                    <input asp-for="Province" class="form-control" />
-                    <span asp-validation-for="Province" class="text-danger"></span>
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label asp-for="City" class="form-label fw-bold">شهر</label>
-                    <input asp-for="City" class="form-control" />
-                    <span asp-validation-for="City" class="text-danger"></span>
-                </div>
-            </div>
-
-            <input type="hidden" asp-for="CompanyId" />
-
-            <div class="d-flex justify-content-between">
-                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">انصراف</a>
-                <button type="submit" class="btn btn-warning">
-                    <i class="bi bi-check-circle me-1"></i>ذخیره تغییرات
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
