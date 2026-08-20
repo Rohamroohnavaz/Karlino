@@ -1,4 +1,4 @@
-using FinalProject_MVC.Services;
+﻿using FinalProject_MVC.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -98,6 +98,16 @@ app.MapAreaControllerRoute(
     name: "Admin",
     areaName: "Admin",
     pattern: "Admin/{controller=Dashboard}/{action=Index}/{id?}");
+
+app.MapAreaControllerRoute(
+    name: "JobSeeker",
+    areaName: "JobSeeker",
+    pattern: "JobSeeker/{controller=Dashboard}/{action=Index}/{id?}");
+
+//app.MapAreaControllerRoute(
+//    name: "JobSeeker",
+//    pattern: "JobSeeker/{controller=Dashboard}/{action=Index}/{id?}",
+//    defaults: new { area = "JobSeeker" });
 
 app.MapControllerRoute(
     name: "default",

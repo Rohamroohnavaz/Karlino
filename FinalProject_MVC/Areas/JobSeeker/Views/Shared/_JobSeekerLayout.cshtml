@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - پنل کارجو</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/admin-sb.css" asp-append-version="true" />
+</head>
+<body>
+
+    <div id="wrapper">
+
+        <aside id="sidebar">
+            <a class="sidebar-brand" href="/JobSeeker/Dashboard">
+                <i class="fa-solid fa-briefcase"></i>
+                <span>پنل کارجو</span>
+            </a>
+
+            <hr class="sidebar-divider" />
+
+            <div class="sidebar-heading">منوی اصلی</div>
+
+            <a class="nav-link" href="/JobSeeker/Dashboard">
+                <i class="fa-solid fa-gauge"></i><span>داشبورد</span>
+            </a>
+
+            <a class="nav-link" href="/JobSeeker/Profile">
+                <i class="fa-solid fa-user"></i><span>پروفایل من</span>
+            </a>
+
+            <a class="nav-link" href="/JobSeeker/Resume">
+                <i class="fa-solid fa-file-lines"></i><span>رزومه من</span>
+            </a>
+
+            <hr class="sidebar-divider" />
+
+            <div class="sidebar-heading">فرصت‌های شغلی</div>
+
+            <a class="nav-link" href="/JobSeeker/Jobs">
+                <i class="fa-solid fa-magnifying-glass"></i><span>جستجوی شغل</span>
+            </a>
+
+            <a class="nav-link" href="/JobSeeker/MyApplications">
+                <i class="fa-solid fa-paper-plane"></i><span>درخواست‌های من</span>
+            </a>
+
+            <hr class="sidebar-divider" />
+
+            <div class="sidebar-heading">تنظیمات</div>
+
+            <a class="nav-link" href="/JobSeeker/Settings">
+                <i class="fa-solid fa-sliders"></i><span>تنظیمات حساب</span>
+            </a>
+
+            <hr class="sidebar-divider" />
+
+            <a class="nav-link" href="/">
+                <i class="fa-solid fa-house"></i><span>بازگشت به سایت</span>
+            </a>
+        </aside>
+
+        <div id="content-wrapper">
+
+            <nav id="topbar">
+                <form class="topbar-search">
+                    <input type="text" placeholder="جستجو..." />
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+
+                <div class="topbar-actions">
+                    <a class="topbar-icon" href="#">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="dot"></span>
+                    </a>
+
+                    <div class="topbar-user">
+                        <i class="fa-solid fa-user"></i>
+                        <span>@User.Identity?.Name</span>
+                    </div>
+
+                    <form asp-controller="Account" asp-action="Logout" method="post">
+                        <button class="btn-logout" type="submit">خروج</button>
+                    </form>
+                </div>
+            </nav>
+
+            <main class="container-fluid">
+                @RenderBody()
+            </main>
+
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,99 @@
+﻿@{
+    Layout = "~/Areas/JobSeeker/Views/Shared/_JobSeekerLayout.cshtml";
+    ViewData["Title"] = "داشبورد";
+}
+
+
+<div class="page-header">
+    <h1>داشبورد کارجو</h1>
+    <p>خوش آمدید! 👋</p>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fa-solid fa-paper-plane"></i>
+            </div>
+            <div class="stat-content">
+                <h3>۱۲</h3>
+                <p>درخواست‌های ارسالی</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fa-solid fa-calendar-check"></i>
+            </div>
+            <div class="stat-content">
+                <h3>۳</h3>
+                <p>مصاحبه‌های sắp tới</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fa-solid fa-eye"></i>
+            </div>
+            <div class="stat-content">
+                <h3>۴۵</h3>
+                <p>بازدید از رزومه</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-icon">
+                <i class="fa-solid fa-bookmark"></i>
+            </div>
+            <div class="stat-content">
+                <h3>۸</h3>
+                <p>شغل‌های ذخیره شده</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header">
+        <h5>آخرین درخواست‌های شما</h5>
+    </div>
+    <div class="card-body">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>عنوان شغل</th>
+                    <th>شرکت</th>
+                    <th>تاریخ ارسال</th>
+                    <th>وضعیت</th>
+                    <th>عملیات</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>برنامه‌نویس C#</td>
+                    <td>شرکت فناوری اطلاعات</td>
+                    <td>۱۴۰۵/۰۵/۲۸</td>
+                    <td><span class="badge bg-warning">در حال بررسی</span></td>
+                    <td>
+                        <a href="#" class="btn btn-sm btn-primary">مشاهده</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>توسعه‌دهنده Full Stack</td>
+                    <td>استارتاپ نوآور</td>
+                    <td>۱۴۰۵/۰۵/۲۵</td>
+                    <td><span class="badge bg-success">پذیرفته شده</span></td>
+                    <td>
+                        <a href="#" class="btn btn-sm btn-primary">مشاهده</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
