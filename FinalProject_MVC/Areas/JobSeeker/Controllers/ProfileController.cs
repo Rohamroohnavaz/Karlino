@@ -4,16 +4,17 @@
 //using FinalProject_MVC.Areas.JobSeeker.ViewModels;
 //using FinalProject_MVC.Models;
 //using MyFinalProject.Infrastructure;
-//using Microsoft.EntityFrameworkCore; // مدل User و Resume خودت
+//using Microsoft.EntityFrameworkCore;
+//using FinalProject_MVC.Areas.JobSeeker.Controllers.Base; // مدل User و Resume خودت
 
 //namespace FinalProject_MVC.Areas.JobSeeker.Controllers
 //{
 //    [Area("JobSeeker")]
 //    [Authorize(Roles = "JobSeeker")]
-//    public class ProfileController : Controller
+//    public class ProfileController : JobSeekerBaseController
 //    {
 //        private readonly UserManager<IdentityUser> _userManager;
-//        private readonly FinalDbContext _dbContext; 
+//        private readonly FinalDbContext _dbContext;
 
 //        public ProfileController(UserManager<IdentityUser> userManager, FinalDbContext dbContext)
 //        {
@@ -30,11 +31,11 @@
 //            }
 
 //            var resume = await _dbContext.Resumes
-//                .FirstOrDefaultAsync(r => r.UserId == user.Id);
+//                .FirstOrDefaultAsync(r => r.UserId.ToString() == user.Id);
 
 //            var viewModel = new JobSeekerProfileViewModel
 //            {
-//                FirstName = user.firs ?? "",
+//                FirstName = user.nam ?? "",
 //                LastName = user.LastName ?? "",
 //                Email = user.Email ?? "",
 //                PhoneNumber = user.PhoneNumber ?? "",

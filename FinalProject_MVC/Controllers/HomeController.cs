@@ -1,7 +1,10 @@
-using FinalProject_MVC.Models;
+﻿using FinalProject_MVC.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyFinalProject.Application.Constants;
+using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
 using System.Diagnostics;
 using System.Threading.Tasks;
@@ -13,19 +16,70 @@ namespace FinalProject_MVC.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IAdvertisementRepository _advertisementRepository;
         private readonly IUserRepository _userRepository;
+        private readonly UserManager<User> _userManager;
 
         public HomeController(ILogger<HomeController> logger
             , IAdvertisementRepository advertisementRepository
-            , IUserRepository userRepository)
+            , IUserRepository userRepository
+            , UserManager<User> userManager
+            )
         {
             _logger = logger;
             _advertisementRepository = advertisementRepository;
             _userRepository = userRepository;
+            _userManager = userManager;
         }
+
+        //[AllowAnonymous]
+        //public async Task<IActionResult> Index()
+        //{
+        //    ViewBag.ActiveJobs = await _advertisementRepository.GetCountByStatus(isActive: true);
+        //    ViewBag.Employers = await _userRepository.GetCountByRole(RoleConstants.EmployerRole);
+        //    ViewBag.JobSeekers = await _userRepository.GetCountByRole(RoleConstants.JobSeekerRole);
+
+        //    var (latest, _) = await _advertisementRepository.GetPagedForAdminAsync(null, true, 1, 6);
+        //    ViewBag.LatestJobs = latest;
+
+        //    return View();
+        //}
 
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                try
+                {
+                    var user = await _userManager.GetUserAsync(User);
+
+                    if (user != null)
+                    {
+                        var roles = await _userManager.GetRolesAsync(user);
+
+                        if (roles.Contains(RoleConstants.JobSeekerRole))
+                        {
+                            return RedirectToAction("Index", "Dashboard", new { area = "JobSeeker" });
+                        }
+                        else if (roles.Contains("Admin"))
+                        {
+                            return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
+                        }
+                        else if (roles.Contains(RoleConstants.EmployerRole))
+                        {
+                            // اگر پنل کارفرما نداری، فعلاً به صفحه اصلی برگرد
+                            // یا می‌توانی بعداً پنل کارفرما بسازی
+                            // return RedirectToAction("Index", "Dashboard", new { area = "Employer" });
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    // اگر خطایی occurred، از سیستم خارج شو
+                    await HttpContext.SignOutAsync();
+                }
+            }
+
+            // اگر کاربر لاگین نیست یا نقشش تعریف نشده، صفحه اصلی سایت را نمایش بده
             ViewBag.ActiveJobs = await _advertisementRepository.GetCountByStatus(isActive: true);
             ViewBag.Employers = await _userRepository.GetCountByRole(RoleConstants.EmployerRole);
             ViewBag.JobSeekers = await _userRepository.GetCountByRole(RoleConstants.JobSeekerRole);
@@ -35,6 +89,7 @@ namespace FinalProject_MVC.Controllers
 
             return View();
         }
+
 
         public IActionResult Privacy()
         {

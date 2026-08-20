@@ -87,6 +87,10 @@ public class AccountController : Controller
             {
                 return Redirect("/Admin/Dashboard");
             }
+            if (string.Equals(role, RoleConstants.JobSeekerRole, StringComparison.OrdinalIgnoreCase))
+            {
+                return Redirect("/JobSeeker/Dashboard");
+            }
 
             if (string.Equals(role, RoleConstants.EmployerRole, StringComparison.OrdinalIgnoreCase))
             {
