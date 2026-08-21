@@ -23,7 +23,7 @@ namespace WebLayer.Controllers.AdminCntrl
         public async Task<IActionResult> GetDashboardStats()
         {
             var stats = await _adminService.GetDashboardStatsAsync();
-            return Ok(BaseResponseDto<AdminDashboardDto>.Success());
+            return Ok(BaseResponseDto<ResponseDto>.Success());
         }
     }
 }

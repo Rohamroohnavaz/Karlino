@@ -1,0 +1,75 @@
+﻿@model FinalProject_MVC.Models.AdvertisementViewModel
+
+@{
+    ViewData["Title"] = "ویرایش آگهی";
+}
+
+<div class="sb-table-card" style="max-width:860px; margin:0 auto;">
+
+    <h5 style="margin-bottom:1.5rem;">
+        <i class="fa-solid fa-pen-to-square"></i> ویرایش آگهی
+    </h5>
+
+    <form asp-controller="Advertisement" asp-action="Edit" asp-route-id="@Model.Id" method="post">
+
+        <div asp-validation-summary="All" class="sb-error" style="margin-bottom:1rem;"></div>
+
+        <!-- عنوان -->
+        <div class="sb-field">
+            <label asp-for="Title">عنوان آگهی</label>
+            <input asp-for="Title" placeholder="مثلاً: استخدام برنامه‌نویس C#" />
+            <span asp-validation-for="Title" class="text-danger" style="font-size:.75rem;"></span>
+        </div>
+
+        <!-- حقوق + شرکت -->
+        <div class="sb-grid">
+            <div class="sb-field">
+                <label asp-for="Salary">حقوق پیشنهادی</label>
+                <input asp-for="Salary" placeholder="مثلاً: ۲۵,۰۰۰,۰۰۰ تومان" />
+                <span asp-validation-for="Salary" class="text-danger" style="font-size:.75rem;"></span>
+            </div>
+
+            <div class="sb-field">
+                <label asp-for="CompanyName">نام شرکت</label>
+                <input asp-for="CompanyName" placeholder="نام شرکت" />
+                <span asp-validation-for="CompanyName" class="text-danger" style="font-size:.75rem;"></span>
+            </div>
+        </div>
+
+        <!-- استان + شهر -->
+        <div class="sb-grid">
+            <div class="sb-field">
+                <label asp-for="Province">استان</label>
+                <input asp-for="Province" placeholder="مثلاً: تهران" />
+                <span asp-validation-for="Province" class="text-danger" style="font-size:.75rem;"></span>
+            </div>
+
+            <div class="sb-field">
+                <label asp-for="City">شهر</label>
+                <input asp-for="City" placeholder="مثلاً: تهران" />
+                <span asp-validation-for="City" class="text-danger" style="font-size:.75rem;"></span>
+            </div>
+        </div>
+
+        <!-- شرح آگهی -->
+        <div class="sb-field">
+            <label asp-for="Description">شرح آگهی</label>
+            <textarea asp-for="Description" rows="7" placeholder="شرح کامل موقعیت شغلی، شرایط و مهارت‌های مورد نیاز..."></textarea>
+            <span asp-validation-for="Description" class="text-danger" style="font-size:.75rem;"></span>
+        </div>
+
+        <!-- دکمه‌ها -->
+        <div class="sb-actions">
+            <button type="submit" class="sb-submit" style="width:auto; padding:.7rem 2.2rem;">
+                <i class="fa-solid fa-floppy-disk"></i> ذخیره تغییرات
+            </button>
+
+            <a asp-controller="Advertisement" asp-action="MyAds"
+               class="btn-sb btn-sb-primary" style="text-decoration:none;">
+                انصراف و بازگشت
+            </a>
+        </div>
+
+    </form>
+
+</div>

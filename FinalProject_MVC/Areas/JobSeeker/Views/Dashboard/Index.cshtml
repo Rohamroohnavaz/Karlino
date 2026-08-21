@@ -1,0 +1,81 @@
+﻿@{
+    Layout = "~/Areas/JobSeeker/Views/Shared/_JobSeekerLayout.cshtml";
+    ViewData["Title"] = "داشبورد";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">داشبورد کارجو</h1>
+    <a href="/JobSeeker/Jobs" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <i class="fas fa-briefcase fa-sm text-white-50"></i> جستجوی شغل
+    </a>
+</div>
+
+<!-- پیام خوش‌آمدگویی -->
+<div class="row">
+    <div class="col-lg-12 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">خوش آمدید! 👋</h6>
+            </div>
+            <div class="card-body">
+                <p class="mb-0">
+                    به پنل کارجو خوش آمدید. از اینجا می‌توانید رزومه خود را مدیریت کنید،
+                    به دنبال فرصت‌های شغلی بگردید و درخواست‌های خود را پیگیری کنید.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- بخش‌های سریع - جای عوض شده -->
+<div class="row">
+    <!-- راهنما (سمت راست) -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-warning">راهنما</h6>
+            </div>
+            <div class="card-body">
+                <ul class="mb-0">
+                    <li class="mb-2">پروفایل خود را کامل کنید تا کارفرماها شما را پیدا کنند</li>
+                    <li class="mb-2">رزومه خود را آپلود یا ویرایش کنید</li>
+                    <li class="mb-2">به دنبال فرصت‌های شغلی مناسب بگردید</li>
+                    <li class="mb-0">درخواست‌های خود را پیگیری کنید</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- دسترسی سریع (سمت چپ) -->
+    <div class="col-lg-6 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">دسترسی سریع</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <a href="/JobSeeker/Profile" class="btn btn-outline-primary btn-block">
+                            <i class="fas fa-user"></i> ویرایش پروفایل
+                        </a>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <a href="/JobSeeker/Resume" class="btn btn-outline-success btn-block">
+                            <i class="fas fa-file-alt"></i> مدیریت رزومه
+                        </a>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <a href="/JobSeeker/Jobs" class="btn btn-outline-info btn-block">
+                            <i class="fas fa-search"></i> جستجوی شغل
+                        </a>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <a href="/JobSeeker/MyApplications" class="btn btn-outline-warning btn-block">
+                            <i class="fas fa-paper-plane"></i> درخواست‌های من
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

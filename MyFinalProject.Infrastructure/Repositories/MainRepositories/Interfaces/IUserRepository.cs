@@ -1,5 +1,6 @@
 ﻿using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Infrastructure.DTO;
 using MyFinalProject.Infrastructure.Repositories.Generics;
 using System;
 using System.Collections.Generic;
@@ -29,5 +30,13 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
         Task<int> GetCountByRole(string userRole);
 
         Task<int> GetPendingEmployersCount();
+
+        Task<List<AdminEmployerTableDto>> GetPendingEmployersAsync();
+
+        Task<bool> SetEmployerApprovalAsync(Guid id, bool approved);
+
+        Task<List<AdminUserTableDto>> GetAllUsersForAdminAsync();
+
+        Task<Guid?> GetIdByEmailAsync(string email);
     }
 }

@@ -1,4 +1,5 @@
-﻿using MyFinalProject.Application.Commands.ViewModels;
+﻿using MyFinalProject.Application.Commands.AdverCommands;
+using MyFinalProject.Application.Commands.ViewModels;
 using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.Filters;
 using MyFinalProject.Application.Services.ServiceInterfaces;
@@ -6,6 +7,7 @@ using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
 using MyFinalProject.Infrastructure.RepoExceptions;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
+using MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,16 +21,29 @@ namespace MyFinalProject.Application.Services.MainServices
     {
         private readonly IAdvertisementRepository _advertisementRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ISettingRepository _settingRepository;
 
         public AdvertisementService(IAdvertisementRepository advertisementRepository
-            , IUnitOfWork unitOfWork)
+            , IUnitOfWork unitOfWork
+            , ISettingRepository settingRepository)
         {
             _advertisementRepository = advertisementRepository;
             _unitOfWork = unitOfWork;
+            _settingRepository = settingRepository;
         }
 
         public async Task CreateAdvertisementAsync(CreateAdvertisementDto dto)
         {
+            var maxSetting = await _settingRepository.GetValueAsync("MaxActiveAdsPerEmployer");
+            var max = int.TryParse(maxSetting, out var m) ? m : 10;
+
+            var activeCount = await _advertisementRepository.GetActiveCountByEmployerAsync(dto.CompanyId);
+
+            if (activeCount >= max)
+            {
+                throw new Exception($"شما به حداکثر تعداد آگهی فعال ({max}) رسیده‌اید.");
+            }
+
             var IsfindAdvertisement = await _advertisementRepository.ExistByTitle(dto.Title);
 
             if (IsfindAdvertisement)
@@ -72,14 +87,23 @@ namespace MyFinalProject.Application.Services.MainServices
             return advertisement;
         }
 
-        public async Task<Advertisement?> GetCompanyAdvertisementAsync(Guid adverId)
+        public async Task<CreateAdvertisementDto?> GetAdvertisementByIdAsync(Guid adverId)
         {
             var advertisement = await _advertisementRepository.GetCompanyAdvertisement(adverId);
 
             if (advertisement == null)
                 throw new InvalidAdvertisementException("Advertisement not found !!");
 
-            return advertisement;
+            return new CreateAdvertisementDto
+            {
+                Title = advertisement.Title,
+                Description = advertisement.Description,
+                Salary = advertisement.Salary,
+                CompanyName = advertisement.CompanyName,
+                Province = advertisement.Province,
+                City = advertisement.City,
+            };
+
         }
 
         public async Task<List<AdvertisementViewModel>> SearchAndFilterAdsAsync(AdverSearchFilterDto filter)
@@ -112,6 +136,38 @@ namespace MyFinalProject.Application.Services.MainServices
                 Salary = a.Salary,
                 CreatedAt = a.CreatedAt
             }).ToList();
+        }
+
+        public async Task UpdateAdvertisement(UpdateAdvertisementCommand command)
+        {
+            var advertisement = await _advertisementRepository.GetByIdAsync(command.Id);
+
+            if (advertisement is null)
+                throw new ArgumentException("Advertisement Not Found !");
+
+            if (advertisement.CompanyId != command.CompanyId)
+                throw new ArgumentException("You don't have permission to edit this advertisement");
+
+            advertisement.ChangeTitle(command.Title);
+            advertisement.ChangeDescription(command.Description);
+            advertisement.ChangeSalary(command.Salary);
+            advertisement.ChangeCompanyName(command.CompanyName);
+            advertisement.ChangeProvince(command.Province);
+            advertisement.ChangeCity(command.City);
+
+            await _advertisementRepository.UpdateAsync(advertisement);
+            await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task DeleteAdvertisement(DeleteAdvertisementCommand command)
+        {
+            var advertisement = await _advertisementRepository.GetByIdAsync(command.Id);
+
+            if (advertisement is null)
+                throw new ArgumentException("Advertisement Not Found !");
+
+            await _advertisementRepository.HardDeleteAsync(command.Id);
+            await _unitOfWork.SaveChangesAsync();
         }
     }
 }

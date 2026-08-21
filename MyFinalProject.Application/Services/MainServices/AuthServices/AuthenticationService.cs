@@ -70,7 +70,7 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
 
         public async Task<RegisterResult> RegisterEmployerAsync(RegisterEmployerCommand command)
         {
-            var findEmployer = await _userManager.FindByNameAsync(command.Username);
+            var findEmployer = await _userManager.FindByNameAsync(command.Email.Trim());
 
             if (findEmployer != null)
                 throw new DuplicateUserException("Duplicate Key");
@@ -84,7 +84,7 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
             var user = new User(command.Firstname, command.Lastname, command.Phonenumber,
                 command.Email)
             {
-                UserName = command.Username,
+                UserName = command.Email,
                 IsApproved = false,
                 Role = UserRole.Employer
             };
@@ -124,7 +124,7 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
 
         public async Task<RegisterResult> RegisterJobSeekerAsync(RegisterJobSeekerCommand command)
         {
-            var findEmployer = await _userManager.FindByNameAsync(command.Username);
+            var findEmployer = await _userManager.FindByNameAsync(command.Email.Trim());
 
             if (findEmployer != null)
                 throw new DuplicateUserException("A JobSeeker With This Username Is Exist !");
@@ -137,7 +137,7 @@ namespace MyFinalProject.Application.Services.MainServices.AuthServices
 
             var user = new User(command.Firstname, command.Lastname, command.Phonenumber, command.Email)
             {
-                UserName = command.Username,
+                UserName = command.Email,
                 Role = UserRole.JobSeeker,
                 IsApproved = false
             };

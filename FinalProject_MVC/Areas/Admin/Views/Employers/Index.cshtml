@@ -1,0 +1,52 @@
+﻿@model List<MyFinalProject.Infrastructure.DTO.AdminEmployerTableDto>
+
+@{
+    ViewData["Title"] = "کارفرماهای در انتظار تأیید";
+}
+
+<div class="sb-table-card">
+    <h5>کارفرماهای در انتظار تأیید</h5>
+
+    <table class="sb-table">
+        <thead>
+            <tr>
+                <th>ایمیل</th>
+                <th>نام شرکت</th>
+                <th>تاریخ ثبت‌نام</th>
+                <th>عملیات</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count == 0)
+            {
+                <tr>
+                    <td colspan="4" style="text-align:center; color:#858796;">
+                        موردی در انتظار تأیید نیست
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var employer in Model)
+                {
+                    <tr>
+                        <td>@employer.Email</td>
+                        <td>@employer.CompanyName</td>
+                        <td>@DisplayHelper.FormatDate(employer.RegisteredAt)</td>
+                        <td style="display:flex; gap:.4rem;">
+                            <form asp-area="Admin" asp-controller="Employers" asp-action="Approve" method="post">
+                                <input type="hidden" name="id" value="@employer.Id" />
+                                <button type="submit" class="btn-sb btn-sb-success">تأیید</button>
+                            </form>
+
+                            <form asp-area="Admin" asp-controller="Employers" asp-action="Reject" method="post">
+                                <input type="hidden" name="id" value="@employer.Id" />
+                                <button type="submit" class="btn-sb btn-sb-danger">رد</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

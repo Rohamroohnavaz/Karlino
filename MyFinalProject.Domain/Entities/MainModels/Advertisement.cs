@@ -35,6 +35,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public string Province { get; private set; }
         public string City { get; private set; }
         public ICollection<RequestResume> RequestResumes { get; set; } = new List<RequestResume>();
+        public ICollection<Report> Reports { get; set; } = new List<Report>();
         public Company? Company { get; private set; }
         public Guid? CompanyId { get; private set; }
         public User? User { get; private set; }

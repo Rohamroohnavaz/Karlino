@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using MyFinalProject.Application.Constants;
 using MyFinalProject.Application.DTOs;
@@ -10,6 +11,7 @@ using MyFinalProject.Application.Services.ServiceInterfaces;
 using MyFinalProject.Application.Services.Settings;
 using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Infrastructure.DTO;
 using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
 using Org.BouncyCastle.Asn1.X509;
@@ -20,6 +22,7 @@ using System.Runtime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using AdminEmployerTableDto = MyFinalProject.Infrastructure.DTO.AdminEmployerTableDto;
 
 namespace MyFinalProject.Application.Services.MainServices
 {
@@ -159,8 +162,22 @@ namespace MyFinalProject.Application.Services.MainServices
                     Success = false,
                     Message = $"It was not rejected !{ex.Message}"
                 };
-                
             }
+        }
+
+        public async Task<List<AdminEmployerTableDto>> GetPendingEmployersAsync()
+        {
+            return await _userRepository.GetPendingEmployersAsync();
+        }
+
+        public async Task<bool> ApproveEmployerAsync(Guid id)
+        {
+            return await _userRepository.SetEmployerApprovalAsync(id, true);
+        }
+
+        public async Task<bool> RejectEmployerAsync(Guid id)
+        {
+            return await _userRepository.SetEmployerApprovalAsync(id, false);
         }
 
         #endregion
@@ -282,8 +299,12 @@ namespace MyFinalProject.Application.Services.MainServices
                     Success = false,
                     Message = $"It was not rejected !{ex.Message}"
                 };
-
             }
+        }
+
+        public async Task<List<AdminUserTableDto>> GetAllUsersAsync()
+        {
+            return await _userRepository.GetAllUsersForAdminAsync();
         }
 
         #endregion
@@ -354,9 +375,38 @@ namespace MyFinalProject.Application.Services.MainServices
             return true;
         }
 
+        public async Task<List<Infrastructure.DTO.AdminAdvertisementTableDto>> GetLatestJobPostingsAsync(int count = 10)
+        {
+            return await _advertisementRepository.GetLatestForAdminAsync(count);
+        }
+
+        public async Task<bool> SetJobPostingActiveAsync(Guid id, bool isActive)
+        {
+            var advertisement = await _advertisementRepository.GetByIdAsync(id);
+
+            if (advertisement == null)
+                return false;
+
+            advertisement.IsActive = isActive;
+
+            await _unitOfWork.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<(List<Infrastructure.DTO.AdminAdvertisementTableDto> Items, int TotalCount)> GetPagedJobPostingsAsync(string? search, bool? isActive, int page, int pageSize)
+        {
+            return await _advertisementRepository.GetPagedForAdminAsync(search, isActive, page, pageSize);
+        }
+
+        public async Task<AdminAdvertisementDetailsDto?> GetJobPostingDetailsAsync(Guid id)
+        {
+            return await _advertisementRepository.GetDetailsForAdminAsync(id);
+        }
+
         #endregion
 
-        //Dashboard Implementation
+        #region Dashboard Implementation
 
         public async Task<AdminDashboardDto> GetDashboardStatsAsync()
         {
@@ -378,6 +428,6 @@ namespace MyFinalProject.Application.Services.MainServices
             return dashboard;
         }
 
-        
+        #endregion
     }
 }

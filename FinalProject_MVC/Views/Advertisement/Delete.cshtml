@@ -1,0 +1,56 @@
+﻿@model FinalProject_MVC.Models.AdvertisementViewModel
+
+@{
+    ViewData["Title"] = "حذف آگهی";
+}
+
+<div class="mb-4">
+    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-right me-1"></i>بازگشت
+    </a>
+</div>
+
+<div class="card border-danger">
+    <div class="card-header bg-danger text-white">
+        <h3 class="mb-0">
+            <i class="bi bi-exclamation-triangle me-2"></i>تایید حذف آگهی
+        </h3>
+    </div>
+
+    <div class="card-body">
+        @if (ViewBag.ErrorMessage != null)
+        {
+            <div class="alert alert-danger">@ViewBag.ErrorMessage</div>
+        }
+
+        <div class="alert alert-warning">
+            <i class="bi bi-exclamation-triangle-fill me-2"></i>
+            آیا از حذف آگهی <strong>@Model.Title</strong> اطمینان دارید؟ این عمل قابل بازگشت نیست.
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <strong>عنوان:</strong> @Model.Title
+            </div>
+            <div class="col-md-6">
+                <strong>شرکت:</strong> @Model.CompanyName
+            </div>
+            <div class="col-md-6">
+                <strong>موقعیت:</strong> @Model.Province - @Model.City
+            </div>
+            <div class="col-md-6">
+                <strong>حقوق:</strong> @Model.Salary تومان
+            </div>
+        </div>
+
+        <form asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="post">
+            @Html.AntiForgeryToken()
+            <div class="d-flex justify-content-between">
+                <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-secondary">انصراف</a>
+                <button type="submit" class="btn btn-danger">
+                    <i class="bi bi-trash me-1"></i>بله، حذف کن
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,4 +1,5 @@
-﻿using MyFinalProject.Application.Commands.ViewModels;
+﻿using MyFinalProject.Application.Commands.AdverCommands;
+using MyFinalProject.Application.Commands.ViewModels;
 using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.Filters;
 using MyFinalProject.Domain.Entities.MainModels;
@@ -16,10 +17,14 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
 
         Task<Advertisement?> GetAdvertisementByCompanyIdAsync(Guid companyId);
 
-        Task<Advertisement?> GetCompanyAdvertisementAsync(Guid adverId);
+        Task<CreateAdvertisementDto?> GetAdvertisementByIdAsync(Guid adverId);
 
         Task<List<AdvertisementViewModel>> GetActiveAdvertisementAsync();
 
         Task<List<AdvertisementViewModel>> SearchAndFilterAdsAsync(AdverSearchFilterDto filter);
+
+        Task UpdateAdvertisement(UpdateAdvertisementCommand command);
+
+        Task DeleteAdvertisement(DeleteAdvertisementCommand command);
     }
 }

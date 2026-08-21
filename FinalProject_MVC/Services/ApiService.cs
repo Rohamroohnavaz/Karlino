@@ -1,6 +1,7 @@
 ﻿using FinalProject_MVC.Services;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
@@ -28,14 +29,22 @@ public class ApiService : IApiService
         await SetAuthHeader();
 
         var fullUrl = new Uri(_httpClient.BaseAddress, endpoint).ToString();
-        System.Diagnostics.Debug.WriteLine($"Calling API at: {fullUrl}");
+        System.Console.WriteLine($"Calling API at: {fullUrl}");
 
         var content = new StringContent(
-            JsonConvert.SerializeObject(data),
-            Encoding.UTF8,
-            "application/json");
+             JsonConvert.SerializeObject(data),
+             Encoding.UTF8,
+             "application/json");
 
         var response = await _httpClient.PostAsync(endpoint, content);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorContent = await response.Content.ReadAsStringAsync();
+            System.Diagnostics.Debug.WriteLine($"API Error Detail: {errorContent}");
+            throw new Exception($"API Error: {response.StatusCode} - {errorContent}");
+        }
+
         return await HandleResponse<T>(response);
     }
 
@@ -61,6 +70,9 @@ public class ApiService : IApiService
     private async Task SetAuthHeader()
     {
         var token = _httpContextAccessor.HttpContext?.Session.GetString("Token");
+
+        System.Diagnostics.Debug.WriteLine($"Token: {token ?? "NULL"}");
+
         if (!string.IsNullOrEmpty(token))
         {
             _httpClient.DefaultRequestHeaders.Authorization =

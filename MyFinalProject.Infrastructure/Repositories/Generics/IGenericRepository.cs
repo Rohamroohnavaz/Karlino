@@ -12,7 +12,7 @@ namespace MyFinalProject.Infrastructure.Repositories.Generics
     {
         Task AddAsync(T entity);
 
-        Task<T?> GetByIdAsync(Guid id ,bool tracking = true);
+        Task<T?> GetByIdAsync(Guid id);
 
         Task<List<T>> QueryAsync(Expression<Func<T ,bool>> predicate ,bool tracking = false);
 

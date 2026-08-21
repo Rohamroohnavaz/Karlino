@@ -1,69 +1,138 @@
-﻿@model RegisterViewModel
+﻿@model FinalProject_MVC.Models.RegisterViewModel
 
 @{
-    ViewData["Title"] = "Register";
+    Layout = null;
+    ViewData["Title"] = "ثبت‌نام";
 }
 
-<div class="row justify-content-center">
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-header">
-                <h4>Register</h4>
-            </div>
-            <div class="card-body">
-                <form asp-action="Register" method="post">
-                    <div asp-validation-summary="All" class="text-danger"></div>
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ثبت‌نام - کارلینو</title>
 
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="Firstname"></label>
-                            <input asp-for="Firstname" class="form-control" />
-                            <span asp-validation-for="Firstname" class="text-danger"></span>
-                        </div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+    <link rel="stylesheet" href="~/css/admin-sb.css" asp-append-version="true" />
+</head>
+<body class="sb-auth-body">
 
-                        <div class="col-md-6 mb-3">
-                            <label asp-for="Lastname"></label>
-                            <input asp-for="Lastname" class="form-control" />
-                            <span asp-validation-for="Lastname" class="text-danger"></span>
-                        </div>
-                    </div>
+    <div class="sb-auth-card sb-auth-wide">
 
-                    <div class="form-group mb-3">
-                        <label asp-for="Username"></label>
-                        <input asp-for="Username" class="form-control" />
-                        <span asp-validation-for="Username" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label asp-for="Email"></label>
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label asp-for="Password"></label>
-                        <input asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group mb-3">
-                        <label asp-for="Phonenumber"></label>
-                        <input asp-for="Phonenumber" class="form-control" />
-                        <span asp-validation-for="Phonenumber" class="text-danger"></span>
-                    </div>
-
-                    <button type="submit" class="btn btn-success w-100">Register</button>
-                </form>
-            </div>
-            <div class="card-footer text-center">
-                <a asp-action="Login">Already have an account? Login</a>
-            </div>
+        <div class="sb-auth-header">
+            <i class="fa-solid fa-user-plus"></i>
+            <h4>ثبت‌نام در کارلینو</h4>
+            <p>اطلاعات خود را وارد کنید</p>
         </div>
-    </div>
-</div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
-}
+        <form asp-action="Register" method="post">
+            <div asp-validation-summary="All" class="sb-error" style="margin-bottom:1rem;"></div>
+
+            <!-- انتخاب نقش -->
+            <div class="sb-radio-row">
+                <label>
+                    <input type="radio" name="IsEmployer" value="false" @(Model.IsEmployer ? "" : "checked") id="roleJobSeeker" />
+                    <i class="fa-solid fa-user"></i> کارجو
+                </label>
+                <label>
+                    <input type="radio" name="IsEmployer" value="true" @(Model.IsEmployer ? "checked" : "") id="roleEmployer" />
+                    <i class="fa-solid fa-building"></i> کارفرما
+                </label>
+            </div>
+
+            <div class="sb-grid">
+                <div class="sb-field">
+                    <label asp-for="FirstName">نام</label>
+                    <input asp-for="FirstName" placeholder="مثلاً: رهام" />
+                    <span asp-validation-for="FirstName" class="text-danger" style="font-size:.75rem;"></span>
+                </div>
+
+                <div class="sb-field">
+                    <label asp-for="LastName">نام خانوادگی</label>
+                    <input asp-for="LastName" placeholder="مثلاً: روح‌نواز" />
+                    <span asp-validation-for="LastName" class="text-danger" style="font-size:.75rem;"></span>
+                </div>
+            </div>
+
+            <div class="sb-grid">
+                <div class="sb-field">
+                    <label asp-for="Email">ایمیل</label>
+                    <input asp-for="Email" type="email" placeholder="example@email.com" />
+                    <span asp-validation-for="Email" class="text-danger" style="font-size:.75rem;"></span>
+                </div>
+
+                <div class="sb-field">
+                    <label asp-for="PhoneNumber">شماره تلفن</label>
+                    <input asp-for="PhoneNumber" placeholder="09123456789" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger" style="font-size:.75rem;"></span>
+                </div>
+            </div>
+
+            <div class="sb-grid">
+                <div class="sb-field">
+                    <label asp-for="Password">رمز عبور</label>
+                    <input asp-for="Password" type="password" />
+                    <span asp-validation-for="Password" class="text-danger" style="font-size:.75rem;"></span>
+                </div>
+
+                <div class="sb-field">
+                    <label asp-for="ConfirmPassword">تأیید رمز عبور</label>
+                    <input asp-for="ConfirmPassword" type="password" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger" style="font-size:.75rem;"></span>
+                </div>
+            </div>
+
+            <!-- فیلدهای کارفرما -->
+            <div id="employerFields" style="display:@(Model.IsEmployer ? "block" : "none");">
+                <div class="sb-field">
+                    <label asp-for="CompanyName">نام شرکت</label>
+                    <input asp-for="CompanyName" placeholder="مثلاً: شرکت فناوری نوین" />
+                </div>
+
+                <div class="sb-field">
+                    <label asp-for="CompanyLocation">آدرس شرکت</label>
+                    <textarea asp-for="CompanyLocation" rows="2" placeholder="آدرس کامل شرکت"></textarea>
+                </div>
+
+                <div class="sb-grid">
+                    <div class="sb-field">
+                        <label asp-for="Province">استان</label>
+                        <input asp-for="Province" placeholder="مثلاً: تهران" />
+                    </div>
+
+                    <div class="sb-field">
+                        <label asp-for="City">شهر</label>
+                        <input asp-for="City" placeholder="مثلاً: تهران" />
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="sb-submit">
+                <i class="fa-solid fa-user-plus"></i> ثبت‌نام
+            </button>
+        </form>
+
+        <div class="sb-auth-footer">
+            حساب داری؟ <a href="/Account/Login">وارد شو</a>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const radios = document.querySelectorAll('input[name="IsEmployer"]');
+            const employerFields = document.getElementById('employerFields');
+
+            function toggle() {
+                const isEmployer = document.getElementById('roleEmployer').checked;
+                employerFields.style.display = isEmployer ? 'block' : 'none';
+            }
+
+            radios.forEach(r => r.addEventListener('change', toggle));
+            toggle();
+        });
+    </script>
+
+</body>
+</html>

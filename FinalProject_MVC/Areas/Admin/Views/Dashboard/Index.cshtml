@@ -1,0 +1,80 @@
+﻿@model MyFinalProject.Application.DTOs.AdminDTOs.AdminDashboardDto
+
+@{
+    ViewData["Title"] = "داشبورد مدیریت";
+}
+
+<div class="sb-cards">
+
+    <div class="sb-card sb-card-warning">
+        <div class="sb-card-row">
+            <div>
+                <div class="text-xs">کارفرماهای در انتظار تأیید</div>
+                <div class="sb-value">@Model.PendingEmployersCount</div>
+            </div>
+            <i class="fa-solid fa-user-clock sb-icon"></i>
+        </div>
+    </div>
+
+    <div class="sb-card sb-card-success">
+        <div class="sb-card-row">
+            <div>
+                <div class="text-xs">آگهی‌های فعال</div>
+                <div class="sb-value">@Model.ActiveJobPostings</div>
+            </div>
+            <i class="fa-solid fa-briefcase sb-icon"></i>
+        </div>
+    </div>
+
+    <div class="sb-card sb-card-danger">
+        <div class="sb-card-row">
+            <div>
+                <div class="text-xs">آگهی‌های غیرفعال</div>
+                <div class="sb-value">@Model.InactiveJobPostings</div>
+            </div>
+            <i class="fa-solid fa-briefcase sb-icon"></i>
+        </div>
+    </div>
+
+    <div class="sb-card sb-card-info">
+        <div class="sb-card-row">
+            <div>
+                <div class="text-xs">کارفرماها</div>
+                <div class="sb-value">@Model.TotalEmployers</div>
+            </div>
+            <i class="fa-solid fa-building sb-icon"></i>
+        </div>
+    </div>
+
+    <div class="sb-card sb-card-primary">
+        <div class="sb-card-row">
+            <div>
+                <div class="text-xs">کارجوها</div>
+                <div class="sb-value">@Model.TotalJobSeekers</div>
+            </div>
+            <i class="fa-solid fa-users sb-icon"></i>
+        </div>
+    </div>
+
+</div>
+
+<div class="sb-table-card">
+    <h5>آمار درخواست رزومه</h5>
+
+    <div class="sb-cards">
+        @foreach (var stat in Model.RequestResumeStats)
+        {
+            <div class="sb-card sb-card-info">
+                <div class="sb-card-row">
+                    <div>
+                        <div class="text-xs">@DisplayHelper.RequestStatusTitle(stat.Key)</div>
+                        <div class="sb-value">@stat.Value</div>
+                    </div>
+                    <i class="fa-solid fa-file-lines sb-icon"></i>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+

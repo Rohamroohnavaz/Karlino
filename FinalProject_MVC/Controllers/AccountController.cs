@@ -1,17 +1,24 @@
-﻿using FinalProject_MVC.Models;
+﻿using FinalProject_MVC.Helpers;
+using FinalProject_MVC.Models;
 using FinalProject_MVC.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using MyFinalProject.Application.Constants;
+using MyFinalProject.Application.Results;
+using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
 using System.Security.Claims;
+using System.Threading.Tasks;
 
 public class AccountController : Controller
 {
     private readonly IApiService _apiService;
+    private readonly ISettingRepository _settingRepository;
 
-    public AccountController(IApiService apiService)
+    public AccountController(IApiService apiService ,ISettingRepository settingRepository)
     {
         _apiService = apiService;
+        _settingRepository = settingRepository;
     }
 
     [HttpGet]
@@ -22,7 +29,7 @@ public class AccountController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Login(LoginViewModel model)
+    public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
     {
         if (!ModelState.IsValid)
             return View(model);
@@ -33,19 +40,33 @@ public class AccountController : Controller
             {
                 model.Email,
                 model.Password,
+                model.RememberMe,
             });
 
             HttpContext.Session.SetString("Token", loginResult.AccessToken);
 
+            var role = loginResult.Role?.Trim();
+
+            if (string.IsNullOrWhiteSpace(role))
+            {
+                role = JwtHelper.GetRoleFromJwt(loginResult.AccessToken)?.Trim();
+            }
+
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Email, model.Email),
-                new Claim("Token", loginResult.AccessToken)
+               new Claim(ClaimTypes.Email, model.Email),
+               new Claim(ClaimTypes.Name, model.Email),
+               new Claim("Token", loginResult.AccessToken),
             };
 
-            if (!string.IsNullOrEmpty(loginResult.Role))
+            if (!string.IsNullOrWhiteSpace(role))
             {
-                claims.Add(new Claim(ClaimTypes.Role, loginResult.Role));
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            if (!string.IsNullOrEmpty(loginResult.CompanyId))
+            {
+                claims.Add(new Claim("CompanyId", loginResult.CompanyId));
             }
 
             var identity = new ClaimsIdentity(
@@ -62,6 +83,25 @@ public class AccountController : Controller
                 new ClaimsPrincipal(identity),
                 authProperties);
 
+            if (string.Equals(role, RoleConstants.AdminRole, StringComparison.OrdinalIgnoreCase))
+            {
+                return Redirect("/Admin/Dashboard");
+            }
+            if (string.Equals(role, RoleConstants.JobSeekerRole, StringComparison.OrdinalIgnoreCase))
+            {
+                return Redirect("/JobSeeker/Dashboard");
+            }
+
+            if (string.Equals(role, RoleConstants.EmployerRole, StringComparison.OrdinalIgnoreCase))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+
             return RedirectToAction("Index", "Home");
         }
         catch (Exception ex)
@@ -72,36 +112,67 @@ public class AccountController : Controller
     }
 
     [HttpGet]
-    public IActionResult Register()
+    public async Task<IActionResult> Register()
     {
-        return View();
+        if (!await IsRegistrationOpenAsync())
+        {
+            ModelState.AddModelError("", "ثبت‌نام در حال حاضر غیرفعال است.");
+            return View("Login", new LoginViewModel());
+        }
+
+        return View(new RegisterViewModel());
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
+        if (!await IsRegistrationOpenAsync())
+        {
+            ModelState.AddModelError("", "ثبت‌نام در حال حاضر غیرفعال است.");
+            return View("Login", new LoginViewModel());
+        }
+
         if (!ModelState.IsValid)
             return View(model);
 
         try
         {
-            await _apiService.PostAsync<RegisterResponse>("/RegisterJobSeeker", new
+            if (model.IsEmployer)   
             {
-                model.Firstname,
-                model.Lastname,
-                model.Username,
-                model.Email,
-                model.Password,
-                model.Phonenumber
-            });
+                await _apiService.PostAsync<RegisterResult>("/RegisterEmployer", new
+                {
+                    model.FirstName,
+                    model.LastName,
+                    model.PhoneNumber,
+                    model.Email,
+                    model.Password,
+                    Username = model.Email,
+                    model.CompanyName,
+                    model.CompanyLocation,
+                    model.Province,
+                    model.City
+                });
+            }
+            else
+            {
+                await _apiService.PostAsync<RegisterResult>("/RegisterJobSeeker", new
+                {
+                    model.FirstName,
+                    model.LastName,
+                    model.PhoneNumber,
+                    model.Email,
+                    model.Password,
+                    Username = model.Email
+                });
+            }
 
-            TempData["SuccessMessage"] = "Registration successful! Please login.";
+            TempData["Success"] = "ثبت‌نام با موفقیت انجام شد. حالا وارد شوید.";
             return RedirectToAction("Login");
         }
         catch (Exception ex)
         {
-            ModelState.AddModelError("", "Registration failed: " + ex.Message);
+            ModelState.AddModelError("", "ثبت‌نام ناموفق بود: " + ex.Message);
             return View(model);
         }
     }
@@ -121,5 +192,11 @@ public class AccountController : Controller
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
         return RedirectToAction("Login");
+    }
+
+    private async Task<bool> IsRegistrationOpenAsync()
+    {
+        var value = await _settingRepository.GetValueAsync("IsRegistrationOpen");
+        return !string.Equals(value, "false", StringComparison.OrdinalIgnoreCase);
     }
 }

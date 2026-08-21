@@ -29,3 +29,80 @@ body {
 .form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
   text-align: start;
 }
+
+.hero {
+    min-height: calc(100vh - 76px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+    .hero h1 {
+        font-size: 3.2rem;
+        font-weight: 900;
+        color: #fff;
+        margin-bottom: .6rem;
+    }
+
+    .hero p {
+        font-size: 1.25rem;
+        color: rgba(255, 255, 255, .88);
+        margin-bottom: 2.2rem;
+    }
+
+.hero-search {
+    display: flex;
+    gap: .5rem;
+    background: #fff;
+    border-radius: 50rem;
+    padding: .4rem;
+    max-width: 560px;
+    margin: 0 auto 2.8rem;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, .22);
+}
+
+    .hero-search input {
+        flex: 1;
+        border: 0;
+        outline: 0;
+        padding: .7rem 1.3rem;
+        font-size: .95rem;
+        background: transparent;
+        font-family: inherit;
+    }
+
+    .hero-search button {
+        border: 0;
+        border-radius: 50rem;
+        background: #4e73df;
+        color: #fff;
+        padding: .7rem 1.7rem;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        transition: background .2s;
+    }
+
+        .hero-search button:hover {
+            background: #224abe;
+        }
+
+.hero-stats {
+    display: flex;
+    gap: 3rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.hero-stat b {
+    display: block;
+    font-size: 1.7rem;
+    color: #fff;
+}
+
+.hero-stat span {
+    color: rgba(255, 255, 255, .75);
+    font-size: .85rem;
+}

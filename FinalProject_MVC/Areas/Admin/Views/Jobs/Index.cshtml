@@ -1,0 +1,105 @@
+﻿@model List<MyFinalProject.Infrastructure.DTO.AdminAdvertisementTableDto>
+
+@{
+    ViewData["Title"] = "مدیریت آگهی‌ها";
+}
+
+<div class="sb-table-card">
+    <h5>مدیریت آگهی‌ها</h5>
+
+    <!-- 🔍 فرم جستجو و فیلتر (GET) -->
+    <form method="get" asp-area="Admin" asp-controller="Jobs" asp-action="Index" class="sb-filter-bar">
+        <input type="text" name="search" value="@ViewBag.Search" placeholder="جستجوی عنوان آگهی..." />
+
+        <select name="isActive">
+            <option value="">همه وضعیت‌ها</option>
+            <option value="true" selected="@(ViewBag.IsActive?.ToString() == "True")">فعال</option>
+            <option value="false" selected="@(ViewBag.IsActive?.ToString() == "False")">غیرفعال</option>
+        </select>
+
+        <button type="submit" class="btn-sb btn-sb-primary">اعمال</button>
+    </form>
+
+    <table class="sb-table">
+        <thead>
+            <tr>
+                <th>عنوان آگهی</th>
+                <th>کارفرما</th>
+                <th>شهر</th>
+                <th>تاریخ ثبت</th>
+                <th>وضعیت</th>
+                <th>عملیات</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count == 0)
+            {
+                <tr>
+                    <td colspan="6" style="text-align:center; color:#858796;">
+                        موردی یافت نشد
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var job in Model)
+                {
+                    <tr>
+                        <td>@job.Title</td>
+                        <td>@job.EmployerName</td>
+                        <td>@job.CityName</td>
+                        <td>@DisplayHelper.FormatDate(job.CreatedAt)</td>
+                        <td>
+                            @if (job.IsActive)
+                            {
+                                <span class="badge badge-success">فعال</span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-danger">غیرفعال</span>
+                            }
+                        </td>
+                        <td style="display:flex; gap:.4rem;">
+                            <a asp-area="Admin" asp-controller="Jobs" asp-action="Details" asp-route-id="@job.Id"
+                               class="btn-sb btn-sb-primary">جزئیات</a>
+
+                            @if (!job.IsActive)
+                            {
+                                <form asp-area="Admin" asp-controller="Jobs" asp-action="Approve" method="post">
+                                    <input type="hidden" name="id" value="@job.Id" />
+                                    <button type="submit" class="btn-sb btn-sb-success">تأیید</button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-area="Admin" asp-controller="Jobs" asp-action="Reject" method="post">
+                                    <input type="hidden" name="id" value="@job.Id" />
+                                    <button type="submit" class="btn-sb btn-sb-danger">رد</button>
+                                </form>
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+    <!-- 📄 صفحه‌بندی -->
+    @if (ViewBag.TotalPages > 1)
+    {
+        <nav class="sb-pagination">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <a class="sb-page @(i == ViewBag.CurrentPage ? "active" : "")"
+                   asp-area="Admin"
+                   asp-controller="Jobs"
+                   asp-action="Index"
+                   asp-route-search="@ViewBag.Search"
+                   asp-route-isActive="@ViewBag.IsActive"
+                   asp-route-page="@i">
+                    @i
+                </a>
+            }
+        </nav>
+    }
+</div>

@@ -1,123 +1,117 @@
-﻿@model FinalProject_MVC.Models.AdvertisementViewModel
+﻿@using FinalProject_MVC.Helpers
+@model FinalProject_MVC.Models.AdvertisementViewModel
 
 @{
-    ViewData["Title"] = "Advertisement Details";
+    ViewData["Title"] = Model.Title;
 }
 
-<div class="mb-4">
-    <a asp-action="Index" class="btn btn-outline-secondary">
-        <i class="bi bi-arrow-right me-1"></i> Back To List 
-    </a>
-</div>
-
-@if (ViewBag.ErrorMessage != null)
+@if (TempData["Success"] != null)
 {
-    <div class="alert alert-danger">
-        <i class="bi bi-exclamation-triangle me-2"></i>@ViewBag.ErrorMessage
+    <div class="sb-error" style="background:#d1e7dd; color:#1cc88a;">
+        @TempData["Success"]
     </div>
 }
+@if (TempData["Error"] != null)
+{
+    <div class="sb-error">@TempData["Error"]</div>
+}
 
-<div class="card">
-    <div class="card-header bg-primary text-white">
-        <h3 class="mb-0">
-            <i class="bi bi-megaphone me-2"></i>@Model.Title
-        </h3>
+<div class="sb-table-card">
+
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:.6rem;">
+        <h5 style="margin:0;">@Model.Title</h5>
+
+        @if (Model.IsActive)
+        {
+            <span class="badge badge-success">فعال</span>
+        }
+        
     </div>
 
-    <div class="card-body">
-        <div class="row mb-4">
-            <div class="col-md-8">
-                <h5 class="text-muted mb-3">
-                    <i class="bi bi-building me-2"></i>@Model.CompanyName
-                </h5>
-            </div>
-            <div class="col-md-4 text-md-end">
-                <span class="badge bg-success fs-6">
-                    <i class="bi bi-check-circle me-1"></i>Active
-                </span>
-            </div>
-        </div>
+    <dl class="sb-details" style="margin-top:1.3rem;">
+        <dt>کارفرما</dt>
+        <dd>@Model.CompanyName</dd>
 
-        <hr />
+        <dt>شهر</dt>
+        <dd>@Model.City</dd>
 
-        <div class="row g-4 mb-4">
-            <div class="col-md-6">
-                <div class="p-3 bg-light rounded">
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-geo-alt-fill text-primary fs-4 me-3"></i>
-                        <div>
-                            <small class="text-muted d-block">Location </small>
-                            <strong>@Model.Province - @Model.City</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        @* <dt>دسته‌بندی</dt>
+        <dd>@Model.CategoryTitle</dd> *@
 
-            <div class="col-md-6">
-                <div class="p-3 bg-light rounded">
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-cash-stack text-success fs-4 me-3"></i>
-                        <div>
-                            <small class="text-muted d-block">
-                                Proposed salary
-                            </small>
-                            <strong class="text-success">@Model.Salary.ToString("N0") Tooman</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <dt>تاریخ ثبت</dt>
+        <dd>@DisplayHelper.FormatDate(Model.CreatedAt)</dd>
+    </dl>
 
-            <div class="col-md-6">
-                <div class="p-3 bg-light rounded">
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-calendar-check text-info fs-4 me-3"></i>
-                        <div>
-                            <small class="text-muted d-block">ExpireDate </small>
-                            <strong>@(Model.ExpireDate.Year > 1 ? Model.ExpireDate.ToString("yyyy/MM/dd") : "Unspecified")</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <h6 style="margin-top:1.5rem; color:var(--sb-secondary);">شرح آگهی</h6>
+    <div class="sb-details-desc">@Model.Description</div>
 
-            <div class="col-md-6">
-                <div class="p-3 bg-light rounded">
-                    <div class="d-flex align-items-center">
-                        <i class="bi bi-clock-history text-warning fs-4 me-3"></i>
-                        <div>
-                            <small class="text-muted d-block">CreatedTime</small>
-                            <strong>@(Model.CreatedAt.Year > 1 ? Model.CreatedAt.ToString("yyyy/MM/dd") : "Unspecified")</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="sb-actions">
+        @if (User.Identity != null && User.Identity.IsAuthenticated && User.IsInRole("JobSeeker"))
+        {
+            <button type="button" class="btn-sb btn-sb-success">
+                <i class="fa-solid fa-file-arrow-up"></i> ارسال رزومه
+            </button>
+        }
 
-        <hr />
-
-        <div class="mb-4">
-            <h5 class="text-primary mb-3">
-                <i class="bi bi-file-text me-2"></i>Description
-            </h5>
-            <div class="p-4 bg-light rounded" style="white-space: pre-wrap; line-height: 1.8;">
-                @Model.Description
-            </div>
-        </div>
-    </div>
-
-    <div class="card-footer bg-white">
-        <div class="d-flex justify-content-between">
-            <a asp-action="Index" class="btn btn-secondary">
-                <i class="bi bi-arrow-right me-1"></i>Back
-            </a>
-            <div>
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
-                    <i class="bi bi-pencil me-1"></i>Edit
-                </a>
-                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger"
-                   onclick="return confirm('Are you sure to delete this ?')">
-                    <i class="bi bi-trash me-1"></i>Delete
-                </a>
-            </div>
-        </div>
+        <a href="/Advertisements" class="btn-sb btn-sb-primary" style="text-decoration:none;">
+            بازگشت به آگهی‌ها
+        </a>
     </div>
 </div>
+
+@if (ViewBag.IsOwner == true)
+{
+    <!-- 🛠 دکمه‌های صاحب آگهی -->
+    <div class="sb-table-card" style="margin-top:1.2rem; border-inline-start:.25rem solid var(--sb-info);">
+        <h5>
+            <i class="fa-solid fa-pen-to-square"></i> این آگهی شماست
+        </h5>
+
+        <div class="sb-actions">
+            <a asp-controller="Advertisement" asp-action="Edit" asp-route-id="@Model.Id"
+               class="btn-sb btn-sb-info" style="text-decoration:none;">
+                <i class="fa-solid fa-pen"></i> ویرایش آگهی
+            </a>
+
+            <form asp-controller="Advertisement" asp-action="DeleteConfirmed" asp-route-id="@Model.Id"
+                  method="post"
+                  onsubmit="return confirm('آیا از حذف این آگهی مطمئن هستید؟');">
+                <button type="submit" class="btn-sb btn-sb-danger">
+                    <i class="fa-solid fa-trash"></i> حذف آگهی
+                </button>
+            </form>
+
+            <a asp-controller="Advertisement" asp-action="MyAds"
+               class="btn-sb btn-sb-primary" style="text-decoration:none;">
+                بازگشت به آگهی‌های من
+            </a>
+        </div>
+    </div>
+}
+else if (User.Identity != null && User.Identity.IsAuthenticated)
+{
+    <!-- 🚩 فرم گزارش تخلف (برای بقیه کاربران) -->
+    <div class="sb-table-card" style="margin-top:1.2rem; border-inline-start:.25rem solid var(--sb-danger);">
+        <h5 style="color:var(--sb-danger);">
+            <i class="fa-solid fa-flag"></i> این آگهی تخلف دارد؟
+        </h5>
+
+        <form asp-controller="Report" asp-action="Submit" method="post" style="margin-top:1rem;">
+            <input type="hidden" name="advertisementId" value="@Model.Id" />
+
+            <textarea name="reason"
+                  placeholder="دلیل گزارش تخلف را بنویسید..."
+                  required
+                  style="width:100%; border:1px solid var(--sb-border); border-radius:.35rem; padding:.7rem .9rem; min-height:90px; font-family:var(--sb-font); font-size:.88rem; margin-bottom:.7rem;"></textarea>
+
+            <button type="submit" class="btn-sb btn-sb-danger">ثبت گزارش</button>
+        </form>
+    </div>
+}
+else
+{
+    <div class="sb-table-card" style="margin-top:1.2rem; text-align:center; color:var(--sb-secondary); font-size:.85rem;">
+        برای گزارش تخلف این آگهی، ابتدا
+        <a href="/Account/Login" style="color:var(--sb-primary); font-weight:700;">وارد شوید</a>.
+    </div>
+}

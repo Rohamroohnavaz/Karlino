@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MyFinalProject.Application.Commands.AdverCommands;
 using MyFinalProject.Application.Commands.ViewModels;
 using MyFinalProject.Application.Constants;
 using MyFinalProject.Application.DTOs;
@@ -12,7 +13,6 @@ namespace WebLayer.Controllers
 {
     [ApiController]
     [Route("api/adv")]
-    [Authorize]
     public class AdvertisementController : ControllerBase
     {
         private readonly IAdvertisementService _advertisementService;
@@ -55,6 +55,54 @@ namespace WebLayer.Controllers
         {
             var adver = await _advertisementService.GetAdvertisementByCompanyIdAsync(companyId);
             return Ok(adver);
+        }
+
+        [HttpGet("/GetAdvertisementById/{id:guid}")]
+        public async Task<IActionResult> GetAdvertisementById(Guid id)
+        {
+            var adver = await _advertisementService.GetAdvertisementByIdAsync(id);
+            return Ok(adver);
+        }
+
+        [HttpPut("/UpdateAdvertisement")]
+        [Authorize(Roles = RoleConstants.EmployerRole)]
+        public async Task<IActionResult> UpdateAdvertisement([FromBody] UpdateAdvertisementCommand command)
+        {
+            if (command == null)
+                return BadRequest(new { message = "Command is null - JSON deserialization failed" });
+
+            if (command.Id == Guid.Empty)
+                return BadRequest(new { message = "Id is empty (Guid.Empty)" });
+
+            if (string.IsNullOrEmpty(command.Title))
+                return BadRequest(new { message = "Title is empty" });
+
+            if (command.CompanyId == Guid.Empty)
+                return BadRequest(new { message = "CompanyId is empty (Guid.Empty)" });
+            try
+            {
+                await _advertisementService.UpdateAdvertisement(command);
+                return Ok(new { message = "Advertisement Updated Successfully !" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        [HttpPost("/DeleteAdvertisement")]
+        [Authorize(Roles = RoleConstants.EmployerRole)]
+        public async Task<IActionResult> DeleteAdvertisement([FromBody] DeleteAdvertisementCommand command)
+        {
+            try
+            {
+                await _advertisementService.DeleteAdvertisement(command);
+                return Ok(new {message = "Advertisement Deleted Successfully !"});
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new {message = ex.Message});
+            }
         }
     }
 }

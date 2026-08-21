@@ -1,0 +1,272 @@
+﻿@model List<MyFinalProject.Infrastructure.DTO.AdminUserTableDto>
+
+@{
+    var count = Model?.Count ?? 0;
+}
+
+<div class="alert alert-info">
+    تعداد کاربران: @count
+</div>
+
+@{
+    ViewData["Title"] = "مدیریت کاربران";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">مدیریت کاربران</h1>
+    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
+        <i class="fas fa-download fa-sm text-white-50"></i> گزارش کاربران
+    </a>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<!-- آمار کاربران -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-start-primary border-start-4 shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">کل کاربران</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-start-warning border-start-4 shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">در انتظار تایید</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(u => !u.IsApproved && u.IsActive)</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-clock fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-start-success border-start-4 shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">تایید شده</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(u => u.IsApproved && u.IsActive)</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-start-danger border-start-4 shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col me-2">
+                        <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">غیرفعال</div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(u => !u.IsActive)</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-ban fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- جدول کاربران -->
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary">لیست کاربران</h6>
+        <div class="dropdown">
+            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                <i class="fas fa-filter"></i> فیلتر
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="#">همه کاربران</a></li>
+                <li><a class="dropdown-item" href="#">کارجوها</a></li>
+                <li><a class="dropdown-item" href="#">کارفرماها</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="#">در انتظار تایید</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" width="100%" cellspacing="0" id="dataTable">
+                <thead class="table-light">
+                    <tr>
+                        <th style="width: 5%">#</th>
+                        <th style="width: 15%">نام و نام خانوادگی</th>
+                        <th style="width: 20%">ایمیل</th>
+                        <th style="width: 12%">شماره تماس</th>
+                        <th style="width: 10%">شهر</th>
+                        <th style="width: 10%">نقش</th>
+                        <th style="width: 12%">تاریخ ثبت‌نام</th>
+                        <th style="width: 10%">وضعیت</th>
+                        <th style="width: 6%">عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        int counter = 1;
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td class="text-center">@counter</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center text-white me-2"
+                                             style="width: 35px; height: 35px; font-size: 14px;">
+                                            @(user.FullName.Substring(0, 1).ToUpper())
+                                        </div>
+                                        <span>@user.FullName</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="mailto:@user.Email">@user.Email</a>
+                                </td>
+                                <td>@(string.IsNullOrEmpty(user.PhoneNumber) ? "-" : user.PhoneNumber)</td>
+                                <td>@(string.IsNullOrEmpty(user.City) ? "-" : user.City)</td>
+                                <td>
+                                    @switch (user.RoleName)
+                                    {
+                                        case "Admin":
+                                            <span class="badge bg-danger">مدیر</span>
+                                            break;
+                                        case "Employer":
+                                            <span class="badge bg-info text-dark">کارفرما</span>
+                                            break;
+                                        case "JobSeeker":
+                                            <span class="badge bg-success">کارجو</span>
+                                            break;
+                                        default:
+                                            <span class="badge bg-secondary">@user.RoleName</span>
+                                            break;
+                                    }
+                                </td>
+                                <td>
+                                    @if (user.CreatedAt.Year > 1)
+                                    {
+                                        <span class="text-muted small">@user.CreatedAt.ToString("yyyy/MM/dd")</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (!user.IsActive)
+                                    {
+                                        <span class="badge bg-danger">غیرفعال</span>
+                                    }
+                                    else if (!user.IsApproved)
+                                    {
+                                        <span class="badge bg-warning text-dark">در انتظار تایید</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">تایید شده</span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        @if (!user.IsApproved && user.IsActive && user.RoleName != "Admin")
+                                        {
+                                            <form asp-action="Approve" asp-controller="Users" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@user.Id" />
+                                                <button type="submit" class="btn btn-success"
+                                                        title="تایید کاربر"
+                                                        onclick="return confirm('آیا از تایید این کاربر اطمینان دارید؟');">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            </form>
+                                            <form asp-action="Reject" asp-controller="Users" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@user.Id" />
+                                                <button type="submit" class="btn btn-warning"
+                                                        title="رد کردن"
+                                                        onclick="return confirm('آیا از رد کردن این کاربر اطمینان دارید؟');">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                        @if (user.RoleName != "Admin")
+                                        {
+                                            <form asp-action="Delete" asp-controller="Users" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="id" value="@user.Id" />
+                                                <button type="submit" class="btn btn-danger"
+                                                        title="حذف کاربر"
+                                                        onclick="return confirm('آیا از حذف این کاربر اطمینان دارید؟');">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                            counter++;
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="9" class="text-center text-muted py-4">
+                                <i class="fas fa-inbox fa-2x mb-2"></i>
+                                <p>هیچ کاربری یافت نشد</p>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // فعال‌سازی DataTable (اگر می‌خوای جدول searchable و sortable باشه)
+        $(document).ready(function() {
+            $('#dataTable').DataTable({
+                "language": {
+                    "url": "//cdn.datatables.net/plug-ins/1.13.4/i18n/fa.json"
+                },
+                "pageLength": 10,
+                "lengthMenu": [[10, 25, 50, 100], [10, 25, 50, 100]],
+                "order": [[6, "desc"]] // مرتب‌سازی بر اساس تاریخ ثبت‌نام
+            });
+        });
+    </script>
+}

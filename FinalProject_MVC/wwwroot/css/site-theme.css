@@ -1,0 +1,31 @@
+﻿:root {
+    --primary: #4e73df;
+    --primary-dark: #224abe;
+    --success: #1cc88a;
+    --info: #36b9cc;
+    --warning: #f6c23e;
+    --danger: #e74a3b;
+    --light: #f8f9fc;
+    --dark: #5a5c69;
+    --secondary: #858796;
+}
+
+a {
+    color: var(--primary);
+}
+
+    a:hover {
+        color: var(--primary-dark);
+    }
+
+.btn-primary,
+.button-primary {
+    background: var(--primary) !important;
+    border-color: var(--primary) !important;
+}
+
+    .btn-primary:hover,
+    .button-primary:hover {
+        background: var(--primary-dark) !important;
+        border-color: var(--primary-dark) !important;
+    }

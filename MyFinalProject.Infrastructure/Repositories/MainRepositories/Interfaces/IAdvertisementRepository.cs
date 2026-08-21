@@ -1,4 +1,5 @@
 ﻿using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Infrastructure.DTO;
 using MyFinalProject.Infrastructure.Repositories.Generics;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,6 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
 
         Task<Advertisement?> GetCompanyAdvertisement(Guid adverId);
 
-        //Task<Advertisement?> GetAdvertisementWithRequestResume(Guid resumeId);
-
         Task<bool> ExistAdvertisementAsync(Guid adverId);
 
         Task<bool> ExistByTitle(string title);
@@ -23,5 +22,20 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
         Task<List<Advertisement>> GetAllWithSoftDelete();
 
         Task<int> GetCountByStatus(bool isActive);
+
+        Task<List<AdminAdvertisementTableDto>> GetLatestForAdminAsync(int count);
+
+        Task<(List<AdminAdvertisementTableDto> Items, int TotalCount)> GetPagedForAdminAsync(
+            string? search,bool? isActive,int page,int pageSize);
+
+        Task<AdminAdvertisementDetailsDto?> GetDetailsForAdminAsync(Guid id);
+
+        Task<int> GetActiveCountByEmployerAsync(Guid employerId);
+
+        Task<List<AdminAdvertisementTableDto>> GetMyAdsAsync(string email);
+
+        Task<bool> IsOwnerAsync(Guid advertisementId, string email);
+
+        Task<Guid?> GetCompanyIdByUserEmailAsync(string email);
     }
 }
