@@ -15,8 +15,4 @@
     <ProjectReference Include="..\MyFinalProject.Application\MyFinalProject.Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Areas\JobSeeker\Views\Profile\" />
-  </ItemGroup>
-
 </Project>

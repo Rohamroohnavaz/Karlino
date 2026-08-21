@@ -31,6 +31,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         public string FirstName { get; private set; }
         public string LastName { get; private set; }
+        public string? City { get; private set; }
         public UserRole Role { get; set; }
         public Company? Company { get; private set; }
         public Guid? CompanyId { get; private set; }

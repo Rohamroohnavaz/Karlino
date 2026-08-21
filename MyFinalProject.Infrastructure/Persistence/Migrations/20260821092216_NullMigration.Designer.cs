@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyFinalProject.Infrastructure;
 
@@ -11,9 +12,11 @@ using MyFinalProject.Infrastructure;
 namespace MyFinalProject.Infrastructure.Migrations
 {
     [DbContext(typeof(FinalDbContext))]
-    partial class FinalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260821092216_NullMigration")]
+    partial class NullMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1155,6 +1158,7 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("City")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("CompanyId")

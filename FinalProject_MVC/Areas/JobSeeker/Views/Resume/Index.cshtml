@@ -1,0 +1,316 @@
+﻿@model FinalProject_MVC.Areas.JobSeeker.ViewModels.ResumeViewModel
+
+@{
+    Layout = "~/Areas/JobSeeker/Views/Shared/_JobSeekerLayout.cshtml";
+    ViewData["Title"] = "رزومه من";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">رزومه من</h1>
+    <div>
+        @if (!string.IsNullOrEmpty(Model.ResumeFilePath))
+        {
+            <a href="@Url.Action("Download")" class="btn btn-success btn-sm shadow-sm">
+                <i class="fas fa-download fa-sm text-white-50"></i> دانلود رزومه
+            </a>
+        }
+        <form asp-action="Delete" method="post" class="d-inline" onsubmit="return confirm('آیا از حذف رزومه اطمینان دارید؟');">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger btn-sm shadow-sm">
+                <i class="fas fa-trash fa-sm text-white-50"></i> حذف رزومه
+            </button>
+        </form>
+    </div>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<!-- نوار وضعیت رزومه -->
+@{
+    // محاسبه درصد تکمیل رزومه
+    int completedFields = 0;
+    int totalFields = 10;
+
+    if (!string.IsNullOrEmpty(Model.JobTitle)) completedFields++;
+    if (!string.IsNullOrEmpty(Model.AboutMe)) completedFields++;
+    if (!string.IsNullOrEmpty(Model.City)) completedFields++;
+    if (!string.IsNullOrEmpty(Model.EducationDegree)) completedFields++;
+    if (!string.IsNullOrEmpty(Model.EducationField)) completedFields++;
+    if (!string.IsNullOrEmpty(Model.University)) completedFields++;
+    if (!string.IsNullOrEmpty(Model.WorkTitle)) completedFields++;
+    if (!string.IsNullOrEmpty(Model.CompanyName)) completedFields++;
+    if (!string.IsNullOrEmpty(Model.Skills)) completedFields++;
+    if (!string.IsNullOrEmpty(Model.ResumeFilePath)) completedFields++;
+
+    int completionPercentage = (completedFields * 100) / totalFields;
+}
+
+<div class="card shadow mb-4 border-start-@((completionPercentage == 100) ? "success" : (completionPercentage >= 50 ? "warning" : "danger")) border-start-4">
+    <div class="card-body">
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <h6 class="m-0 font-weight-bold">
+                <i class="fas fa-@(completionPercentage == 100 ? "check-circle text-success" : (completionPercentage >= 50 ? "exclamation-circle text-warning" : "times-circle text-danger"))"></i>
+                وضعیت رزومه:
+                @if (completionPercentage == 100)
+                {
+                    <span class="text-success">تکمیل شده ✅</span>
+                }
+                else if (completionPercentage >= 50)
+                {
+                    <span class="text-warning">نیمه‌تکمیل ⚠️</span>
+                }
+                else if (completedFields > 0)
+                {
+                    <span class="text-info">در حال تکمیل 📝</span>
+                }
+                else
+                {
+                    <span class="text-danger">خالی </span>
+                }
+            </h6>
+            <span class="badge bg-@(completionPercentage == 100 ? "success" : (completionPercentage >= 50 ? "warning" : "danger")) fs-6">
+                @completionPercentage%
+            </span>
+        </div>
+        <div class="progress" style="height: 10px;">
+            <div class="progress-bar bg-@(completionPercentage == 100 ? "success" : (completionPercentage >= 50 ? "warning" : "danger"))"
+                 role="progressbar"
+                 style="width: @completionPercentage%"
+                 aria-valuenow="@completionPercentage"
+                 aria-valuemin="0"
+                 aria-valuemax="100">
+            </div>
+        </div>
+        <small class="text-muted mt-2 d-block">
+            @completedFields از @totalFields بخش تکمیل شده
+        </small>
+    </div>
+</div>
+
+
+<form asp-action="Index" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+
+    <!-- تب‌های رزومه -->
+    <ul class="nav nav-tabs mb-4" id="resumeTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="personal-tab" data-bs-toggle="tab" data-bs-target="#personal" type="button" role="tab">
+                <i class="fas fa-user"></i> اطلاعات شخصی
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="education-tab" data-bs-toggle="tab" data-bs-target="#education" type="button" role="tab">
+                <i class="fas fa-graduation-cap"></i> تحصیلات
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="work-tab" data-bs-toggle="tab" data-bs-target="#work" type="button" role="tab">
+                <i class="fas fa-briefcase"></i> سوابق کاری
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="skills-tab" data-bs-toggle="tab" data-bs-target="#skills" type="button" role="tab">
+                <i class="fas fa-tools"></i> مهارت‌ها
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="file-tab" data-bs-toggle="tab" data-bs-target="#file" type="button" role="tab">
+                <i class="fas fa-file-upload"></i> فایل رزومه
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="resumeTabsContent">
+
+        <!-- اطلاعات شخصی -->
+        <div class="tab-pane fade show active" id="personal" role="tabpanel">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">اطلاعات شخصی</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="JobTitle" class="form-label">عنوان شغلی</label>
+                            <input asp-for="JobTitle" class="form-control" placeholder="مثلاً: برنامه‌نویس ارشد" />
+                            <span asp-validation-for="JobTitle" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="City" class="form-label">شهر</label>
+                            <input asp-for="City" class="form-control" />
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="AboutMe" class="form-label">درباره من</label>
+                        <textarea asp-for="AboutMe" class="form-control" rows="4" placeholder="خلاصه‌ای از خودتان و اهدافتان بنویسید..."></textarea>
+                        <span asp-validation-for="AboutMe" class="text-danger"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="LinkedInUrl" class="form-label">لینک لینکدین</label>
+                            <input asp-for="LinkedInUrl" class="form-control" placeholder="https://linkedin.com/in/..." />
+                            <span asp-validation-for="LinkedInUrl" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="GitHubUrl" class="form-label">لینک گیت‌هاب</label>
+                            <input asp-for="GitHubUrl" class="form-control" placeholder="https://github.com/..." />
+                            <span asp-validation-for="GitHubUrl" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- تحصیلات -->
+        <div class="tab-pane fade" id="education" role="tabpanel">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">سوابق تحصیلی</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="EducationDegree" class="form-label">مقطع تحصیلی</label>
+                            <select asp-for="EducationDegree" class="form-control">
+                                <option value="">انتخاب کنید</option>
+                                <option value="دیپلم">دیپلم</option>
+                                <option value="کاردانی">کاردانی</option>
+                                <option value="کارشناسی">کارشناسی</option>
+                                <option value="کارشناسی ارشد">کارشناسی ارشد</option>
+                                <option value="دکتری">دکتری</option>
+                            </select>
+                            <span asp-validation-for="EducationDegree" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="EducationField" class="form-label">رشته تحصیلی</label>
+                            <input asp-for="EducationField" class="form-control" placeholder="مثلاً: مهندسی کامپیوتر" />
+                            <span asp-validation-for="EducationField" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="University" class="form-label">دانشگاه</label>
+                            <input asp-for="University" class="form-control" />
+                            <span asp-validation-for="University" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="EducationStartYear" class="form-label">سال شروع</label>
+                            <input asp-for="EducationStartYear" type="number" class="form-control" min="1370" max="1410" />
+                            <span asp-validation-for="EducationStartYear" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label asp-for="EducationEndYear" class="form-label">سال پایان</label>
+                            <input asp-for="EducationEndYear" type="number" class="form-control" min="1370" max="1410" />
+                            <span asp-validation-for="EducationEndYear" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- سوابق کاری -->
+        <div class="tab-pane fade" id="work" role="tabpanel">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">سوابق کاری</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="WorkTitle" class="form-label">عنوان شغلی</label>
+                            <input asp-for="WorkTitle" class="form-control" placeholder="مثلاً: توسعه‌دهنده نرم‌افزار" />
+                            <span asp-validation-for="WorkTitle" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="CompanyName" class="form-label">نام شرکت</label>
+                            <input asp-for="CompanyName" class="form-control" />
+                            <span asp-validation-for="CompanyName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="WorkDescription" class="form-label">توضیحات شغلی</label>
+                        <textarea asp-for="WorkDescription" class="form-control" rows="3" placeholder="مسئولیت‌ها و دستاوردهای خود را شرح دهید..."></textarea>
+                        <span asp-validation-for="WorkDescription" class="text-danger"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="WorkStartYear" class="form-label">سال شروع</label>
+                            <input asp-for="WorkStartYear" type="number" class="form-control" min="1370" max="1410" />
+                            <span asp-validation-for="WorkStartYear" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="WorkEndYear" class="form-label">سال پایان</label>
+                            <input asp-for="WorkEndYear" type="number" class="form-control" min="1370" max="1410" placeholder="در صورت ادامه، خالی بگذارید" />
+                            <span asp-validation-for="WorkEndYear" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- مهارت‌ها -->
+        <div class="tab-pane fade" id="skills" role="tabpanel">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">مهارت‌ها و زبان‌ها</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label asp-for="Skills" class="form-label">مهارت‌ها</label>
+                        <textarea asp-for="Skills" class="form-control" rows="4" placeholder="مهارت‌های خود را وارد کنید (مثلاً: C#, ASP.NET Core, SQL Server, Git)"></textarea>
+                        <small class="text-muted">مهارت‌ها را با کاما (،) جدا کنید</small>
+                        <span asp-validation-for="Skills" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Languages" class="form-label">زبان‌ها</label>
+                        <textarea asp-for="Languages" class="form-control" rows="3" placeholder="زبان‌هایی که می‌دانید (مثلاً: فارسی - زبان مادری، انگلیسی - پیشرفته)"></textarea>
+                        <span asp-validation-for="Languages" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- فایل رزومه -->
+        <div class="tab-pane fade" id="file" role="tabpanel">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">آپلود فایل رزومه</h6>
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.ResumeFilePath))
+                    {
+                        <div class="alert alert-info">
+                            <i class="fas fa-file-pdf"></i> فایل رزومه شما قبلاً آپلود شده است.
+                            <a href="@Url.Action("Download")" class="alert-link">دانلود فایل فعلی</a>
+                        </div>
+                    }
+
+                    <div class="mb-3">
+                        <label for="resumeFile" class="form-label">فایل رزومه (PDF)</label>
+                        <input type="file" class="form-control" id="resumeFile" name="resumeFile" accept=".pdf" />
+                        <small class="text-muted">حداکثر حجم فایل: 5 مگابایت</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- دکمه ذخیره -->
+    <div class="text-end mt-4">
+        <button type="submit" class="btn btn-primary btn-lg">
+            <i class="fas fa-save"></i> ذخیره رزومه
+        </button>
+    </div>
+</form>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+}

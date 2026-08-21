@@ -1,0 +1,179 @@
+﻿@model FinalProject_MVC.Areas.JobSeeker.ViewModels.JobSeekerProfileViewModel
+
+@{
+    Layout = "~/Areas/JobSeeker/Views/Shared/_JobSeekerLayout.cshtml";
+    ViewData["Title"] = "پروفایل من";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">پروفایل من</h1>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+<div class="row">
+    <!-- بخش عکس پروفایل -->
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">عکس پروفایل</h6>
+            </div>
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
+                    {
+                        <img src="@Model.ProfileImageUrl" alt="عکس پروفایل" class="img-profile rounded-circle"
+                             style="width: 150px; height: 150px; object-fit: cover;" />
+                    }
+                    else
+                    {
+                        <div class="img-profile rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto"
+                             style="width: 150px; height: 150px; font-size: 60px;">
+                            @Model.FirstName?[0]@Model.LastName?[0]
+                        </div>
+                    }
+                </div>
+                <h5 class="mb-1">@Model.FirstName @Model.LastName</h5>
+                <p class="text-muted mb-1">@Model.JobTitle</p>
+                <p class="text-muted small mb-3">@Model.Email</p>
+                <button class="btn btn-sm btn-outline-primary" type="button" disabled>
+                    <i class="fas fa-camera"></i> تغییر عکس
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- فرم ویرایش پروفایل -->
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">ویرایش اطلاعات پروفایل</h6>
+            </div>
+            <div class="card-body">
+                <form asp-action="Index" method="post">
+                    @Html.AntiForgeryToken()
+
+                    <div class="row">
+                        <!-- نام -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="FirstName" class="form-label">نام</label>
+                            <input asp-for="FirstName" class="form-control" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+
+                        <!-- نام خانوادگی -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="LastName" class="form-label">نام خانوادگی</label>
+                            <input asp-for="LastName" class="form-control" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- ایمیل -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Email" class="form-label">ایمیل</label>
+                            <input asp-for="Email" class="form-control" readonly />
+                            <small class="text-muted">ایمیل قابل تغییر نیست</small>
+                        </div>
+
+                        <!-- شماره موبایل -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="PhoneNumber" class="form-label">شماره موبایل</label>
+                            <input asp-for="PhoneNumber" class="form-control" />
+                            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- تاریخ تولد -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="BirthDate" class="form-label">تاریخ تولد</label>
+                            <input asp-for="BirthDate" type="date" class="form-control" />
+                            <span asp-validation-for="BirthDate" class="text-danger"></span>
+                        </div>
+
+                        <!-- جنسیت -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="Gender" class="form-label">جنسیت</label>
+                            <select asp-for="Gender" class="form-control">
+                                <option value="">انتخاب کنید</option>
+                                <option value="Male">مرد</option>
+                                <option value="Female">زن</option>
+                            </select>
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- شهر -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="City" class="form-label">شهر</label>
+                            <input asp-for="City" class="form-control" />
+                            <span asp-validation-for="City" class="text-danger"></span>
+                        </div>
+
+                        <!-- عنوان شغلی -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="JobTitle" class="form-label">عنوان شغلی</label>
+                            <input asp-for="JobTitle" class="form-control" placeholder="مثلاً: برنامه‌نویس C#" />
+                            <span asp-validation-for="JobTitle" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <!-- آدرس -->
+                    <div class="mb-3">
+                        <label asp-for="Address" class="form-label">آدرس</label>
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+
+                    <!-- درباره من -->
+                    <div class="mb-3">
+                        <label asp-for="AboutMe" class="form-label">درباره من</label>
+                        <textarea asp-for="AboutMe" class="form-control" rows="4" placeholder="درباره خودتان بنویسید..."></textarea>
+                        <span asp-validation-for="AboutMe" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <!-- لینکدین -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="LinkedInUrl" class="form-label">لینک لینکدین</label>
+                            <input asp-for="LinkedInUrl" class="form-control" placeholder="https://linkedin.com/in/..." />
+                            <span asp-validation-for="LinkedInUrl" class="text-danger"></span>
+                        </div>
+
+                        <!-- گیت‌هاب -->
+                        <div class="col-md-6 mb-3">
+                            <label asp-for="GitHubUrl" class="form-label">لینک گیت‌هاب</label>
+                            <input asp-for="GitHubUrl" class="form-control" placeholder="https://github.com/..." />
+                            <span asp-validation-for="GitHubUrl" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="text-end mt-4">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> ذخیره تغییرات
+                        </button>
+                        <a href="/JobSeeker/Dashboard" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> انصراف
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js"></script>
+}

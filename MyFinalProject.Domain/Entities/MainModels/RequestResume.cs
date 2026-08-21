@@ -3,6 +3,7 @@ using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,12 +14,12 @@ namespace MyFinalProject.Domain.Entities.MainModels
     {
         private RequestResume()
         {
-            
+
         }
 
-        public RequestResume(string jobSeekerName ,string jobSeekerLastName 
-            ,string province ,string city ,DateTime startDate ,DateTime expireDate 
-            ,Guid userId ,Guid advertisementId ,Guid attachmentId)
+        public RequestResume(string jobSeekerName, string jobSeekerLastName
+            , string province, string city, DateTime startDate, DateTime expireDate
+            , Guid userId, Guid advertisementId, Guid attachmentId)
         {
             JobSeekerName = jobSeekerName;
             JobSeekerLastName = jobSeekerLastName;
@@ -37,7 +38,41 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public string JobSeekerName { get; private set; }
         public string JobSeekerLastName { get; private set; }
         public string Province { get; private set; }
-        public string City { get; private set; }
+        public string? City { get; private set; }
+        public string AboutMe { get; private set; }
+        public string Address { get; private set; }
+        public DateTime? BirthDate { get; private set; }
+        public string Gender { get; private set; }
+        public string LinkedInUrl { get; private set; }
+        public string GitHubUrl { get; private set; }
+        public string ProfileImageUrl { get; private set; }
+
+        public string EducationDegree { get; set; }
+
+        public string EducationField { get; set; }
+
+        public string University { get; set; }
+
+        public int? EducationStartYear { get; set; }
+
+        public int? EducationEndYear { get; set; }
+
+        public string WorkTitle { get; set; }
+
+        public string CompanyName { get; set; }
+
+        public string WorkDescription { get; set; }
+
+        public int? WorkStartYear { get; set; }
+
+        public int? WorkEndYear { get; set; }
+
+        public string Skills { get; set; }
+
+        public string Languages { get; set; }
+
+        public string ResumeFilePath { get; set; }
+
         public RequestStatus Status { get; set; } = RequestStatus.Pending;
         public User? User { get; private set; }
         public Guid UserId { get; private set; }
@@ -58,7 +93,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
             Status = RequestStatus.Fail;
         }
 
-        public void SetAttach(Guid? attachId ,Attach attach)
+        public void SetAttach(Guid? attachId, Attach attach)
         {
             AttachmentId = attachId;
             Attach = attach;

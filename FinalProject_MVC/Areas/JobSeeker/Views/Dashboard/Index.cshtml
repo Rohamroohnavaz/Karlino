@@ -6,176 +6,74 @@
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
     <h1 class="h3 mb-0 text-gray-800">داشبورد کارجو</h1>
     <a href="/JobSeeker/Jobs" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm">
-        <i class="fa-solid fa-briefcase fa-sm text-white-50"></i> جستجوی شغل
+        <i class="fas fa-briefcase fa-sm text-white-50"></i> جستجوی شغل
     </a>
 </div>
 
+<!-- پیام خوش‌آمدگویی -->
 <div class="row">
-
-    <!-- درخواست‌های ارسالی -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-start-primary border-start-4 border-start-4 shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col me-2">
-                        <div class="text-xs fw-bold text-primary text-uppercase mb-1">درخواست‌های ارسالی</div>
-                        <div class="h5 mb-0 fw-bold text-gray-800">12</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fa-solid fa-paper-plane fa-2x text-gray-300"></i>
-                    </div>
-                </div>
+    <div class="col-lg-12 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">خوش آمدید! 👋</h6>
             </div>
-        </div>
-    </div>
-
-    <!-- در حال بررسی -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-start-warning border-start-4 border-start-4 shadow h-100 py-2">
             <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col me-2">
-                        <div class="text-xs fw-bold text-warning text-uppercase mb-1">در حال بررسی</div>
-                        <div class="h5 mb-0 fw-bold text-gray-800">5</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fa-solid fa-clock fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- پذیرفته شده -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-start-success border-start-4 border-start-4 shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col me-2">
-                        <div class="text-xs fw-bold text-success text-uppercase mb-1">پذیرفته شده</div>
-                        <div class="h5 mb-0 fw-bold text-gray-800">3</div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fa-solid fa-calendar-check fa-2x text-gray-300"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- بازدید از رزومه -->
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="card border-start-info border-start-4 border-start-4 shadow h-100 py-2">
-            <div class="card-body">
-                <div class="row no-gutters align-items-center">
-                    <div class="col me-2">
-                        <div class="text-xs fw-bold text-info text-uppercase mb-1">بازدید از رزومه</div>
-                        <div class="row no-gutters align-items-center">
-                            <div class="col-auto">
-                                <div class="h5 mb-0 me-3 fw-bold text-gray-800">45</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-auto">
-                        <i class="fa-solid fa-eye fa-2x text-gray-300"></i>
-                    </div>
-                </div>
+                <p class="mb-0">
+                    به پنل کارجو خوش آمدید. از اینجا می‌توانید رزومه خود را مدیریت کنید،
+                    به دنبال فرصت‌های شغلی بگردید و درخواست‌های خود را پیگیری کنید.
+                </p>
             </div>
         </div>
     </div>
 </div>
 
+<!-- بخش‌های سریع - جای عوض شده -->
 <div class="row">
-
-    <!-- آخرین درخواست‌ها -->
-    <div class="col-lg-8 mb-4">
+    <!-- راهنما (سمت راست) -->
+    <div class="col-lg-6 mb-4">
         <div class="card shadow mb-4">
-            <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 fw-bold text-primary">آخرین درخواست‌های شما</h6>
-                <a href="/JobSeeker/MyApplications" class="btn btn-sm btn-outline-primary">مشاهده همه</a>
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-warning">راهنما</h6>
             </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-bordered" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>عنوان شغل</th>
-                                <th>شرکت</th>
-                                <th>تاریخ ارسال</th>
-                                <th>وضعیت</th>
-                                <th>عملیات</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>برنامه‌نویس C#</td>
-                                <td>شرکت فناوری اطلاعات</td>
-                                <td>1405/05/28</td>
-                                <td><span class="badge bg-warning text-dark">در حال بررسی</span></td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-primary">مشاهده</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>توسعه‌دهنده Full Stack</td>
-                                <td>استارتاپ نوآور</td>
-                                <td>1405/05/25</td>
-                                <td><span class="badge bg-success">پذیرفته شده</span></td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-primary">مشاهده</a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>توسعه‌دهنده موبایل</td>
-                                <td>شرکت دیجیتال مارکتینگ</td>
-                                <td>1405/05/20</td>
-                                <td><span class="badge bg-danger">رد شده</span></td>
-                                <td>
-                                    <a href="#" class="btn btn-sm btn-primary">مشاهده</a>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <ul class="mb-0">
+                    <li class="mb-2">پروفایل خود را کامل کنید تا کارفرماها شما را پیدا کنند</li>
+                    <li class="mb-2">رزومه خود را آپلود یا ویرایش کنید</li>
+                    <li class="mb-2">به دنبال فرصت‌های شغلی مناسب بگردید</li>
+                    <li class="mb-0">درخواست‌های خود را پیگیری کنید</li>
+                </ul>
             </div>
         </div>
     </div>
 
-    <!-- پیشنهادات ویژه -->
-    <div class="col-lg-4 mb-4">
+    <!-- دسترسی سریع (سمت چپ) -->
+    <div class="col-lg-6 mb-4">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 fw-bold text-warning">پیشنهادات ویژه</h6>
+                <h6 class="m-0 font-weight-bold text-primary">دسترسی سریع</h6>
             </div>
             <div class="card-body">
-                <div class="mb-3 pb-3 border-bottom">
-                    <h6 class="mb-1">برنامه‌نویس ASP.NET Core</h6>
-                    <p class="text-muted mb-2 small">شرکت نرم‌افزاری برتر</p>
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="badge bg-primary">تمام وقت</span>
-                        <small class="text-muted">تهران</small>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <a href="/JobSeeker/Profile" class="btn btn-outline-primary btn-block">
+                            <i class="fas fa-user"></i> ویرایش پروفایل
+                        </a>
                     </div>
-                    <a href="#" class="btn btn-sm btn-primary w-100">ارسال رزومه</a>
-                </div>
-
-                <div class="mb-3 pb-3 border-bottom">
-                    <h6 class="mb-1">توسعه‌دهنده React</h6>
-                    <p class="text-muted mb-2 small">استارتاپ فناوری</p>
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="badge bg-success">دورکاری</span>
-                        <small class="text-muted">ریموت</small>
+                    <div class="col-md-6 mb-3">
+                        <a href="/JobSeeker/Resume" class="btn btn-outline-success btn-block">
+                            <i class="fas fa-file-alt"></i> مدیریت رزومه
+                        </a>
                     </div>
-                    <a href="#" class="btn btn-sm btn-primary w-100">ارسال رزومه</a>
-                </div>
-
-                <div>
-                    <h6 class="mb-1">مهندس DevOps</h6>
-                    <p class="text-muted mb-2 small">شرکت ابری</p>
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="badge bg-info">پروژه‌ای</span>
-                        <small class="text-muted">اصفهان</small>
+                    <div class="col-md-6 mb-3">
+                        <a href="/JobSeeker/Jobs" class="btn btn-outline-info btn-block">
+                            <i class="fas fa-search"></i> جستجوی شغل
+                        </a>
                     </div>
-                    <a href="#" class="btn btn-sm btn-primary w-100">ارسال رزومه</a>
+                    <div class="col-md-6 mb-3">
+                        <a href="/JobSeeker/MyApplications" class="btn btn-outline-warning btn-block">
+                            <i class="fas fa-paper-plane"></i> درخواست‌های من
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>

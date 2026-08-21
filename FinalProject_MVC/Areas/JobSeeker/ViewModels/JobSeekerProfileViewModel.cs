@@ -15,8 +15,8 @@ namespace FinalProject_MVC.Areas.JobSeeker.ViewModels
         [Display(Name = "تاریخ تولد")]
         public DateTime? BirthDate { get; set; }
 
-        //[Display(Name = "جنسیت")]
-        //public string Gender { get; set; }
+        [Display(Name = "جنسیت")]
+        public string Gender { get; set; }
 
         [Display(Name = "شماره موبایل")]
         [Phone(ErrorMessage = "شماره موبایل معتبر نیست")]
@@ -32,18 +32,18 @@ namespace FinalProject_MVC.Areas.JobSeeker.ViewModels
         [Display(Name = "آدرس")]
         public string Address { get; set; }
 
-        //[Display(Name = "عنوان شغلی")]
-        //public string JobTitle { get; set; }
+        [Display(Name = "عنوان شغلی")]
+        public string JobTitle { get; set; }
 
-        //[Display(Name = "درباره من")]
-        //public string AboutMe { get; set; }
+        [Display(Name = "درباره من")]
+        public string AboutMe { get; set; }
 
-        //[Display(Name = "لینک لینکدین")]
-        //public string LinkedInUrl { get; set; }
+        [Display(Name = "لینک لینکدین")]
+        public string LinkedInUrl { get; set; }
 
-        //[Display(Name = "لینک گیت‌هاب")]
-        //public string GitHubUrl { get; set; }
+        [Display(Name = "لینک گیت‌هاب")]
+        public string GitHubUrl { get; set; }
 
-        //public string ProfileImageUrl { get; set; }
+        public string ProfileImageUrl { get; set; }
     }
 }

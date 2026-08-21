@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyFinalProject.Infrastructure;
 
@@ -11,9 +12,11 @@ using MyFinalProject.Infrastructure;
 namespace MyFinalProject.Infrastructure.Migrations
 {
     [DbContext(typeof(FinalDbContext))]
-    partial class FinalDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260821071001_JobSeekerPanelMig")]
+    partial class JobSeekerPanelMig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -812,9 +815,6 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CompanyName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -833,20 +833,6 @@ namespace MyFinalProject.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EducationDegree")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("EducationEndYear")
-                        .HasColumnType("int");
-
-                    b.Property<string>("EducationField")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("EducationStartYear")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("ExpireDate")
                         .HasColumnType("DATETIME");
@@ -870,10 +856,6 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("NVARCHAR(150)");
 
-                    b.Property<string>("Languages")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("LinkedInUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -892,14 +874,6 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ResumeFilePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Skills")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("DATETIME");
 
@@ -910,26 +884,8 @@ namespace MyFinalProject.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("University")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("WorkDescription")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("WorkEndYear")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("WorkStartYear")
-                        .HasColumnType("int");
-
-                    b.Property<string>("WorkTitle")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -1153,9 +1109,6 @@ namespace MyFinalProject.Infrastructure.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("CompanyId")
                         .HasColumnType("uniqueidentifier");
