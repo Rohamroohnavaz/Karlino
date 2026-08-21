@@ -1,0 +1,117 @@
+﻿@model FinalProject_MVC.Areas.JobSeeker.ViewModels.JobSearchViewModel
+
+@{
+    Layout = "~/Areas/JobSeeker/Views/Shared/_JobSeekerLayout.cshtml";
+    ViewData["Title"] = "جستجوی شغل";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">جستجوی شغل</h1>
+</div>
+
+<!-- فرم جستجو -->
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <form asp-action="Index" method="get" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">عنوان شغل</label>
+                <input type="text" name="jobTitle" class="form-control" 
+                       value="@Model.JobTitle" placeholder="مثلاً: برنامه‌نویس C#" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">شهر</label>
+                <input type="text" name="city" class="form-control" 
+                       value="@Model.City" placeholder="مثلاً: تهران" />
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">نوع همکاری</label>
+                <select name="jobType" class="form-control">
+                    <option value="">همه</option>
+                    @* <option value="1" @(Model.JobType == "1" ? "selected" : "")>تمام وقت</option>
+                    <option value="2" @(Model.JobType == "2" ? "selected" : "")>پاره وقت</option>
+                    <option value="3" @(Model.JobType == "3" ? "selected" : "")>دورکاری</option>
+                    <option value="4" @(Model.JobType == "4" ? "selected" : "")>پروژه‌ای</option>
+                    <option value="5" @(Model.JobType == "5" ? "selected" : "")>کارآموزی</option> *@
+                </select>
+            </div>
+            <div class="col-md-2 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fas fa-search"></i> جستجو
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.Jobs.Any())
+{
+    <div class="row">
+        @foreach (var job in Model.Jobs)
+        {
+            <div class="col-lg-6 mb-4">
+                <div class="card shadow h-100 @(job.HasApplied ? "border-success border-2" : "")">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="card-title mb-0">@job.Title</h5>
+                            @if (job.HasApplied)
+                            {
+                                <span class="badge bg-success">ارسال شده</span>
+                            }
+                        </div>
+                        
+                        <div class="mb-2">
+                            <i class="fas fa-building text-muted"></i>
+                            <span class="text-muted">@job.CompanyName</span>
+                        </div>
+                        
+                        <div class="mb-2">
+                            <i class="fas fa-map-marker-alt text-muted"></i>
+                            <span class="text-muted">@job.City</span>
+                        </div>
+                        
+                      @*   <div class="mb-2">
+                            <i class="fas fa-clock text-muted"></i>
+                            <span class="text-muted">@job.JobType</span>
+                        </div> *@
+                        
+                        <div class="mb-3">
+                            <i class="fas fa-money-bill-wave text-muted"></i>
+                            <span class="text-muted">@job.Salary</span>
+                        </div>
+                        
+                        <p class="card-text text-muted small">
+                            @if (!string.IsNullOrEmpty(job.Description))
+                            {
+                                @(job.Description.Length > 100 
+                                    ? job.Description.Substring(0, 100) + "..." 
+                                    : job.Description)
+                            }
+                        </p>
+                        
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar"></i> 
+                                @job.PostedDate.ToString("yyyy/MM/dd")
+                            </small>
+                            <a href="@Url.Action("Details", new { id = job.Id })" 
+                               class="btn @(job.HasApplied ? "btn-outline-success" : "btn-primary") btn-sm">
+                                <i class="fas @(job.HasApplied ? "fa-check" : "fa-arrow-left")"></i>
+                                @(job.HasApplied ? "جزئیات" : "مشاهده و ارسال")
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="card shadow mb-4">
+        <div class="card-body text-center py-5">
+            <i class="fas fa-search fa-3x text-gray-300 mb-3"></i>
+            <h5 class="text-gray-600">هیچ آگهی شغلی یافت نشد</h5>
+            <p class="text-muted">فیلترهای جستجو را تغییر دهید یا بعداً مراجعه کنید.</p>
+        </div>
+    </div>
+}

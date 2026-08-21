@@ -1,0 +1,127 @@
+﻿@model FinalProject_MVC.Areas.JobSeeker.ViewModels.JobsViewModel
+
+@{
+    Layout = "~/Areas/JobSeeker/Views/Shared/_JobSeekerLayout.cshtml";
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">@Model.Title</h1>
+    <a href="@Url.Action("Index")" class="btn btn-secondary btn-sm">
+        <i class="fas fa-arrow-right"></i> بازگشت به لیست
+    </a>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="row">
+    <!-- اطلاعات اصلی آگهی -->
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">اطلاعات شغل</h6>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6 mb-3">
+                        <strong><i class="fas fa-building"></i> شرکت:</strong>
+                        <p class="mb-0">@Model.CompanyName</p>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <strong><i class="fas fa-map-marker-alt"></i> شهر:</strong>
+                        <p class="mb-0">@Model.City</p>
+                    </div>
+                    @* <div class="col-md-6 mb-3">
+                        <strong><i class="fas fa-clock"></i> نوع همکاری:</strong>
+                        <p class="mb-0">@Model.JobType</p>
+                    </div> *@
+                    <div class="col-md-6 mb-3">
+                        <strong><i class="fas fa-money-bill-wave"></i> حقوق:</strong>
+                        <p class="mb-0">@Model.Salary</p>
+                    </div>
+                </div>
+
+                <hr />
+
+                <h6 class="font-weight-bold mb-3">شرح موقعیت شغلی:</h6>
+                <p class="mb-4">@Model.Description</p>
+@* 
+                @if (Model.Requirements.Any())
+                {
+                    <h6 class="font-weight-bold mb-3">شرایط و مهارت‌های مورد نیاز:</h6>
+                    <ul class="mb-0">
+                        @foreach (var req in Model.Requirements)
+                        {
+                            <li class="mb-2">@req</li>
+                        }
+                    </ul>
+                } *@
+            </div>
+        </div>
+    </div>
+
+    <!-- بخش اقدام -->
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow mb-4 @(Model.HasApplied ? "border-success border-2" : "")">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold @(Model.HasApplied ? "text-success" : "text-primary")">
+                    @(Model.HasApplied ? "وضعیت درخواست" : "اقدام به ارسال")
+                </h6>
+            </div>
+            <div class="card-body text-center">
+                @if (Model.HasApplied)
+                {
+                    <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                    <h5 class="text-success mb-2">شما برای این آگهی درخواست ارسال کرده‌اید</h5>
+                    <p class="text-muted mb-3">می‌توانید وضعیت درخواست خود را در بخش "درخواست‌های من" مشاهده کنید.</p>
+                    <a href="@Url.Action("Index", "MyApplications")" class="btn btn-outline-success">
+                        <i class="fas fa-list"></i> مشاهده درخواست‌ها
+                    </a>
+                }
+                else
+                {
+                    <i class="fas fa-briefcase fa-3x text-primary mb-3"></i>
+                    <h5 class="text-primary mb-2">آماده ارسال درخواست هستید؟</h5>
+                    <p class="text-muted mb-3">با ارسال رزومه خود، شانس استخدام خود را افزایش دهید.</p>
+                    <form asp-action="Apply" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="advertisementId" value="@Model.Id" />
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            <i class="fas fa-paper-plane"></i> ارسال رزومه
+                        </button>
+                    </form>
+                }
+            </div>
+        </div>
+
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-info">اطلاعات تکمیلی</h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <small class="text-muted">تاریخ انتشار:</small>
+                    <p class="mb-0">@Model.PostedDate.ToString("yyyy/MM/dd")</p>
+                </div>
+                <div class="mb-3">
+                    <small class="text-muted">مهلت ارسال:</small>
+                    <p class="mb-0">30 روز از تاریخ انتشار</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -5,8 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"] - پنل مدیریت</title>
 
+    <!-- ۱. فونت وزیرمتن (همون فونت خودت - دست نخورده) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
+
+    <!-- ۲. Font Awesome (برای آیکون‌ها) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- ۳. Bootstrap 5 RTL (جدید: برای درست شدن چیدمان کارت‌ها و جدول‌ها) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+
+    <!-- ۴. SB Admin 2 CSS (جدید: برای اعمال تم و رنگ‌بندی اصلی) -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/startbootstrap-sb-admin-2/4.1.4/css/sb-admin-2.min.css" rel="stylesheet" />
+
+    <!-- ۵. CSS سفارشی خودت -->
     <link rel="stylesheet" href="~/css/admin-sb.css" asp-append-version="true" />
 </head>
 <body>
@@ -88,6 +99,6 @@
 
         </div>
     </div>
-
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
