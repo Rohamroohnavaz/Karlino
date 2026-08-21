@@ -81,12 +81,11 @@ namespace FinalProject_MVC.Areas.JobSeeker.Controllers
             return View(existingViewModel);
         }
 
-        // POST: JobSeeker/Resume
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(ResumeViewModel viewModel, IFormFile resumeFile)
         {
-            if (ModelState.IsValid)
+            try
             {
                 var user = await GetUserAsync();
                 if (user == null) return NotFound();
@@ -101,29 +100,39 @@ namespace FinalProject_MVC.Areas.JobSeeker.Controllers
                     _dbContext.Resumes.Add(resume);
                 }
 
-                // آپدیت اطلاعات رزومه
-                SetProperty(resume, "Title", viewModel.JobTitle);
-                SetProperty(resume, "AboutMe", viewModel.AboutMe);
-                SetProperty(resume, "City", viewModel.City);
-                SetProperty(resume, "Address", viewModel.Address);
-                SetProperty(resume, "LinkedInUrl", viewModel.LinkedInUrl);
-                SetProperty(resume, "GitHubUrl", viewModel.GitHubUrl);
-                SetProperty(resume, "EducationDegree", viewModel.EducationDegree);
-                SetProperty(resume, "EducationField", viewModel.EducationField);
-                SetProperty(resume, "University", viewModel.University);
+                SetStringProperty(resume, "Title", viewModel.JobTitle);
+                SetStringProperty(resume, "AboutMe", viewModel.AboutMe);
+                SetStringProperty(resume, "City", viewModel.City);
+                SetStringProperty(resume, "Address", viewModel.Address);
+                SetStringProperty(resume, "LinkedInUrl", viewModel.LinkedInUrl);
+                SetStringProperty(resume, "GitHubUrl", viewModel.GitHubUrl);
+                SetStringProperty(resume, "EducationDegree", viewModel.EducationDegree);
+                SetStringProperty(resume, "EducationField", viewModel.EducationField);
+                SetStringProperty(resume, "University", viewModel.University);
+                SetStringProperty(resume, "WorkTitle", viewModel.WorkTitle);
+                SetStringProperty(resume, "CompanyName", viewModel.CompanyName);
+                SetStringProperty(resume, "WorkDescription", viewModel.WorkDescription);
+                SetStringProperty(resume, "Skills", viewModel.Skills);
+                SetStringProperty(resume, "Languages", viewModel.Languages);
+
+                SetStringProperty(resume, "Description", viewModel.AboutMe);
+
+                SetStringProperty(resume, "JobSeekerName", user.FirstName ?? "نام");
+                SetStringProperty(resume, "JobSeekerLastName", user.LastName ?? "نام خانوادگی");
+                SetStringProperty(resume, "Province", "تهران");
+                SetStringProperty(resume, "Gender", "");
+                SetStringProperty(resume, "ProfileImageUrl", "");
+                SetStringProperty(resume, "ResumeFilePath", "");
+
                 SetProperty(resume, "EducationStartYear", viewModel.EducationStartYear);
                 SetProperty(resume, "EducationEndYear", viewModel.EducationEndYear);
-                SetProperty(resume, "WorkTitle", viewModel.WorkTitle);
-                SetProperty(resume, "CompanyName", viewModel.CompanyName);
-                SetProperty(resume, "WorkDescription", viewModel.WorkDescription);
                 SetProperty(resume, "WorkStartYear", viewModel.WorkStartYear);
                 SetProperty(resume, "WorkEndYear", viewModel.WorkEndYear);
-                SetProperty(resume, "Skills", viewModel.Skills);
-                SetProperty(resume, "Languages", viewModel.Languages);
 
                 if (resumeFile != null && resumeFile.Length > 0)
                 {
                     var uploadsFolder = Path.Combine(_webHostEnvironment.WebRootPath, "resumes");
+
                     if (!Directory.Exists(uploadsFolder))
                     {
                         Directory.CreateDirectory(uploadsFolder);
@@ -137,17 +146,27 @@ namespace FinalProject_MVC.Areas.JobSeeker.Controllers
                         await resumeFile.CopyToAsync(fileStream);
                     }
 
-                    SetProperty(resume, "ResumeFilePath", $"/resumes/{uniqueFileName}");
+                    if (System.IO.File.Exists(filePath))
+                    {
+                        SetStringProperty(resume, "ResumeFilePath", $"/resumes/{uniqueFileName}");
+                    }
                 }
+
+                SetProperty(resume, "StartDate", DateTime.Now);
+                SetProperty(resume, "ExpireDate", DateTime.Now.AddYears(1));
+                SetProperty(resume, "CreatedAt", DateTime.Now);
+                SetProperty(resume, "ModifiedAt", DateTime.Now);
 
                 await _dbContext.SaveChangesAsync();
 
                 TempData["SuccessMessage"] = "رزومه با موفقیت ذخیره شد";
                 return RedirectToAction(nameof(Index));
             }
-
-            ViewData["Title"] = "رزومه من";
-            return View(viewModel);
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"خطا در ذخیره رزومه: {ex.Message}";
+                return View(viewModel);
+            }
         }
 
         public async Task<IActionResult> Download()
@@ -212,10 +231,45 @@ namespace FinalProject_MVC.Areas.JobSeeker.Controllers
 
         private void SetProperty<T>(T entity, string propertyName, object value)
         {
-            var property = typeof(T).GetProperty(propertyName);
+            var property = typeof(T).GetProperty(propertyName,
+                System.Reflection.BindingFlags.Public |
+                System.Reflection.BindingFlags.NonPublic |
+                System.Reflection.BindingFlags.Instance);
+
             if (property != null)
             {
-                property.SetValue(entity, value);
+                try
+                {
+                    if (value != null && property.PropertyType != value.GetType())
+                    {
+                        try
+                        {
+                            value = Convert.ChangeType(value, property.PropertyType);
+                        }
+                        catch { }
+                    }
+                    property.SetValue(entity, value);
+                }
+                catch { }
+            }
+        }
+
+        private void SetStringProperty<T>(T entity, string propertyName, string value)
+        {
+            value ??= ""; 
+
+            var property = typeof(T).GetProperty(propertyName,
+                System.Reflection.BindingFlags.Public |
+                System.Reflection.BindingFlags.NonPublic |
+                System.Reflection.BindingFlags.Instance);
+
+            if (property != null)
+            {
+                try
+                {
+                    property.SetValue(entity, value);
+                }
+                catch { }
             }
         }
     }

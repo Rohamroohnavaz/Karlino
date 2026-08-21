@@ -77,7 +77,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public User? User { get; private set; }
         public Guid UserId { get; private set; }
         public Advertisement Advertisement { get; private set; }
-        public Guid AdvertisementId { get; set; }
+        public Guid? AdvertisementId { get; set; }
         public Guid? AttachmentId { get; set; }
         public Attach? Attach { get; set; }
         public DateTime StartDate { get; private set; }
