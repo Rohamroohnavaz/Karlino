@@ -54,6 +54,7 @@ builder.Services.AddScoped<UserManager<User>>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<ISettingRepository, SettingRepository>();
+builder.Services.AddScoped<IAdvertisementService, AdvertisementService>();
 builder.Services
     .AddIdentityCore<User>(options =>
     {
@@ -103,6 +104,10 @@ app.MapAreaControllerRoute(
     name: "JobSeeker",
     areaName: "JobSeeker",
     pattern: "JobSeeker/{controller=Dashboard}/{action=Index}/{id?}");
+
+app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
 app.MapControllerRoute(
     name: "default",

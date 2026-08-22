@@ -37,5 +37,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
         Task<bool> IsOwnerAsync(Guid advertisementId, string email);
 
         Task<Guid?> GetCompanyIdByUserEmailAsync(string email);
+
+        Task<List<Advertisement>> GetByUserIdAsync(Guid userId);
     }
 }

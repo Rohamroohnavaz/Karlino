@@ -29,7 +29,6 @@
 }
 
 <div class="row">
-    <!-- اطلاعات اصلی آگهی -->
     <div class="col-lg-8 mb-4">
         <div class="card shadow mb-4">
             <div class="card-header py-3">
@@ -74,7 +73,6 @@
         </div>
     </div>
 
-    <!-- بخش اقدام -->
     <div class="col-lg-4 mb-4">
         <div class="card shadow mb-4 @(Model.HasApplied ? "border-success border-2" : "")">
             <div class="card-header py-3">
@@ -97,7 +95,7 @@
                     <i class="fas fa-briefcase fa-3x text-primary mb-3"></i>
                     <h5 class="text-primary mb-2">آماده ارسال درخواست هستید؟</h5>
                     <p class="text-muted mb-3">با ارسال رزومه خود، شانس استخدام خود را افزایش دهید.</p>
-                    <form asp-action="Apply" method="post">
+                    <form asp-action="Apply" asp-controller="Jobs" method="post">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="advertisementId" value="@Model.Id" />
                         <button type="submit" class="btn btn-primary btn-lg w-100">

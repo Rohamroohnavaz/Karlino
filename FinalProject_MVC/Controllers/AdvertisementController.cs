@@ -1,25 +1,35 @@
 ﻿using FinalProject_MVC.Models;
 using FinalProject_MVC.Services;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MyFinalProject.Application.Constants;
+using MyFinalProject.Application.Services.ServiceInterfaces;
+using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
 using System.Reflection;
 
 namespace FinalProject_MVC.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = RoleConstants.EmployerRole)]
     [Route("Advertisements")]
     public class AdvertisementController : Controller
     {
         private readonly IApiService _apiService;
+        private readonly IAdvertisementService _advertisementService;
         private readonly IAdvertisementRepository _advertisementRepository;
+        private readonly UserManager<User> _userManager;
 
         public AdvertisementController(IApiService apiService 
-            ,IAdvertisementRepository advertisementRepository)
+            ,IAdvertisementService advertisementService
+            ,IAdvertisementRepository advertisementRepository
+            ,UserManager<User> userManager
+            )
         {
             _apiService = apiService;
+            _advertisementService = advertisementService;
             _advertisementRepository = advertisementRepository;
+            _userManager = userManager;
         }
 
         [AllowAnonymous]
@@ -273,6 +283,46 @@ namespace FinalProject_MVC.Controllers
                 return false;
 
             return await _advertisementRepository.IsOwnerAsync(id, email);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("[action]/{id}")]
+        public async Task<IActionResult> Feature(Guid id, int days = 7)
+        {
+            var user = await _userManager.FindByEmailAsync(User.Identity?.Name);
+            if (user == null) return NotFound();
+
+            var success = await _advertisementService.FeatureAdvertisementAsync(id, user.Id, days);
+
+            if (!success)
+            {
+                TempData["ErrorMessage"] = "آگهی یافت نشد یا دسترسی ندارید";
+                return RedirectToAction(nameof(MyAds));
+            }
+
+            TempData["SuccessMessage"] = "آگهی ویژه شد!";
+            return RedirectToAction(nameof(MyAds));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("[action]/{id}")]
+        public async Task<IActionResult> Unfeature(Guid id)
+        {
+            var user = await _userManager.FindByEmailAsync(User.Identity?.Name);
+            if (user == null) return NotFound();
+
+            var success = await _advertisementService.UnfeatureAdvertisementAsync(id, user.Id);
+
+            if (!success)
+            {
+                TempData["ErrorMessage"] = "آگهی یافت نشد یا دسترسی ندارید";
+                return RedirectToAction(nameof(MyAds));
+            }
+
+            TempData["SuccessMessage"] = "آگهی از حالت ویژه خارج شد";
+            return RedirectToAction(nameof(MyAds));
         }
     }
 }

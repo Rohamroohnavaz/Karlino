@@ -169,5 +169,40 @@ namespace MyFinalProject.Application.Services.MainServices
             await _advertisementRepository.HardDeleteAsync(command.Id);
             await _unitOfWork.SaveChangesAsync();
         }
+
+        public async Task<bool> FeatureAdvertisementAsync(Guid advertisementId, Guid userId, int days)
+        {
+            var ad = await _advertisementRepository.GetByIdAsync(advertisementId);
+
+            if (ad == null || ad.Company?.UserId != userId)
+                return false;
+
+            ad.MakeFeatured(days);
+
+            await _advertisementRepository.UpdateAsync(ad);
+            await _unitOfWork.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> UnfeatureAdvertisementAsync(Guid advertisementId, Guid userId)
+        {
+            var ad = await _advertisementRepository.GetByIdAsync(advertisementId);
+
+            if (ad == null || ad.Company?.UserId != userId)
+                return false;
+
+            ad.CancelFeature();
+
+            await _advertisementRepository.UpdateAsync(ad);
+            await _unitOfWork.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<List<Advertisement>> GetMyAdsAsync(Guid userId)
+        {
+            return await _advertisementRepository.GetByUserIdAsync(userId);
+        }
     }
 }

@@ -17,9 +17,16 @@
     <title>@ViewData["Title"] - @siteName</title>
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/rastikerdar/vazirmatn@v33.003/Vazirmatn-font-face.css" />
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css" rel="stylesheet" />
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" />
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/startbootstrap-sb-admin-2/4.1.4/css/sb-admin-2.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/admin-sb.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/employer-applications.css" asp-append-version="true" />
 </head>
 <body>
 
@@ -54,6 +61,10 @@
 
                     <a class="nav-link" asp-controller="Advertisement" asp-action="MyAds">
                         <i class="fa-solid fa-list"></i><span>آگهی‌های من</span>
+                    </a>
+
+                    <a class="nav-link" asp-controller="EmployerApplications" asp-action="Index">
+                        <i class="fa-solid fa-envelope-open-text"></i><span>درخواست‌های دریافتی</span>
                     </a>
 
                     <a class="nav-link" asp-controller="Advertisement" asp-action="Create">
@@ -131,5 +142,13 @@
 
     @await RenderSectionAsync("Scripts", required: false)
 
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/startbootstrap-sb-admin-2/4.1.4/js/sb-admin-2.min.js"></script>
+
+    @RenderSection("Scripts", required: false)
 </body>
+
 </html>

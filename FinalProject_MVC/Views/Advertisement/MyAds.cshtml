@@ -8,9 +8,9 @@
     var total = Model.Count;
     var active = Model.Count(a => a.IsActive);
     var inactive = total - active;
+    var featured = Model.Count(a => a.IsFeatured && a.FeaturedUntil.HasValue && a.FeaturedUntil.Value > DateTime.Now);
 }
 
-<!-- 📊 آمار آگهی‌های من -->
 <div class="sb-cards">
 
     <div class="sb-card sb-card-primary">
@@ -43,9 +43,18 @@
         </div>
     </div>
 
+    <div class="sb-card sb-card-warning">
+        <div class="sb-card-row">
+            <div>
+                <div class="text-xs">آگهی‌های ویژه</div>
+                <div class="sb-value">@featured</div>
+            </div>
+            <i class="fa-solid fa-star sb-icon"></i>
+        </div>
+    </div>
+
 </div>
 
-<!-- 📋 جدول آگهی‌های من -->
 <div class="sb-table-card">
 
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; flex-wrap:wrap; gap:.6rem;">
@@ -56,6 +65,22 @@
         </a>
     </div>
 
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
     <table class="sb-table">
         <thead>
             <tr>
@@ -63,6 +88,7 @@
                 <th>شهر</th>
                 <th>تاریخ ثبت</th>
                 <th>وضعیت</th>
+                <th>ویژه</th>
                 <th>عملیات</th>
             </tr>
         </thead>
@@ -70,7 +96,7 @@
             @if (Model.Count == 0)
             {
                 <tr>
-                    <td colspan="5" style="text-align:center; color:#858796; padding:2rem 0;">
+                    <td colspan="6" style="text-align:center; color:#858796; padding:2rem 0;">
                         هنوز آگهی‌ای ثبت نکرده‌اید
                     </td>
                 </tr>
@@ -79,7 +105,11 @@
             {
                 @foreach (var ad in Model)
                 {
-                    <tr>
+                    // بررسی وضعیت ویژه
+                    bool isFeatured = ad.IsFeatured && ad.FeaturedUntil.HasValue && ad.FeaturedUntil.Value > DateTime.Now;
+                    string rowClass = isFeatured ? "table-warning" : "";
+
+                    <tr class="@rowClass">
                         <td>@ad.Title</td>
                         <td>@ad.CityName</td>
                         <td>@DisplayHelper.FormatDate(ad.CreatedAt)</td>
@@ -91,6 +121,19 @@
                             else
                             {
                                 <span class="badge badge-warning">در انتظار تأیید</span>
+                            }
+                        </td>
+                        <td>
+                            @if (isFeatured)
+                            {
+                                <span class="badge badge-warning">
+                                    <i class="fa-solid fa-star"></i>
+                                    تا @ad.FeaturedUntil.Value.ToString("yyyy/MM/dd")
+                                </span>
+                            }
+                            else
+                            {
+                                <span class="badge badge-secondary">عادی</span>
                             }
                         </td>
                         <td style="display:flex; gap:.4rem; flex-wrap:wrap;">
@@ -105,10 +148,37 @@
                                 ویرایش
                             </a>
 
+                            @if (isFeatured)
+                            {
+                                <form asp-controller="Advertisement" asp-action="Unfeature" asp-route-id="@ad.Id"
+                                      method="post"
+                                      onsubmit="return confirm('آیا از لغو وضعیت ویژه اطمینان دارید؟');">
+                                      @Html.AntiForgeryToken()
+                                      <input type="hidden" name="id" value="@ad.Id" />
+                                      <button type="submit" class="btn-sb btn-sb-secondary">
+                                        <i class="fa-solid fa-times"></i> لغو ویژه
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <form asp-controller="Advertisement" asp-action="Feature" asp-route-id="@ad.Id"
+                                      method="post"
+                                      onsubmit="return confirm('آیا می‌خواهید این آگهی را به مدت ۷ روز ویژه کنید؟');">
+                                      @Html.AntiForgeryToken()
+                                      <input type="hidden" name="id" value="@ad.Id" />
+                                      <input type="hidden" name="days" value="7" />
+                                    <button type="submit" class="btn-sb btn-sb-warning">
+                                        <i class="fa-solid fa-star"></i> ویژه کردن
+                                    </button>
+                                </form>
+                            }
+
                             <form asp-controller="Advertisement" asp-action="DeleteConfirmed" asp-route-id="@ad.Id"
                                   method="post"
                                   onsubmit="return confirm('آیا از حذف این آگهی مطمئن هستید؟');">
-                                <button type="submit" class="btn-sb btn-sb-danger">حذف</button>
+                                  @Html.AntiForgeryToken()
+                                  <button type="submit" class="btn-sb btn-sb-danger">حذف</button>
                             </form>
 
                         </td>

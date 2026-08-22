@@ -57,6 +57,17 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 .ToListAsync();
         }
 
+        public async Task<List<Advertisement>> GetByUserIdAsync(Guid userId)
+        {
+            return await _dbContext.Advertisements
+                .Include(a => a.Company) 
+                .Where(a => a.Company != null &&
+                            a.Company.UserId == userId &&
+                            !a.IsDeleted)
+                .OrderByDescending(a => a.CreatedAt)
+                .ToListAsync();
+        }
+
         //public async Task<Advertisement?> GetAdvertisementWithRequestResume(Guid resumeId)
         //{
         //    return await _dbContext.Advertisements

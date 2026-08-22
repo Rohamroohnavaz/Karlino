@@ -26,5 +26,11 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
         Task UpdateAdvertisement(UpdateAdvertisementCommand command);
 
         Task DeleteAdvertisement(DeleteAdvertisementCommand command);
+
+        Task<bool> FeatureAdvertisementAsync(Guid advertisementId, Guid userId, int days);
+
+        Task<bool> UnfeatureAdvertisementAsync(Guid advertisementId, Guid userId);
+
+        Task<List<Advertisement>> GetMyAdsAsync(Guid userId);
     }
 }
