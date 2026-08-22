@@ -9,5 +9,6 @@
         public DateTime AppliedDate { get; set; }
         public string Status { get; set; }
         public string StatusBadgeClass { get; set; }
+        public Guid AdvertisementId { get; set; }
     }
 }
