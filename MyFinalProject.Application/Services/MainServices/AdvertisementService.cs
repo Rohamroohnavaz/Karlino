@@ -1,9 +1,11 @@
 ﻿using MyFinalProject.Application.Commands.AdverCommands;
 using MyFinalProject.Application.Commands.ViewModels;
 using MyFinalProject.Application.DTOs;
+using MyFinalProject.Application.DTOs.AdminDTOs;
 using MyFinalProject.Application.Filters;
 using MyFinalProject.Application.Services.ServiceInterfaces;
 using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Infrastructure.DTO;
 using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
 using MyFinalProject.Infrastructure.RepoExceptions;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
@@ -172,7 +174,7 @@ namespace MyFinalProject.Application.Services.MainServices
 
         public async Task<bool> FeatureAdvertisementAsync(Guid advertisementId, Guid userId, int days)
         {
-            var ad = await _advertisementRepository.GetByIdAsync(advertisementId);
+            var ad = await _advertisementRepository.GetByIdWithCompanyAsync(advertisementId);
 
             if (ad == null || ad.Company?.UserId != userId)
                 return false;
@@ -187,7 +189,7 @@ namespace MyFinalProject.Application.Services.MainServices
 
         public async Task<bool> UnfeatureAdvertisementAsync(Guid advertisementId, Guid userId)
         {
-            var ad = await _advertisementRepository.GetByIdAsync(advertisementId);
+            var ad = await _advertisementRepository.GetByIdWithCompanyAsync(advertisementId);
 
             if (ad == null || ad.Company?.UserId != userId)
                 return false;
@@ -200,7 +202,7 @@ namespace MyFinalProject.Application.Services.MainServices
             return true;
         }
 
-        public async Task<List<Advertisement>> GetMyAdsAsync(Guid userId)
+        public async Task<List<Infrastructure.DTO.AdminAdvertisementTableDto>> GetMyAdsAsync(Guid userId)
         {
             return await _advertisementRepository.GetByUserIdAsync(userId);
         }

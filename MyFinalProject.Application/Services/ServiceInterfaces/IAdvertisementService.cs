@@ -31,6 +31,6 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
 
         Task<bool> UnfeatureAdvertisementAsync(Guid advertisementId, Guid userId);
 
-        Task<List<Advertisement>> GetMyAdsAsync(Guid userId);
+        //Task<List<Infrastructure.DTO.AdminAdvertisementTableDto>> GetMyAdsAsync(Guid userId);
     }
 }

@@ -38,6 +38,8 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
 
         Task<Guid?> GetCompanyIdByUserEmailAsync(string email);
 
-        Task<List<Advertisement>> GetByUserIdAsync(Guid userId);
+        Task<List<AdminAdvertisementTableDto>> GetByUserIdAsync(Guid userId);
+
+        Task<Advertisement> GetByIdWithCompanyAsync(Guid id);
     }
 }
