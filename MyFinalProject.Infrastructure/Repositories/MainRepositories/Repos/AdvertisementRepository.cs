@@ -57,6 +57,26 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 .ToListAsync();
         }
 
+        public async Task<List<AdminAdvertisementTableDto>> GetByUserIdAsync(Guid userId)
+        {
+            return await _dbContext.Advertisements
+                .Include(a => a.Company)
+                 .Where(a => a.Company != null &&
+                    a.Company.UserId == userId &&
+                    !a.IsDeleted)
+                .Select(a => new AdminAdvertisementTableDto
+                {
+                    Id = a.Id,
+                    Title = a.Title,
+                    CityName = a.City,
+                    CreatedAt = a.CreatedAt,
+                    IsActive = a.IsActive,
+                    IsFeatured = a.IsFeatured,  
+                    FeaturedUntil = a.FeaturedUntil
+                })
+                .ToListAsync();
+        }
+
         //public async Task<Advertisement?> GetAdvertisementWithRequestResume(Guid resumeId)
         //{
         //    return await _dbContext.Advertisements
@@ -96,10 +116,10 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                     Id = a.Id,
                     Title = a.Title,
                     Description = a.Description,
-                    EmployerName = a.User.FirstName + " " + a.User.LastName,  
-                    EmployerEmail = a.User.Email,                                  
-                    CityName = a.City,                                           
-                    CategoryTitle = a.Category.CategoryName,                                
+                    EmployerName = a.User.FirstName + " " + a.User.LastName,
+                    EmployerEmail = a.User.Email,
+                    CityName = a.City,
+                    CategoryTitle = a.Category.CategoryName,
                     CreatedAt = a.CreatedAt,
                     IsActive = a.IsActive
                 })
@@ -131,8 +151,8 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 {
                     Id = a.Id,
                     Title = a.Title,
-                    EmployerName = a.CompanyName,           
-                    CityName = a.City,                  
+                    EmployerName = a.CompanyName,
+                    CityName = a.City,
                     CreatedAt = a.CreatedAt,
                     IsActive = a.IsActive
                 })
@@ -140,7 +160,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
         }
 
         public async Task<(List<AdminAdvertisementTableDto>, int)> GetPagedForAdminAsync(
-             string? search,bool? isActive, int page,int pageSize)
+             string? search, bool? isActive, int page, int pageSize)
         {
             var query = _dbContext.Advertisements.AsQueryable();
 
@@ -164,7 +184,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 {
                     Id = a.Id,
                     Title = a.Title,
-                    EmployerName = a.CompanyName,  
+                    EmployerName = a.CompanyName,
                     CityName = a.City,
                     CreatedAt = a.CreatedAt,
                     IsActive = a.IsActive
@@ -178,7 +198,14 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
         {
             return await _dbContext.Advertisements
                 .AnyAsync(a => a.Id == advertisementId
-                            && a.Company.User.Email == email); 
+                            && a.Company.User.Email == email);
+        }
+
+        public async Task<Advertisement> GetByIdWithCompanyAsync(Guid id)
+        {
+            return await _dbContext.Advertisements
+                .Include(a => a.Company)
+                .FirstOrDefaultAsync(a => a.Id == id);
         }
     }
 }

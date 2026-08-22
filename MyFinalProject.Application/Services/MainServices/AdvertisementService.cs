@@ -1,9 +1,11 @@
 ﻿using MyFinalProject.Application.Commands.AdverCommands;
 using MyFinalProject.Application.Commands.ViewModels;
 using MyFinalProject.Application.DTOs;
+using MyFinalProject.Application.DTOs.AdminDTOs;
 using MyFinalProject.Application.Filters;
 using MyFinalProject.Application.Services.ServiceInterfaces;
 using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Infrastructure.DTO;
 using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
 using MyFinalProject.Infrastructure.RepoExceptions;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
@@ -168,6 +170,41 @@ namespace MyFinalProject.Application.Services.MainServices
 
             await _advertisementRepository.HardDeleteAsync(command.Id);
             await _unitOfWork.SaveChangesAsync();
+        }
+
+        public async Task<bool> FeatureAdvertisementAsync(Guid advertisementId, Guid userId, int days)
+        {
+            var ad = await _advertisementRepository.GetByIdWithCompanyAsync(advertisementId);
+
+            if (ad == null || ad.Company?.UserId != userId)
+                return false;
+
+            ad.MakeFeatured(days);
+
+            await _advertisementRepository.UpdateAsync(ad);
+            await _unitOfWork.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<bool> UnfeatureAdvertisementAsync(Guid advertisementId, Guid userId)
+        {
+            var ad = await _advertisementRepository.GetByIdWithCompanyAsync(advertisementId);
+
+            if (ad == null || ad.Company?.UserId != userId)
+                return false;
+
+            ad.CancelFeature();
+
+            await _advertisementRepository.UpdateAsync(ad);
+            await _unitOfWork.SaveChangesAsync();
+
+            return true;
+        }
+
+        public async Task<List<Infrastructure.DTO.AdminAdvertisementTableDto>> GetMyAdsAsync(Guid userId)
+        {
+            return await _advertisementRepository.GetByUserIdAsync(userId);
         }
     }
 }

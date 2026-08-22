@@ -30,44 +30,58 @@ namespace FinalProject_MVC.Areas.JobSeeker.Controllers
             var applications = await _dbContext.Resumes
                 .Where(r => r.UserId == user.Id)
                 .Include(r => r.Advertisement)
-                .OrderByDescending(r => r.CreatedAt)
+                    .ThenInclude(a => a != null ? a.Company : null)
                 .ToListAsync();
+
+            foreach (var app in applications)
+            {
+                System.Diagnostics.Debug.WriteLine($"Request ID: {app.Id}");
+                System.Diagnostics.Debug.WriteLine($"Advertisement: {app.Advertisement?.Title ?? "NULL"}");
+                System.Diagnostics.Debug.WriteLine($"Company: {app.Advertisement?.CompanyName ?? "NULL"}");
+            }
 
             var viewModel = applications.Select(r => new MyApplicationsViewModel
             {
                 Id = r.Id,
-                JobTitle = r.Advertisement?.Title ?? "عنوان شغل نامشخص",
-                CompanyName = r.Advertisement?.CompanyName ?? "شرکت نامشخص",
-                City = r.Advertisement?.City ?? "",
-                AppliedDate = r.CreatedAt,
-                Status = GetStatusText(((int)r.Status)),
-                StatusBadgeClass = GetStatusBadgeClass(((int)r.Status))
+                JobTitle = r.Advertisement != null && !string.IsNullOrEmpty(r.Advertisement.Title)
+                    ? r.Advertisement.Title
+                    : "عنوان شغل نامشخص",
+                CompanyName = r.Advertisement != null && r.Advertisement.Company != null && !string.IsNullOrEmpty(r.Advertisement.Company.CompanyName)
+                    ? r.Advertisement.Company.CompanyName
+                    : "شرکت نامشخص",
+                City = r.Advertisement?.City ?? r.City ?? "",
+                AppliedDate = r.StartDate,
+                Status = GetStatusText(r.Status),
+                StatusBadgeClass = GetStatusBadgeClass(r.Status),
+                AdvertisementId = r.AdvertisementId
             }).ToList();
 
             ViewData["Title"] = "درخواست‌های من";
             return View(viewModel);
         }
 
-        private string GetStatusText(int status)
+        private string GetStatusText(MyFinalProject.Domain.Entities.Enums.RequestStatus status)
         {
             return status switch
             {
-                0 => "در انتظار بررسی",
-                1 => "در حال بررسی",
-                2 => "پذیرفته شده",
-                3 => "رد شده",
+                MyFinalProject.Domain.Entities.Enums.RequestStatus.Pending => "در انتظار بررسی",
+                MyFinalProject.Domain.Entities.Enums.RequestStatus.CurrentlyViewing => "در حال بررسی",
+                MyFinalProject.Domain.Entities.Enums.RequestStatus.Interview => "دعوت به مصاحبه",
+                MyFinalProject.Domain.Entities.Enums.RequestStatus.Success => "پذیرفته شده",
+                MyFinalProject.Domain.Entities.Enums.RequestStatus.Fail => "رد شده",
                 _ => "نامشخص"
             };
         }
 
-        private string GetStatusBadgeClass(int status)
+        private string GetStatusBadgeClass(MyFinalProject.Domain.Entities.Enums.RequestStatus status)
         {
             return status switch
             {
-                0 => "bg-secondary",
-                1 => "bg-warning text-dark",
-                2 => "bg-success",
-                3 => "bg-danger",
+                MyFinalProject.Domain.Entities.Enums.RequestStatus.Pending => "bg-secondary",
+                MyFinalProject.Domain.Entities.Enums.RequestStatus.CurrentlyViewing => "bg-warning text-dark",
+                MyFinalProject.Domain.Entities.Enums.RequestStatus.Interview => "bg-warning text-dark",
+                MyFinalProject.Domain.Entities.Enums.RequestStatus.Success => "bg-success",
+                MyFinalProject.Domain.Entities.Enums.RequestStatus.Fail => "bg-danger",
                 _ => "bg-secondary"
             };
         }

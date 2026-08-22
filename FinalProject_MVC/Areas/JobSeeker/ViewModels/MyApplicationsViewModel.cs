@@ -3,6 +3,7 @@
     public class MyApplicationsViewModel
     {
         public Guid Id { get; set; }
+        public Guid? AdvertisementId { get; set; }
         public string JobTitle { get; set; }
         public string CompanyName { get; set; }
         public string City { get; set; }

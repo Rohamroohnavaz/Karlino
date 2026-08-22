@@ -214,7 +214,7 @@ namespace MyFinalProject.Application.Services.MainServices
             RequestStatus status, CancellationToken cancellationToken)
         {
             var jobSeeker = await _userManager.FindByIdAsync(request.UserId.ToString());
-            var advertisement = await _advertiserRepository.GetByIdAsync(request.AdvertisementId);
+            var advertisement = await _advertiserRepository.GetByIdAsync(request.AdvertisementId.Value);
 
             if (jobSeeker is null || advertisement is null)
                 return;

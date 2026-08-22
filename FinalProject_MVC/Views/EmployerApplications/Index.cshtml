@@ -1,0 +1,253 @@
+﻿@model List<FinalProject_MVC.Models.EmployerApplicationsViewModel>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "درخواست‌های دریافتی";
+}
+
+@* @if (TempData["DebugInfo"] != null)
+{
+    <div class="alert alert-info" style="direction: ltr; text-align: left;">
+        @Html.Raw(TempData["DebugInfo"])
+    </div>
+} *@
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">درخواست‌های دریافتی</h1>
+</div>
+
+@* <div class="alert alert-info">
+    <strong>اطلاعات دیباگ:</strong><br />
+    - کل درخواست‌ها در دیتابیس: @ViewBag.TotalRequestsInDB<br />
+    - تعداد آگهی‌های متعلق به شما: @ViewBag.AdsCountForThisUser<br />
+    - تعداد درخواست‌های منطبق با آگهی‌های شما: @ViewBag.MatchedRequestsCount
+</div> *@
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["WarningMessage"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-triangle"></i> @TempData["WarningMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (Model.Any())
+{
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-start-primary border-start-4 shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">کل درخواست‌ها</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-envelope fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-start-warning border-start-4 shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">در انتظار بررسی</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(m => m.StatusValue == 0)</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-start-success border-start-4 shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">پذیرفته شده</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(m => m.StatusValue == 2)</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-start-danger border-start-4 shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col me-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">رد شده</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.Count(m => m.StatusValue == 3)</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-times-circle fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">لیست درخواست‌ها</h6>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                    <thead class="table-light">
+                        <tr>
+                            <th style="width: 5%">#</th>
+                            <th style="width: 15%">نام کارجو</th>
+                            <th style="width: 15%">عنوان رزومه</th>
+                            <th style="width: 15%">آگهی</th>
+                            <th style="width: 10%">شهر</th>
+                            <th style="width: 15%">مهارت‌ها</th>
+                            <th style="width: 10%">تاریخ ارسال</th>
+                            <th style="width: 10%">وضعیت</th>
+                            <th style="width: 5%">عملیات</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int counter = 1;
+                        }
+                        @foreach (var app in Model)
+                        {
+                            <tr>
+                                <td class="text-center">@counter</td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center text-white me-2"
+                                             style="width: 35px; height: 35px; font-size: 14px;">
+                                            @(app.JobSeekerName.Substring(0, 1).ToUpper())
+                                        </div>
+                                        <div>
+                                            <div class="fw-bold">@app.JobSeekerFullName</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>@app.Title</td>
+                                <td>
+                                    <a href="@Url.Action("Details", "Advertisement", new { id = app.AdvertisementId })"
+                                       class="text-primary text-decoration-none" target="_blank">
+                                        <i class="fas fa-external-link-alt fa-sm me-1"></i>
+                                        @app.AdvertisementTitle
+                                    </a>
+                                </td>
+                                <td>@app.City</td>
+                                <td>
+                                    <small class="text-muted">
+                                        @if (!string.IsNullOrEmpty(app.Skills))
+                                        {
+                                            @(app.Skills.Length > 40 ? app.Skills.Substring(0, 40) + "..." : app.Skills)
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">-</span>
+                                        }
+                                    </small>
+                                </td>
+                                <td>@app.AppliedDate.ToString("yyyy/MM/dd")</td>
+                                <td>
+                                    <span class="badge @app.StatusBadgeClass">@app.Status</span>
+                                </td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        @if (!string.IsNullOrEmpty(app.ResumeFilePath))
+                                        {
+                                            <a href="@Url.Action("ViewResume", new { requestId = app.RequestId })"
+                                               class="btn btn-info btn-sm"
+                                               title="مشاهده رزومه"
+                                               target="_blank">
+                                                <i class="fas fa-file-pdf"></i>
+                                            </a>
+                                        }
+
+                                        @if (app.StatusValue != 2)
+                                        {
+                                            <form asp-action="UpdateStatus" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="requestId" value="@app.RequestId" />
+                                                <input type="hidden" name="newStatus" value="2" />
+                                                <button type="submit" class="btn btn-success btn-sm"
+                                                        title="پذیرفتن"
+                                                        onclick="return confirm('آیا از پذیرش این کارجو اطمینان دارید؟');">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            </form>
+                                        }
+
+                                        @if (app.StatusValue != 3)
+                                        {
+                                            <form asp-action="UpdateStatus" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <input type="hidden" name="requestId" value="@app.RequestId" />
+                                                <input type="hidden" name="newStatus" value="3" />
+                                                <button type="submit" class="btn btn-danger btn-sm"
+                                                        title="رد کردن"
+                                                        onclick="return confirm('آیا از رد کردن این کارجو اطمینان دارید؟');">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                            counter++;
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow mb-4">
+                <div class="card-body text-center py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-inbox fa-5x text-gray-300"></i>
+                    </div>
+                    <h5 class="text-gray-600 mb-3">هنوز درخواستی دریافت نکرده‌اید</h5>
+                    <p class="text-muted mb-4">
+                        وقتی کارجوها برای آگهی‌های شما رزومه ارسال کنند، اینجا نمایش داده می‌شود.
+                    </p>
+                    <a href="@Url.Action("Create", "Advertisement")" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>
+                        ثبت آگهی جدید
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

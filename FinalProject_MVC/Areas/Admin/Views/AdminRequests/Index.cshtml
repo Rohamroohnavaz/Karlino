@@ -1,0 +1,76 @@
+﻿@model List<MyFinalProject.Domain.Entities.MainModels.RequestResume>
+
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "مدیریت درخواست‌های رزومه";
+}
+
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">مدیریت درخواست‌های رزومه</h1>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="fas fa-check-circle"></i> @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="fas fa-exclamation-circle"></i> @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">لیست درخواست‌ها (@Model.Count مورد)</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" width="100%" cellspacing="0">
+                <thead class="table-light">
+                    <tr>
+                        <th>نام کارجو</th>
+                        <th>عنوان رزومه</th>
+                        <th>آگهی</th>
+                        <th>کاربر</th>
+                        <th>تاریخ ارسال</th>
+                        <th>وضعیت</th>
+                        <th>عملیات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var req in Model)
+                    {
+                        <tr>
+                            <td>@req.JobSeekerName @req.JobSeekerLastName</td>
+                            <td>@req.Title</td>
+                            <td>@(req.Advertisement?.Title ?? "نامشخص")</td>
+                            <td>@(req.User?.Email ?? "نامشخص")</td>
+                            <td>@req.StartDate.ToString("yyyy/MM/dd")</td>
+                            <td>
+                                <span class="badge @(req.Status.ToString() == "Pending" ? "bg-warning" : req.Status.ToString() == "Accepted" ? "bg-success" : "bg-danger")">
+                                    @req.Status
+                                </span>
+                            </td>
+                            <td>
+                                <form asp-action="Delete" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@req.Id" />
+                                    <button type="submit" class="btn btn-sm btn-danger"
+                                            onclick="return confirm('آیا از حذف این درخواست اطمینان دارید؟');">
+                                        <i class="fas fa-trash"></i> حذف
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

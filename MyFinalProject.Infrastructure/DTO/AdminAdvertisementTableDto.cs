@@ -14,5 +14,7 @@ namespace MyFinalProject.Infrastructure.DTO
         public string CityName { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public bool IsActive { get; set; }
+        public bool IsFeatured { get; set; }
+        public DateTime? FeaturedUntil { get; set; }
     }
 }

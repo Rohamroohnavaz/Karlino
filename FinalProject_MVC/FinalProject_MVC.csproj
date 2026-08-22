@@ -15,4 +15,8 @@
     <ProjectReference Include="..\MyFinalProject.Application\MyFinalProject.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Resumes\" />
+  </ItemGroup>
+
 </Project>

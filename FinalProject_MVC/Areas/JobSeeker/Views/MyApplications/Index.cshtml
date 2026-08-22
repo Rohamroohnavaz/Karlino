@@ -42,10 +42,19 @@
                                 <td>
                                     <span class="badge @app.StatusBadgeClass">@app.Status</span>
                                 </td>
+
                                 <td>
-                                    <button class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-eye"></i> مشاهده
-                                    </button>
+                                    @if (app.AdvertisementId.HasValue)
+                                    {
+                                        <a href="@Url.Action("Details", "Jobs", new { id = app.AdvertisementId.Value })"
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="fas fa-eye"></i> مشاهده آگهی
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
                                 </td>
                             </tr>
                         }
