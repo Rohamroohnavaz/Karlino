@@ -105,7 +105,6 @@
             {
                 @foreach (var ad in Model)
                 {
-                    // بررسی وضعیت ویژه
                     bool isFeatured = ad.IsFeatured && ad.FeaturedUntil.HasValue && ad.FeaturedUntil.Value > DateTime.Now;
                     string rowClass = isFeatured ? "table-warning" : "";
 
@@ -155,8 +154,8 @@
                                       onsubmit="return confirm('آیا از لغو وضعیت ویژه اطمینان دارید؟');">
                                       @Html.AntiForgeryToken()
                                       <input type="hidden" name="id" value="@ad.Id" />
-                                      <button type="submit" class="btn-sb btn-sb-secondary">
-                                        <i class="fa-solid fa-times"></i> لغو ویژه
+                                    <button type="submit" class="btn-sb" style="background-color: #6c757d; color: white;">
+                                      <i class="fa-solid fa-times"></i> لغو ویژه
                                     </button>
                                 </form>
                             }
@@ -168,8 +167,8 @@
                                       @Html.AntiForgeryToken()
                                       <input type="hidden" name="id" value="@ad.Id" />
                                       <input type="hidden" name="days" value="7" />
-                                    <button type="submit" class="btn-sb btn-sb-warning">
-                                        <i class="fa-solid fa-star"></i> ویژه کردن
+                                    <button type="submit" class="btn-sb" style="background-color: #f59e0b; color: #1f2937; font-weight: bold;">
+                                      <i class="fa-solid fa-star"></i> ویژه کردن
                                     </button>
                                 </form>
                             }

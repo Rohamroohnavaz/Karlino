@@ -3,9 +3,12 @@ using FinalProject_MVC.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MyFinalProject.Application.Constants;
 using MyFinalProject.Application.Services.ServiceInterfaces;
 using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Infrastructure;
+using MyFinalProject.Infrastructure.DTO;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
 using System.Reflection;
 
@@ -19,17 +22,20 @@ namespace FinalProject_MVC.Controllers
         private readonly IAdvertisementService _advertisementService;
         private readonly IAdvertisementRepository _advertisementRepository;
         private readonly UserManager<User> _userManager;
+        private readonly FinalDbContext _dbContext;
 
         public AdvertisementController(IApiService apiService 
             ,IAdvertisementService advertisementService
             ,IAdvertisementRepository advertisementRepository
             ,UserManager<User> userManager
+            ,FinalDbContext dbContext
             )
         {
             _apiService = apiService;
             _advertisementService = advertisementService;
             _advertisementRepository = advertisementRepository;
             _userManager = userManager;
+            _dbContext = dbContext;
         }
 
         [AllowAnonymous]
@@ -270,7 +276,10 @@ namespace FinalProject_MVC.Controllers
             if (string.IsNullOrEmpty(email))
                 return RedirectToAction("Login", "Account");
 
-            var model = await _advertisementRepository.GetMyAdsAsync(email);
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null) return NotFound();
+
+            var model = await _advertisementService.GetMyAdsAsync(user.Id);
 
             return View(model);
         }
@@ -283,6 +292,18 @@ namespace FinalProject_MVC.Controllers
                 return false;
 
             return await _advertisementRepository.IsOwnerAsync(id, email);
+        }
+
+        [HttpGet]
+        [Route("[action]")]
+        public async Task<IActionResult> GetAds()
+        {
+            var user = await _userManager.FindByEmailAsync(User.Identity?.Name);
+            if (user == null) return NotFound();
+
+            var ads = await _advertisementService.GetMyAdsAsync(user.Id);
+
+            return View(ads);
         }
 
         [HttpPost]
@@ -324,5 +345,6 @@ namespace FinalProject_MVC.Controllers
             TempData["SuccessMessage"] = "آگهی از حالت ویژه خارج شد";
             return RedirectToAction(nameof(MyAds));
         }
+
     }
 }

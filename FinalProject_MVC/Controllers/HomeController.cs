@@ -66,23 +66,20 @@ namespace FinalProject_MVC.Controllers
                         }
                         else if (roles.Contains(RoleConstants.EmployerRole))
                         {
-                            // اگر پنل کارفرما نداری، فعلاً به صفحه اصلی برگرد
-                            // یا می‌توانی بعداً پنل کارفرما بسازی
                             // return RedirectToAction("Index", "Dashboard", new { area = "Employer" });
                         }
                     }
                 }
                 catch (Exception)
                 {
-                    // اگر خطایی occurred، از سیستم خارج شو
                     await HttpContext.SignOutAsync();
                 }
             }
 
-            // اگر کاربر لاگین نیست یا نقشش تعریف نشده، صفحه اصلی سایت را نمایش بده
             ViewBag.ActiveJobs = await _advertisementRepository.GetCountByStatus(isActive: true);
             ViewBag.Employers = await _userRepository.GetCountByRole(RoleConstants.EmployerRole);
             ViewBag.JobSeekers = await _userRepository.GetCountByRole(RoleConstants.JobSeekerRole);
+
 
             var (latest, _) = await _advertisementRepository.GetPagedForAdminAsync(null, true, 1, 6);
             ViewBag.LatestJobs = latest;

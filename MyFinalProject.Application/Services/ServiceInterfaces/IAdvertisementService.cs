@@ -3,6 +3,7 @@ using MyFinalProject.Application.Commands.ViewModels;
 using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.Filters;
 using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Infrastructure.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,6 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
 
         Task<bool> UnfeatureAdvertisementAsync(Guid advertisementId, Guid userId);
 
-        //Task<List<Infrastructure.DTO.AdminAdvertisementTableDto>> GetMyAdsAsync(Guid userId);
+        Task<List<AdminAdvertisementTableDto>> GetMyAdsAsync(Guid userId);
     }
 }

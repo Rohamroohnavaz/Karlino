@@ -43,7 +43,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public Category? Category { get; private set; }
         public Guid? CategoryId { get; private set; }
         public bool IsActive { get; set; } = true;
-        public bool IsFeatured { get; set; }
+        public bool IsFeatured { get; set; } = false;
         public bool IsApproved { get; set; }
         public DateTime? FeaturedUntil { get; private set; }
         public DateTime? StartDate { get; private set; }

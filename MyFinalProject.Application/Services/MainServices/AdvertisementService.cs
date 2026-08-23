@@ -16,6 +16,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using AdminAdvertisementTableDto = MyFinalProject.Infrastructure.DTO.AdminAdvertisementTableDto;
 
 namespace MyFinalProject.Application.Services.MainServices
 {
@@ -202,9 +203,20 @@ namespace MyFinalProject.Application.Services.MainServices
             return true;
         }
 
-        public async Task<List<Infrastructure.DTO.AdminAdvertisementTableDto>> GetMyAdsAsync(Guid userId)
+        public async Task<List<AdminAdvertisementTableDto>> GetMyAdsAsync(Guid userId)
         {
-            return await _advertisementRepository.GetByUserIdAsync(userId);
+            var ads = await _advertisementRepository.GetByUserIdAsync(userId);
+
+            return ads.Select(a => new AdminAdvertisementTableDto
+            {
+                Id = a.Id,
+                Title = a.Title,
+                CityName = a.CityName,
+                CreatedAt = a.CreatedAt,
+                IsActive = a.IsActive,
+                IsFeatured = a.IsFeatured,
+                FeaturedUntil = a.FeaturedUntil
+            }).ToList();
         }
     }
 }

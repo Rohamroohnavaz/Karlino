@@ -59,22 +59,24 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
 
         public async Task<List<AdminAdvertisementTableDto>> GetByUserIdAsync(Guid userId)
         {
-            return await _dbContext.Advertisements
-                .Include(a => a.Company)
-                 .Where(a => a.Company != null &&
-                    a.Company.UserId == userId &&
-                    !a.IsDeleted)
-                .Select(a => new AdminAdvertisementTableDto
-                {
-                    Id = a.Id,
-                    Title = a.Title,
-                    CityName = a.City,
-                    CreatedAt = a.CreatedAt,
-                    IsActive = a.IsActive,
-                    IsFeatured = a.IsFeatured,  
-                    FeaturedUntil = a.FeaturedUntil
-                })
+            var ads = await _dbContext.Advertisements
+                .AsNoTracking()
+                .Where(a => a.Company != null &&
+                            a.Company.UserId == userId &&
+                            !a.IsDeleted)
+                .OrderByDescending(a => a.CreatedAt)
                 .ToListAsync();
+
+            return ads.Select(a => new AdminAdvertisementTableDto
+            {
+                Id = a.Id,
+                Title = a.Title,
+                CityName = a.City ?? "",
+                CreatedAt = a.CreatedAt,
+                IsActive = a.IsActive,
+                IsFeatured = a.IsFeatured,
+                FeaturedUntil = a.FeaturedUntil
+            }).ToList();
         }
 
         //public async Task<Advertisement?> GetAdvertisementWithRequestResume(Guid resumeId)
@@ -159,14 +161,16 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 .ToListAsync();
         }
 
-        public async Task<(List<AdminAdvertisementTableDto>, int)> GetPagedForAdminAsync(
-             string? search, bool? isActive, int page, int pageSize)
+        public async Task<(List<AdminAdvertisementTableDto> Items, int TotalCount)> GetPagedForAdminAsync(
+           string? searchTerm, bool? isActive, int page, int pageSize)
         {
-            var query = _dbContext.Advertisements.AsQueryable();
+            var query = _dbContext.Advertisements
+                .Include(a => a.Company)
+                .AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(search))
+            if (!string.IsNullOrEmpty(searchTerm))
             {
-                query = query.Where(a => a.Title.Contains(search));
+                query = query.Where(a => a.Title.Contains(searchTerm));
             }
 
             if (isActive.HasValue)
@@ -177,7 +181,8 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
             var totalCount = await query.CountAsync();
 
             var items = await query
-                .OrderByDescending(a => a.CreatedAt)
+                .OrderByDescending(a => a.IsFeatured && a.FeaturedUntil > DateTime.Now)
+                .ThenByDescending(a => a.CreatedAt)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .Select(a => new AdminAdvertisementTableDto
@@ -187,9 +192,11 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                     EmployerName = a.CompanyName,
                     CityName = a.City,
                     CreatedAt = a.CreatedAt,
-                    IsActive = a.IsActive
+                    IsActive = a.IsActive,
+                    IsFeatured = a.IsFeatured,
+                    FeaturedUntil = a.FeaturedUntil
                 })
-                .ToListAsync();
+          .ToListAsync();
 
             return (items, totalCount);
         }

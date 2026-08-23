@@ -35,9 +35,6 @@
         <dt>شهر</dt>
         <dd>@Model.City</dd>
 
-        @* <dt>دسته‌بندی</dt>
-        <dd>@Model.CategoryTitle</dd> *@
-
         <dt>تاریخ ثبت</dt>
         <dd>@DisplayHelper.FormatDate(Model.CreatedAt)</dd>
     </dl>
@@ -61,7 +58,6 @@
 
 @if (ViewBag.IsOwner == true)
 {
-    <!-- 🛠 دکمه‌های صاحب آگهی -->
     <div class="sb-table-card" style="margin-top:1.2rem; border-inline-start:.25rem solid var(--sb-info);">
         <h5>
             <i class="fa-solid fa-pen-to-square"></i> این آگهی شماست
@@ -90,7 +86,6 @@
 }
 else if (User.Identity != null && User.Identity.IsAuthenticated)
 {
-    <!-- 🚩 فرم گزارش تخلف (برای بقیه کاربران) -->
     <div class="sb-table-card" style="margin-top:1.2rem; border-inline-start:.25rem solid var(--sb-danger);">
         <h5 style="color:var(--sb-danger);">
             <i class="fa-solid fa-flag"></i> این آگهی تخلف دارد؟

@@ -54,23 +54,35 @@
     else
     {
         <div class="sb-job-grid">
-            @foreach (var job in latest)
-            {
-                <div class="sb-job-card">
-                    <h6>@job.Title</h6>
-                    <div class="meta">
-                        <span><i class="fa-solid fa-building"></i> @job.EmployerName</span>
-                        <span><i class="fa-solid fa-city"></i> @job.CityName</span>
+                @foreach (var job in latest)
+                {
+                    bool isFeatured = job.IsFeatured && job.FeaturedUntil.HasValue && job.FeaturedUntil.Value > DateTime.Now;
+                    string featuredClass = isFeatured ? "sb-job-card-featured" : "";
+                    string featuredBadge = isFeatured ? "<div class='sb-featured-badge'><i class='fa-solid fa-star'></i> ویژه</div>" : "";
+
+                    <div class="sb-job-card @featuredClass">
+                        @Html.Raw(featuredBadge)
+
+                        <h6>@job.Title</h6>
+                        <div class="meta">
+                            <span><i class="fa-solid fa-building"></i> @job.EmployerName</span>
+                            <span><i class="fa-solid fa-city"></i> @job.CityName</span>
+                        </div>
+                        <div class="meta">
+                            <span><i class="fa-regular fa-calendar"></i> @DisplayHelper.FormatDate(job.CreatedAt)</span>
+                            @if (isFeatured)
+                            {
+                                <span style="color:#f59e0b; font-weight:bold;">
+                                    <i class="fa-solid fa-star"></i> تا @job.FeaturedUntil.Value.ToString("yyyy/MM/dd")
+                                </span>
+                            }
+                        </div>
+                        <a asp-controller="Advertisement" asp-action="Details" asp-route-id="@job.Id"
+                           class="btn-sb btn-sb-primary" style="text-decoration:none; text-align:center;">
+                            مشاهده آگهی
+                        </a>
                     </div>
-                    <div class="meta">
-                        <span><i class="fa-regular fa-calendar"></i> @DisplayHelper.FormatDate(job.CreatedAt)</span>
-                    </div>
-                    <a asp-controller="Advertisement" asp-action="Details" asp-route-id="@job.Id"
-                       class="btn-sb btn-sb-primary" style="text-decoration:none; text-align:center;">
-                        مشاهده آگهی
-                    </a>
-                </div>
-            }
-        </div>
+                }
+            </div>
     }
 </div>

@@ -106,3 +106,33 @@ body {
     color: rgba(255, 255, 255, .75);
     font-size: .85rem;
 }
+
+.sb-job-card-featured {
+    border: 2px solid #f59e0b !important;
+    background: linear-gradient(135deg, #fffbeb 0%, #ffffff 100%);
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+    .sb-job-card-featured:hover {
+        transform: translateY(-3px);
+    }
+
+.sb-featured-badge {
+    position: absolute;
+    top: -10px;
+    right: 15px;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+    z-index: 10;
+}
+
+    .sb-featured-badge i {
+        margin-left: 4px;
+    }
