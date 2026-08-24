@@ -15,11 +15,15 @@ namespace FinalProject_MVC.Areas.JobSeeker.Controllers
     {
         private readonly UserManager<User> _userManager;
         private readonly FinalDbContext _dbContext;
+        private readonly SignInManager<User> _signInManager;
 
-        public ProfileController(UserManager<User> userManager, FinalDbContext dbContext)
+        public ProfileController(UserManager<User> userManager
+            , FinalDbContext dbContext
+            , SignInManager<User> signInManager)
         {
             _userManager = userManager;
             _dbContext = dbContext;
+            _signInManager = signInManager;
         }
 
         public async Task<IActionResult> Index()
@@ -118,6 +122,84 @@ namespace FinalProject_MVC.Areas.JobSeeker.Controllers
             {
                 property.SetValue(entity, value);
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AccountSettings()
+        {
+            var user = await _userManager.FindByEmailAsync(User.Identity?.Name);
+            if (user == null) return NotFound();
+
+            var model = new AccountSettingsViewModel
+            {
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                FullName = user.FirstName + " " + user.LastName
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateProfile(AccountSettingsViewModel model)
+        {
+            if (!ModelState.IsValid) return View("AccountSettings", model);
+
+            var user = await _userManager.FindByEmailAsync(User.Identity?.Name);
+            if (user == null) return NotFound();
+
+            user.UserName = model.FullName;
+            user.PhoneNumber = model.PhoneNumber;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded)
+            {
+                TempData["ErrorMessage"] = "خطا در به‌روزرسانی اطلاعات";
+                return View("AccountSettings", model);
+            }
+
+            TempData["SuccessMessage"] = "اطلاعات با موفقیت به‌روزرسانی شد";
+            return RedirectToAction(nameof(AccountSettings));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid) return View("AccountSettings", model);
+
+            var user = await _userManager.FindByEmailAsync(User.Identity?.Name);
+            if (user == null) return NotFound();
+
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+            if (!result.Succeeded)
+            {
+                TempData["ErrorMessage"] = "خطا در تغییر رمز عبور";
+                return View("AccountSettings", model);
+            }
+
+            TempData["SuccessMessage"] = "رمز عبور با موفقیت تغییر کرد";
+            return RedirectToAction(nameof(AccountSettings));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteAccount()
+        {
+            var user = await _userManager.FindByEmailAsync(User.Identity?.Name);
+            if (user == null) return NotFound();
+
+            var result = await _userManager.DeleteAsync(user);
+            if (!result.Succeeded)
+            {
+                TempData["ErrorMessage"] = "خطا در حذف حساب کاربری";
+                return RedirectToAction(nameof(AccountSettings));
+            }
+
+            await _signInManager.SignOutAsync();
+            TempData["SuccessMessage"] = "حساب کاربری شما با موفقیت حذف شد";
+            return RedirectToAction("Index", "Home");
         }
     }
 }

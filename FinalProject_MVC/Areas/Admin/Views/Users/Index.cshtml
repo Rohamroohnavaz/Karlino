@@ -148,7 +148,7 @@
                                     <div class="d-flex align-items-center">
                                         <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center text-white me-2"
                                              style="width: 35px; height: 35px; font-size: 14px;">
-                                            @(user.FullName.Substring(0, 1).ToUpper())
+                                            @(string.IsNullOrEmpty(user.FullName) ? "?" : user.FullName.Substring(0, 1).ToUpper())
                                         </div>
                                         <span>@user.FullName</span>
                                     </div>
@@ -201,34 +201,57 @@
                                 </td>
                                 <td>
                                     <div class="btn-group btn-group-sm" role="group">
-                                        @if (!user.IsApproved && user.IsActive && user.RoleName != "Admin")
-                                        {
-                                            <form asp-action="Approve" asp-controller="Users" method="post" class="d-inline">
-                                                @Html.AntiForgeryToken()
-                                                <input type="hidden" name="id" value="@user.Id" />
-                                                <button type="submit" class="btn btn-success"
-                                                        title="تایید کاربر"
-                                                        onclick="return confirm('آیا از تایید این کاربر اطمینان دارید؟');">
-                                                    <i class="fas fa-check"></i>
-                                                </button>
-                                            </form>
-                                            <form asp-action="Reject" asp-controller="Users" method="post" class="d-inline">
-                                                @Html.AntiForgeryToken()
-                                                <input type="hidden" name="id" value="@user.Id" />
-                                                <button type="submit" class="btn btn-warning"
-                                                        title="رد کردن"
-                                                        onclick="return confirm('آیا از رد کردن این کاربر اطمینان دارید؟');">
-                                                    <i class="fas fa-times"></i>
-                                                </button>
-                                            </form>
-                                        }
+
                                         @if (user.RoleName != "Admin")
                                         {
+                                            @if (!user.IsApproved)
+                                            {
+                                                <form asp-action="Approve" asp-controller="Users" method="post" class="d-inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@user.Id" />
+                                                    <button type="submit" class="btn btn-success" title="تایید کاربر"
+                                                            onclick="return confirm('آیا از تایید این کاربر اطمینان دارید؟');">
+                                                        <i class="fas fa-check"></i>
+                                                    </button>
+                                                </form>
+
+                                                <form asp-action="Reject" asp-controller="Users" method="post" class="d-inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@user.Id" />
+                                                    <button type="submit" class="btn btn-warning" title="رد کردن"
+                                                            onclick="return confirm('آیا از رد کردن این کاربر اطمینان دارید؟');">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </form>
+                                            }
+
+                                            @if (user.IsActive)
+                                            {
+                                                <form asp-action="Deactivate" asp-controller="Users" method="post" class="d-inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@user.Id" />
+                                                    <button type="submit" class="btn btn-secondary" title="غیرفعال کردن"
+                                                            onclick="return confirm('آیا از غیرفعال کردن این کاربر اطمینان دارید؟');">
+                                                        <i class="fas fa-ban"></i>
+                                                    </button>
+                                                </form>
+                                            }
+                                            else
+                                            {
+                                                <form asp-action="Activate" asp-controller="Users" method="post" class="d-inline">
+                                                    @Html.AntiForgeryToken()
+                                                    <input type="hidden" name="id" value="@user.Id" />
+                                                    <button type="submit" class="btn btn-info text-white" title="فعال کردن"
+                                                            onclick="return confirm('آیا از فعال کردن این کاربر اطمینان دارید؟');">
+                                                        <i class="fas fa-check-circle"></i>
+                                                    </button>
+                                                </form>
+                                            }
+
                                             <form asp-action="Delete" asp-controller="Users" method="post" class="d-inline">
                                                 @Html.AntiForgeryToken()
                                                 <input type="hidden" name="id" value="@user.Id" />
-                                                <button type="submit" class="btn btn-danger"
-                                                        title="حذف کاربر"
+                                                <button type="submit" class="btn btn-danger" title="حذف کاربر"
                                                         onclick="return confirm('آیا از حذف این کاربر اطمینان دارید؟');">
                                                     <i class="fas fa-trash"></i>
                                                 </button>

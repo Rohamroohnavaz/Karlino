@@ -70,6 +70,8 @@ builder.Services
     .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<FinalDbContext>()
     .AddDefaultTokenProviders();
+builder.Services.AddScoped<SignInManager<User>>();
+
 
 builder.Services.AddAuthorization();
 
