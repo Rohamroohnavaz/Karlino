@@ -54,6 +54,42 @@ namespace MyFinalProject.Application.Services.MainServices
             _requestResumeRepository = requestResumeRepository;
         }
 
+        public async Task<List<AdminUserTableDto>> GetAllUsers()
+        {
+            return await _userRepository.GetAllUsersAsync();
+        }
+
+        public async Task<bool> ActivateUserAsync(Guid userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null) return false;
+
+            user.IsActive = true;
+            var result = await _userManager.UpdateAsync(user);
+            await _unitOfWork.SaveChangesAsync();
+            return result.Succeeded;
+        }
+
+        public async Task<bool> DeactivateUserAsync(Guid userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null) return false;
+
+            user.IsActive = false;
+            var result = await _userManager.UpdateAsync(user);
+            await _unitOfWork.SaveChangesAsync();
+            return result.Succeeded;
+        }
+
+        public async Task<bool> DeleteUserAsync(Guid userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null) return false;
+
+            var result = await _userManager.DeleteAsync(user);
+            return result.Succeeded;
+        }
+
         #region Employer Implementation
 
         public async Task<List<AdminEmployerListDto>> GetEmployersAsync()

@@ -115,6 +115,30 @@ namespace MyFinalProject.Domain.Entities.MainModels
             JobSeekerName = jobSeekerName;
         }
 
+        public void SetAboutMe(string aboutMe)
+        {
+            if (string.IsNullOrWhiteSpace(aboutMe))
+                throw new Exception("AboutMe is required !!");
+
+            AboutMe = aboutMe;
+        }
+
+        public void SetDescription(string description)
+        {
+            if (string.IsNullOrWhiteSpace(description))
+                throw new Exception("AboutMe is required !!");
+
+            Description = description;
+        }
+
+        public void SetAddress(string address)
+        {
+            if (string.IsNullOrWhiteSpace(address))
+                throw new Exception("AboutMe is required !!");
+
+            Address = address;
+        }
+
         public void ChangeJobSeekerLastName(string jobSeekerLastName)
         {
             if (string.IsNullOrWhiteSpace(jobSeekerLastName))

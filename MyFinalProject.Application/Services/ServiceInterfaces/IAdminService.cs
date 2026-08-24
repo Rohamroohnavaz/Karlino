@@ -14,6 +14,12 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
 {
     public interface IAdminService
     {
+        //ForAllRoles
+        Task<List<AdminUserTableDto>> GetAllUsers();
+        Task<bool> ActivateUserAsync(Guid userId);
+        Task<bool> DeactivateUserAsync(Guid userId);
+        Task<bool> DeleteUserAsync(Guid userId);
+
         //Employers
         Task<List<AdminEmployerListDto>> GetEmployersAsync();
 

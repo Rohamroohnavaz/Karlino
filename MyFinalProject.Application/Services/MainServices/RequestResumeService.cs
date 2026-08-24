@@ -5,6 +5,7 @@ using MyFinalProject.Application.ServiceExceptions;
 using MyFinalProject.Application.Services.ServiceInterfaces;
 using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Infrastructure.DTO;
 using MyFinalProject.Infrastructure.Persistence.UnitOfWorkFolder;
 using MyFinalProject.Infrastructure.RepoExceptions;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
@@ -251,5 +252,55 @@ namespace MyFinalProject.Application.Services.MainServices
 
             await _emailService.SendEmailAsync(recipientEmail, subject, body, true, cancellationToken);
         }
+
+        public async Task<List<MyApplicationDto>> GetMyApplicationsAsync(Guid userId)
+        {
+            return await _requestRepository.GetMyApplicationsAsync(userId);
+        }
+
+        public async Task<bool> ApplyForAdvertisementAsync(Guid userId, Guid advertisementId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null) return false;
+
+            var advertisement = await _advertiserRepository.GetByIdAsync(advertisementId);
+            if (advertisement == null || !advertisement.IsActive || advertisement.IsDeleted || advertisement.ExpireDate <= DateTime.Now)
+                return false;
+
+            var resume = await _requestRepository.GetRequestByUserId(userId);
+            if (resume == null) return false;
+
+            try
+            {
+                var request = new RequestResume(
+                    jobSeekerName: user.FirstName ?? "نام",
+                    jobSeekerLastName: user.LastName ?? "نام خانوادگی",
+                    province: "تهران", // یا از پروفایل کاربر
+                    city: resume?.City ?? "تهران",
+                    startDate: DateTime.Now,
+                    expireDate: DateTime.Now.AddMonths(3),
+                    userId: userId,
+                    advertisementId: advertisementId,
+                    attachmentId: Guid.Empty
+                );
+
+                request.ChangeJobSeekerTitle(resume?.Title ?? "درخواست همکاری");
+                request.SetAboutMe(resume?.AboutMe ?? "");
+                request.SetDescription(resume?.Description ?? "");
+                request.SetAddress(resume?.Address ?? "");
+                request.Status = MyFinalProject.Domain.Entities.Enums.RequestStatus.Pending;
+                request.IsDeleted = false;
+
+                await _requestRepository.AddAsync(request);
+                await _unitOfWork.SaveChangesAsync();
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
 }
+  

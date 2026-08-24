@@ -170,5 +170,27 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                   .Select(u => (Guid?)u.Id)
                   .FirstOrDefaultAsync();
         }
+
+        public async Task<List<AdminUserTableDto>> GetAllUsersAsync()
+        {
+            return await _dbContext.Users
+                .AsNoTracking() 
+                .Where(u => u.Role.ToString() == "JobSeeker" ||
+                            u.Role.ToString() == "Employer" ||
+                            u.Role.ToString() == "Admin")
+                .OrderByDescending(u => u.CreatedAt)
+                .Select(u => new AdminUserTableDto
+                {
+                    Id = u.Id,
+                    Email = u.Email ?? "",
+                    FullName = $"{u.FirstName} {u.LastName}".Trim(),
+                    RoleName = u.Role.ToString() ?? "",
+                    PhoneNumber = u.PhoneNumber ?? "",
+                    City = u.City ?? "",
+                    IsApproved = u.IsApproved,
+                    IsActive = u.IsActive,
+                    CreatedAt = u.CreatedAt
+                }).ToListAsync();
+        }
     }
 }

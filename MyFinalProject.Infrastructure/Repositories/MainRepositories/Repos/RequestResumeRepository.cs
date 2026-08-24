@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Infrastructure.DTO;
 using MyFinalProject.Infrastructure.RepoExceptions;
 using MyFinalProject.Infrastructure.Repositories.Generics;
 using MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces;
@@ -22,6 +23,28 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
             return await _dbContext.Resumes
                 .AnyAsync(r => r.UserId == userId && r.AdvertisementId == advertisementId
                 && r.IsDeleted == false);
+        }
+
+        public async Task<List<MyApplicationDto>> GetMyApplicationsAsync(Guid userId)
+        {
+            var resumes = await _dbContext.Resumes
+                .AsNoTracking()
+                .Where(r => r.UserId == userId)
+                .Include(r => r.Advertisement)
+                    .ThenInclude(a => a.Company)
+                .OrderByDescending(r => r.StartDate)
+                .ToListAsync();
+
+            return resumes.Select(r => new MyApplicationDto
+            {
+                Id = r.Id,
+                JobTitle = r.Advertisement?.Title ?? "عنوان شغل نامشخص",
+                CompanyName = r.Advertisement?.Company?.CompanyName ?? "شرکت نامشخص",
+                City = r.Advertisement?.City ?? r.City ?? "",
+                AppliedDate = r.StartDate,
+                Status = r.Status,
+                AdvertisementId = r.AdvertisementId
+            }).ToList();
         }
 
         public async Task<List<RequestResume>> GetRequestByAdverId(Guid adverId)

@@ -214,5 +214,47 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
                 .Include(a => a.Company)
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
+
+        public async Task<List<Advertisement>> GetActiveAdvertisementsAsync(string jobTitle, string city)
+        {
+            var query = _dbContext.Advertisements
+                .AsNoTracking()
+                .Where(a => a.IsActive && !a.IsDeleted && a.ExpireDate > DateTime.Now)
+                .Include(a => a.Company)
+                .OrderByDescending(a => a.CreatedAt)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(jobTitle))
+                query = query.Where(a => a.Title.Contains(jobTitle));
+
+            if (!string.IsNullOrEmpty(city))
+                query = query.Where(a => a.City == city);
+
+            
+            return await query.ToListAsync();
+        }
+
+        public async Task<Advertisement> GetAdvertisementWithDetailsAsync(Guid id)
+        {
+            return await _dbContext.Advertisements
+                .AsNoTracking()
+                .Include(a => a.Company)
+                .FirstOrDefaultAsync(a => a.Id == id && a.IsActive && !a.IsDeleted);
+        }
+
+        public async Task<bool> UserHasAppliedAsync(Guid userId, Guid advertisementId)
+        {
+            return await _dbContext.Resumes
+                .AnyAsync(r => r.UserId == userId && r.AdvertisementId == advertisementId && !r.IsDeleted);
+        }
+
+        public async Task<List<Guid?>> GetUserAppliedAdvertisementIdsAsync(Guid userId)
+        {
+            return await _dbContext.Resumes
+                .AsNoTracking()
+                .Where(r => r.UserId == userId && !r.IsDeleted)
+                .Select(r => r.AdvertisementId)
+                .ToListAsync();
+        }
     }
 }

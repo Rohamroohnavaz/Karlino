@@ -41,5 +41,15 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
         Task<List<AdminAdvertisementTableDto>> GetByUserIdAsync(Guid userId);
 
         Task<Advertisement> GetByIdWithCompanyAsync(Guid id);
+
+        //////////////////////////////////////////
+
+        Task<List<Advertisement>> GetActiveAdvertisementsAsync(string jobTitle, string city = null);
+        
+        Task<Advertisement> GetAdvertisementWithDetailsAsync(Guid id);
+        
+        Task<bool> UserHasAppliedAsync(Guid userId, Guid advertisementId);
+
+        Task<List<Guid?>> GetUserAppliedAdvertisementIdsAsync(Guid userId);
     }
 }
