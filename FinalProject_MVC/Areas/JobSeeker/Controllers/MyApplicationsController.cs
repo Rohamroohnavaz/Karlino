@@ -6,6 +6,7 @@ using FinalProject_MVC.Areas.JobSeeker.ViewModels;
 using MyFinalProject.Infrastructure;
 using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Application.Constants;
+using MyFinalProject.Application.Services.ServiceInterfaces;
 
 namespace FinalProject_MVC.Areas.JobSeeker.Controllers
 {
@@ -14,12 +15,13 @@ namespace FinalProject_MVC.Areas.JobSeeker.Controllers
     public class MyApplicationsController : Controller
     {
         private readonly UserManager<User> _userManager;
-        private readonly FinalDbContext _dbContext;
+        private readonly IRequestResumeService _requestResumeService;
 
-        public MyApplicationsController(UserManager<User> userManager, FinalDbContext dbContext)
+        public MyApplicationsController(UserManager<User> userManager
+            , IRequestResumeService requestResumeService)
         {
             _userManager = userManager;
-            _dbContext = dbContext;
+            _requestResumeService = requestResumeService;
         }
 
         public async Task<IActionResult> Index()
@@ -27,38 +29,25 @@ namespace FinalProject_MVC.Areas.JobSeeker.Controllers
             var user = await _userManager.FindByEmailAsync(User.Identity?.Name);
             if (user == null) return NotFound();
 
-            var applications = await _dbContext.Resumes
-                .Where(r => r.UserId == user.Id)
-                .Include(r => r.Advertisement)
-                    .ThenInclude(a => a != null ? a.Company : null)
-                .ToListAsync();
+            var dtos = await _requestResumeService.GetMyApplicationsAsync(user.Id);
 
-            foreach (var app in applications)
+            var viewModel = dtos.Select(dto => new MyApplicationsViewModel
             {
-                System.Diagnostics.Debug.WriteLine($"Request ID: {app.Id}");
-                System.Diagnostics.Debug.WriteLine($"Advertisement: {app.Advertisement?.Title ?? "NULL"}");
-                System.Diagnostics.Debug.WriteLine($"Company: {app.Advertisement?.CompanyName ?? "NULL"}");
-            }
-
-            var viewModel = applications.Select(r => new MyApplicationsViewModel
-            {
-                Id = r.Id,
-                JobTitle = r.Advertisement != null && !string.IsNullOrEmpty(r.Advertisement.Title)
-                    ? r.Advertisement.Title
-                    : "عنوان شغل نامشخص",
-                CompanyName = r.Advertisement != null && r.Advertisement.Company != null && !string.IsNullOrEmpty(r.Advertisement.Company.CompanyName)
-                    ? r.Advertisement.Company.CompanyName
-                    : "شرکت نامشخص",
-                City = r.Advertisement?.City ?? r.City ?? "",
-                AppliedDate = r.StartDate,
-                Status = GetStatusText(r.Status),
-                StatusBadgeClass = GetStatusBadgeClass(r.Status),
-                AdvertisementId = r.AdvertisementId
+                Id = dto.Id,
+                JobTitle = dto.JobTitle,
+                CompanyName = dto.CompanyName,
+                City = dto.City,
+                AppliedDate = dto.AppliedDate,
+                Status = dto.Status.ToString(),
+                StatusText = GetStatusText(dto.Status),
+                StatusBadgeClass = GetStatusBadgeClass(dto.Status),
+                AdvertisementId = dto.AdvertisementId
             }).ToList();
 
             ViewData["Title"] = "درخواست‌های من";
             return View(viewModel);
         }
+
 
         private string GetStatusText(MyFinalProject.Domain.Entities.Enums.RequestStatus status)
         {

@@ -139,7 +139,6 @@ namespace FinalProject_MVC.Areas.Employer.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // تغییر وضعیت
             var statusEnum = (RequestStatus)newStatus;
             request.SetStatus(statusEnum);
 

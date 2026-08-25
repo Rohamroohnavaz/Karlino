@@ -97,6 +97,7 @@ namespace FinalProject_MVC.Areas.JobSeeker.Controllers
                 {
                     resume = (RequestResume)Activator.CreateInstance(typeof(RequestResume), nonPublic: true);
                     SetProperty(resume, "UserId", user.Id);
+                    SetProperty(resume, "IsDeleted", false);
                     _dbContext.Resumes.Add(resume);
                 }
 
@@ -256,7 +257,7 @@ namespace FinalProject_MVC.Areas.JobSeeker.Controllers
 
         private void SetStringProperty<T>(T entity, string propertyName, string value)
         {
-            value ??= ""; 
+            value ??= "";
 
             var property = typeof(T).GetProperty(propertyName,
                 System.Reflection.BindingFlags.Public |

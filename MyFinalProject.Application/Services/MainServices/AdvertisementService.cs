@@ -218,5 +218,25 @@ namespace MyFinalProject.Application.Services.MainServices
                 FeaturedUntil = a.FeaturedUntil
             }).ToList();
         }
+
+        public async Task<List<Advertisement>> GetActiveAdvertisementsAsync(string jobTitle, string city)
+        {
+            return await _advertisementRepository.GetActiveAdvertisementsAsync(jobTitle, city);
+        }
+
+        public async Task<Advertisement> GetAdvertisementWithDetailsAsync(Guid id)
+        {
+            return await _advertisementRepository.GetAdvertisementWithDetailsAsync(id);
+        }
+
+        public async Task<bool> UserHasAppliedAsync(Guid userId, Guid advertisementId)
+        {
+            return await _advertisementRepository.UserHasAppliedAsync(userId, advertisementId);
+        }
+
+        public async Task<List<Guid?>> GetUserAppliedAdvertisementIdsAsync(Guid userId)
+        {
+            return await _advertisementRepository.GetUserAppliedAdvertisementIdsAsync(userId);
+        }
     }
 }

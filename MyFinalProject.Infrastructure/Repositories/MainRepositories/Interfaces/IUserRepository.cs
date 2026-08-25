@@ -38,5 +38,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
         Task<List<AdminUserTableDto>> GetAllUsersForAdminAsync();
 
         Task<Guid?> GetIdByEmailAsync(string email);
+
+        Task<List<AdminUserTableDto>> GetAllUsersAsync();
     }
 }

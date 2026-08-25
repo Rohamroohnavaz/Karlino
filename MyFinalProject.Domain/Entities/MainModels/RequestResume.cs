@@ -99,6 +99,16 @@ namespace MyFinalProject.Domain.Entities.MainModels
             Attach = attach;
         }
 
+        public void SetLinkedInUrl(string linkedInUrl)
+        {
+            LinkedInUrl = linkedInUrl;
+        }
+
+        public void SetGitHubUrl(string gitHubUrl)
+        {
+            GitHubUrl = gitHubUrl;
+        }
+
         public void ChangeJobSeekerTitle(string jobSeekerTitle)
         {
             if (string.IsNullOrWhiteSpace(Title))
@@ -113,6 +123,30 @@ namespace MyFinalProject.Domain.Entities.MainModels
                 throw new Exception("JobSeekerName is required !!");
 
             JobSeekerName = jobSeekerName;
+        }
+
+        public void SetAboutMe(string aboutMe)
+        {
+            if (string.IsNullOrWhiteSpace(aboutMe))
+                throw new Exception("AboutMe is required !!");
+
+            AboutMe = aboutMe;
+        }
+
+        public void SetDescription(string description)
+        {
+            if (string.IsNullOrWhiteSpace(description))
+                throw new Exception("AboutMe is required !!");
+
+            Description = description;
+        }
+
+        public void SetAddress(string address)
+        {
+            if (string.IsNullOrWhiteSpace(address))
+                throw new Exception("AboutMe is required !!");
+
+            Address = address;
         }
 
         public void ChangeJobSeekerLastName(string jobSeekerLastName)

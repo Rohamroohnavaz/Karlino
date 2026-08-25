@@ -9,6 +9,7 @@
         public string City { get; set; }
         public DateTime AppliedDate { get; set; }
         public string Status { get; set; }
+        public string StatusText { get; set; }
         public string StatusBadgeClass { get; set; }
     }
 }

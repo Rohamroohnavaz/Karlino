@@ -1,22 +1,37 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace FinalProject_MVC.Areas.JobSeeker.ViewModels
+namespace MyFinalProject.Application.Commands.ViewModels
 {
-    public class ResumeViewModel
+    using System.ComponentModel.DataAnnotations;
+
+    public class ResumesDto
     {
         [Display(Name = "نام و نام خانوادگی")]
         public string FullName { get; set; }
 
+        [Display(Name = "نام کارجو")]
+        public string JobSeekerName { get; set; }
+
+        [Display(Name = "نام خانوادگی کارجو")]
+        public string JobSeekerLastName { get; set; }
+
         [Display(Name = "عنوان شغلی")]
+        [Required(ErrorMessage = "عنوان شغلی الزامی است")]
         public string JobTitle { get; set; }
 
         [Display(Name = "درباره من")]
         public string AboutMe { get; set; }
 
         [Display(Name = "ایمیل")]
+        [EmailAddress(ErrorMessage = "ایمیل وارد شده معتبر نیست")]
         public string Email { get; set; }
 
         [Display(Name = "شماره تماس")]
+        [Phone(ErrorMessage = "شماره تماس معتبر نیست")]
         public string PhoneNumber { get; set; }
 
         [Display(Name = "شهر")]
@@ -28,13 +43,13 @@ namespace FinalProject_MVC.Areas.JobSeeker.ViewModels
         [Display(Name = "آدرس")]
         public string Address { get; set; }
 
-        [Display(Name = "لینک لینکدین")]
+        [Display(Name = "لینکدین")]
+        [Url(ErrorMessage = "آدرس لینک معتبر نیست")]
         public string LinkedInUrl { get; set; }
 
-        [Display(Name = "لینک گیت‌هاب")]
+        [Display(Name = "گیت‌هاب")]
+        [Url(ErrorMessage = "آدرس لینک معتبر نیست")]
         public string GitHubUrl { get; set; }
-
-
 
         [Display(Name = "مقطع تحصیلی")]
         public string EducationDegree { get; set; }
@@ -45,15 +60,13 @@ namespace FinalProject_MVC.Areas.JobSeeker.ViewModels
         [Display(Name = "دانشگاه")]
         public string University { get; set; }
 
-        [Display(Name = "سال شروع")]
+        [Display(Name = "سال شروع تحصیل")]
         public int? EducationStartYear { get; set; }
 
-        [Display(Name = "سال پایان")]
+        [Display(Name = "سال پایان تحصیل")]
         public int? EducationEndYear { get; set; }
 
-
-
-        [Display(Name = "عنوان شغلی قبلی")]
+        [Display(Name = "عنوان شغلی (سابقه کار)")]
         public string WorkTitle { get; set; }
 
         [Display(Name = "نام شرکت")]
@@ -74,6 +87,8 @@ namespace FinalProject_MVC.Areas.JobSeeker.ViewModels
         [Display(Name = "زبان‌ها")]
         public string Languages { get; set; }
 
+        [Display(Name = "مسیر فایل رزومه")]
         public string ResumeFilePath { get; set; }
     }
 }
+

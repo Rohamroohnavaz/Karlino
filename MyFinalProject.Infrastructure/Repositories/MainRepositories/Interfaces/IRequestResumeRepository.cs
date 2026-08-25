@@ -1,4 +1,5 @@
 ﻿using MyFinalProject.Domain.Entities.MainModels;
+using MyFinalProject.Infrastructure.DTO;
 using MyFinalProject.Infrastructure.Repositories.Generics;
 using System;
 using System.Collections.Generic;
@@ -22,12 +23,14 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
 
         Task<RequestResume?> GetResumeByAttachId(Guid attachId);
 
-        Task<RequestResume?> GetRequestByUserId(Guid userId);
+        Task<RequestResume> GetRequestByUserId(Guid userId);
 
         Task<RequestResume?> GetRequestWithAttachmentByUserId(Guid requestId, Guid userId);
 
         Task<bool> ExistsByUserAndAdvertisement(Guid userId, Guid advertisementId);
 
         Task<Dictionary<string, int>> GetStatusStats();
+
+        Task<List<MyApplicationDto>> GetMyApplicationsAsync(Guid userId);
     }
 }

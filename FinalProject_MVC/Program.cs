@@ -55,6 +55,10 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IReportRepository, ReportRepository>();
 builder.Services.AddScoped<ISettingRepository, SettingRepository>();
 builder.Services.AddScoped<IAdvertisementService, AdvertisementService>();
+builder.Services.AddScoped<IRequestResumeService, RequestResumeService>();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+builder.Services.AddScoped<IAttachService, AttachService>();
+builder.Services.AddScoped<IAttachRepository, AttachRepository>();
 builder.Services
     .AddIdentityCore<User>(options =>
     {
@@ -70,6 +74,8 @@ builder.Services
     .AddRoles<IdentityRole<Guid>>()
     .AddEntityFrameworkStores<FinalDbContext>()
     .AddDefaultTokenProviders();
+builder.Services.AddScoped<SignInManager<User>>();
+
 
 builder.Services.AddAuthorization();
 
