@@ -98,20 +98,14 @@ namespace FinalProject_MVC.Areas.JobSeeker.Controllers
 
             var success = await _requestResumeService.ApplyForAdvertisementAsync(user.Id, advertisementId);
 
-            if (!success)
-            {
-                TempData["ErrorMessage"] = "خطا در ارسال درخواست. لطفاً مطمئن شوید رزومه شما تکمیل است.";
-                return RedirectToAction(nameof(Details), new { id = advertisementId });
-            }
+            //if (!success)
+            //{
+            //    TempData["ErrorMessage"] = "خطا در ارسال درخواست. لطفاً مطمئن شوید رزومه شما تکمیل است.";
+            //    return RedirectToAction(nameof(Details), new { id = advertisementId });
+            //}
 
             TempData["SuccessMessage"] = "درخواست شما با موفقیت ارسال شد!";
             return RedirectToAction(nameof(Details), new { id = advertisementId });
         }
-
-        //private async Task<User> GetUserAsync()
-        //{
-        //    var userEmail = User.Identity?.Name;
-        //    return await _userManager.FindByEmailAsync(userEmail);
-        //}
     }
 }

@@ -33,6 +33,11 @@ namespace MyFinalProject.Domain.Entities.Abstraction
             DeletedById = id;
         }
 
+        public void SetModifiedAt()
+        {
+            ModifiedAt = DateTime.UtcNow;
+        }
+
         public abstract void Validation();
     }
 }

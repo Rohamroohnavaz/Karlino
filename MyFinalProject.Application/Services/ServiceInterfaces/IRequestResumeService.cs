@@ -1,4 +1,5 @@
-﻿using MyFinalProject.Application.DTOs;
+﻿using MyFinalProject.Application.Commands.ViewModels;
+using MyFinalProject.Application.DTOs;
 using MyFinalProject.Domain.Entities.Enums;
 using MyFinalProject.Domain.Entities.MainModels;
 using MyFinalProject.Infrastructure.DTO;
@@ -36,5 +37,12 @@ namespace MyFinalProject.Application.Services.ServiceInterfaces
 
         Task<bool> ApplyForAdvertisementAsync(Guid userId, Guid advertisementId);
 
+        Task<ResumesDto> GetResumesDtoAsync(Guid userId);
+
+        Task<bool> SaveResumeAsync(Guid userId, ResumesDto viewModel, string? savedFilePath);
+
+        Task<(byte[] FileBytes, string FileName)?> GetResumeFileAsync(Guid userId);
+
+        Task<bool> DeleteResumeAsync(Guid userId);
     }
 }

@@ -60,11 +60,10 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
             return requests;
         }
 
-        public async Task<RequestResume?> GetRequestByUserId(Guid userId)
+        public async Task<RequestResume> GetRequestByUserId(Guid userId)
         {
             return await _dbContext.Resumes
-                .AsNoTracking()
-                .FirstOrDefaultAsync(r => r.UserId == userId && r.IsDeleted == false);
+                .FirstOrDefaultAsync(r => r.UserId == userId);
         }
 
         public async Task<RequestResume?> GetRequestResumeByCompanyId(Guid resumeId, Guid companyId)

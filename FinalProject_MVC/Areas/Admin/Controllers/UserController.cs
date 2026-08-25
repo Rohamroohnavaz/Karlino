@@ -36,93 +36,93 @@ namespace FinalProject_MVC.Areas.Admin.Controllers
 
         #region Divide Methods
 
-        // (Employer)
+        //(Employer)
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> ApproveEmployer(Guid id)
-        //{
-        //    var user = await _userManager.FindByIdAsync(id.ToString());
-        //    if (user == null) return NotFound();
+        // public async Task<IActionResult> ApproveEmployer(Guid id)
+        // {
+        //     var user = await _userManager.FindByIdAsync(id.ToString());
+        //     if (user == null) return NotFound();
 
-        //    var emailRequest = new SendEmailRequest
-        //    {
-        //        To = user.Email,
-        //        Subject = "تأیید حساب کاربری کارفرما",
-        //        Body = "حساب کاربری شما با موفقیت توسط مدیریت تأیید شد. اکنون می‌توانید وارد پنل خود شوید.",
-        //        isHtml = false
-        //    };
+        //     var emailRequest = new SendEmailRequest
+        //     {
+        //         To = user.Email,
+        //         Subject = "تأیید حساب کاربری کارفرما",
+        //         Body = "حساب کاربری شما با موفقیت توسط مدیریت تأیید شد. اکنون می‌توانید وارد پنل خود شوید.",
+        //         isHtml = false
+        //     };
 
-        //    await _adminService.ApproveEmployerAsync(emailRequest, id, CancellationToken.None);
+        //     await _adminService.ApproveEmployerAsync(emailRequest, id, CancellationToken.None);
 
-        //    TempData["SuccessMessage"] = "حساب کارفرما با موفقیت تأیید شد.";
-        //    return RedirectToAction(nameof(Index));
-        //}
+        //     TempData["SuccessMessage"] = "حساب کارفرما با موفقیت تأیید شد.";
+        //     return RedirectToAction(nameof(Index));
+        // }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> RejectEmployer(Guid id)
-        //{
-        //    var user = await _userManager.FindByIdAsync(id.ToString());
-        //    if (user == null) return NotFound();
+        // [HttpPost]
+        // [ValidateAntiForgeryToken]
+        // public async Task<IActionResult> RejectEmployer(Guid id)
+        // {
+        //     var user = await _userManager.FindByIdAsync(id.ToString());
+        //     if (user == null) return NotFound();
 
-        //    var emailRequest = new SendEmailRequest
-        //    {
-        //        To = user.Email,
-        //        Subject = "رد درخواست ثبت‌نام کارفرما",
-        //        Body = "متأسفانه درخواست ثبت‌نام شما مورد تأیید مدیریت قرار نگرفت.",
-        //        isHtml = false
-        //    };
+        //     var emailRequest = new SendEmailRequest
+        //     {
+        //         To = user.Email,
+        //         Subject = "رد درخواست ثبت‌نام کارفرما",
+        //         Body = "متأسفانه درخواست ثبت‌نام شما مورد تأیید مدیریت قرار نگرفت.",
+        //         isHtml = false
+        //     };
 
-        //    await _adminService.RejectEmployersAsync(emailRequest, id, CancellationToken.None);
+        //     await _adminService.RejectEmployersAsync(emailRequest, id, CancellationToken.None);
 
-        //    TempData["SuccessMessage"] = "حساب کارفرما رد شد.";
-        //    return RedirectToAction(nameof(Index));
-        //}
+        //     TempData["SuccessMessage"] = "حساب کارفرما رد شد.";
+        //     return RedirectToAction(nameof(Index));
+        // }
 
-        //// (JobSeeker)
+        // // (JobSeeker)
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> ApproveJobSeeker(Guid id)
-        //{
-        //    var user = await _userManager.FindByIdAsync(id.ToString());
-        //    if (user == null) return NotFound();
+        // [HttpPost]
+        // [ValidateAntiForgeryToken]
+        // public async Task<IActionResult> ApproveJobSeeker(Guid id)
+        // {
+        //     var user = await _userManager.FindByIdAsync(id.ToString());
+        //     if (user == null) return NotFound();
 
-        //    var emailRequest = new SendEmailRequest
-        //    {
-        //        To = user.Email,
-        //        Subject = "تأیید حساب کاربری کارجو",
-        //        Body = "حساب کاربری شما با موفقیت تأیید شد. اکنون می‌توانید رزومه ارسال کنید.",
-        //        isHtml = false
-        //    };
+        //     var emailRequest = new SendEmailRequest
+        //     {
+        //         To = user.Email,
+        //         Subject = "تأیید حساب کاربری کارجو",
+        //         Body = "حساب کاربری شما با موفقیت تأیید شد. اکنون می‌توانید رزومه ارسال کنید.",
+        //         isHtml = false
+        //     };
 
-        //    await _adminService.ApproveJobSeekerAsync(emailRequest, id, CancellationToken.None);
+        //     await _adminService.ApproveJobSeekerAsync(emailRequest, id, CancellationToken.None);
 
-        //    TempData["SuccessMessage"] = "حساب کارجو با موفقیت تأیید شد.";
-        //    return RedirectToAction(nameof(Index));
-        //}
+        //     TempData["SuccessMessage"] = "حساب کارجو با موفقیت تأیید شد.";
+        //     return RedirectToAction(nameof(Index));
+        // }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> RejectJobSeeker(Guid id)
-        //{
-        //    var user = await _userManager.FindByIdAsync(id.ToString());
-        //    if (user == null) return NotFound();
+        // [HttpPost]
+        // [ValidateAntiForgeryToken]
+        // public async Task<IActionResult> RejectJobSeeker(Guid id)
+        // {
+        //     var user = await _userManager.FindByIdAsync(id.ToString());
+        //     if (user == null) return NotFound();
 
-        //    var emailRequest = new SendEmailRequest
-        //    {
-        //        To = user.Email,
-        //        Subject = "رد درخواست ثبت‌نام کارجو",
-        //        Body = "متأسفانه درخواست ثبت‌نام شما مورد تأیید مدیریت قرار نگرفت.",
-        //        isHtml = false
-        //    };
+        //     var emailRequest = new SendEmailRequest
+        //     {
+        //         To = user.Email,
+        //         Subject = "رد درخواست ثبت‌نام کارجو",
+        //         Body = "متأسفانه درخواست ثبت‌نام شما مورد تأیید مدیریت قرار نگرفت.",
+        //         isHtml = false
+        //     };
 
-        //    await _adminService.RejectJobSeekerAsync(emailRequest, id, CancellationToken.None); // فرض بر این است که متد RejectJobSeekerAsync در سرویس دارید
+        //     await _adminService.RejectJobSeekerAsync(emailRequest, id, CancellationToken.None); // فرض بر این است که متد RejectJobSeekerAsync در سرویس دارید
 
-        //    TempData["SuccessMessage"] = "حساب کارجو رد شد.";
-        //    return RedirectToAction(nameof(Index));
-        //}
+        //     TempData["SuccessMessage"] = "حساب کارجو رد شد.";
+        //     return RedirectToAction(nameof(Index));
+        // }
 
         #endregion
 
@@ -131,74 +131,49 @@ namespace FinalProject_MVC.Areas.Admin.Controllers
         public async Task<IActionResult> Approve(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
-            if (user == null) return NotFound();
-
-            var emailRequest = new SendEmailRequest
+            if (user == null)
             {
-                To = user.Email,
-                Subject = user.Role.ToString() == "Employer" ? "تأیید حساب کاربری کارفرما" : "تأیید حساب کاربری کارجو",
-                Body = user.Role.ToString() == "Employer"
-                    ? "حساب کاربری شما با موفقیت توسط مدیریت تأیید شد. اکنون می‌توانید وارد پنل کارفرمایی خود شوید."
-                    : "حساب کاربری شما با موفقیت تأیید شد. اکنون می‌توانید رزومه ارسال کنید و فرصت‌های شغلی را ببینید.",
-                isHtml = false
-            };
-
-            try
-            {
-                if (user.Role.ToString() == "Employer")
-                {
-                    await _adminService.ApproveEmployerAsync(emailRequest, id, CancellationToken.None);
-                }
-                else if (user.Role.ToString() == "JobSeeker")
-                {
-                    await _adminService.ApproveJobSeekerAsync(emailRequest, id, CancellationToken.None);
-                }
-
-                TempData["SuccessMessage"] = "کاربر با موفقیت تأیید شد و ایمیل اطلاع‌رسانی ارسال گردید.";
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMessage"] = $"خطا در تأیید کاربر: {ex.Message}";
+                TempData["ErrorMessage"] = "کاربر یافت نشد";
+                return RedirectToAction(nameof(Index));
             }
 
+            user.IsApproved = true;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                TempData["ErrorMessage"] = "خطا در به‌روزرسانی وضعیت کاربر";
+                return RedirectToAction(nameof(Index));
+            }
+
+            TempData["SuccessMessage"] = $"کاربر {user.FirstName} {user.LastName} با موفقیت تایید شد";
             return RedirectToAction(nameof(Index));
         }
 
+        // POST: Admin/Users/Reject
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Reject(Guid id)
         {
             var user = await _userManager.FindByIdAsync(id.ToString());
-            if (user == null) return NotFound();
-
-            var emailRequest = new SendEmailRequest
+            if (user == null)
             {
-                To = user.Email,
-                Subject = user.Role.ToString() == "Employer" ? "رد درخواست ثبت‌نام کارفرما" : "رد درخواست ثبت‌نام کارجو",
-                Body = user.Role.ToString() == "Employer"
-                    ? "متأسفانه درخواست ثبت‌نام شما به عنوان کارفرما مورد تأیید مدیریت قرار نگرفت."
-                    : "متأسفانه درخواست ثبت‌نام شما مورد تأیید مدیریت قرار نگرفت.",
-                isHtml = false
-            };
-
-            try
-            {
-                if (user.Role.ToString() == "Employer")
-                {
-                    await _adminService.RejectEmployersAsync(emailRequest, id, CancellationToken.None);
-                }
-                else if (user.Role.ToString() == "JobSeeker")
-                {
-                    await _adminService.RejectJobSeekerAsync(emailRequest, id, CancellationToken.None);
-                }
-
-                TempData["SuccessMessage"] = "کاربر رد شد و ایمیل اطلاع‌رسانی ارسال گردید.";
-            }
-            catch (Exception ex)
-            {
-                TempData["ErrorMessage"] = $"خطا در رد کاربر: {ex.Message}";
+                TempData["ErrorMessage"] = "کاربر یافت نشد";
+                return RedirectToAction(nameof(Index));
             }
 
+            user.IsActive = false;
+
+            var result = await _userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                TempData["ErrorMessage"] = "خطا در به‌روزرسانی وضعیت کاربر";
+                return RedirectToAction(nameof(Index));
+            }
+
+            TempData["SuccessMessage"] = $"کاربر {user.FirstName} {user.LastName} با موفقیت رد (غیرفعال) شد";
             return RedirectToAction(nameof(Index));
         }
 

@@ -22,20 +22,17 @@ namespace FinalProject_MVC.Controllers
         private readonly IAdvertisementService _advertisementService;
         private readonly IAdvertisementRepository _advertisementRepository;
         private readonly UserManager<User> _userManager;
-        private readonly FinalDbContext _dbContext;
 
         public AdvertisementController(IApiService apiService 
             ,IAdvertisementService advertisementService
             ,IAdvertisementRepository advertisementRepository
             ,UserManager<User> userManager
-            ,FinalDbContext dbContext
             )
         {
             _apiService = apiService;
             _advertisementService = advertisementService;
             _advertisementRepository = advertisementRepository;
             _userManager = userManager;
-            _dbContext = dbContext;
         }
 
         [AllowAnonymous]

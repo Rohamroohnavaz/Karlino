@@ -36,7 +36,6 @@
     </div>
 }
 
-<!-- آمار کاربران -->
 <div class="row mb-4">
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="card border-start-primary border-start-4 shadow h-100 py-2">
@@ -188,7 +187,7 @@
                                 <td>
                                     @if (!user.IsActive)
                                     {
-                                        <span class="badge bg-danger">غیرفعال</span>
+                                        <span class="badge bg-success">فعال</span>
                                     }
                                     else if (!user.IsApproved)
                                     {
@@ -204,8 +203,8 @@
 
                                         @if (user.RoleName != "Admin")
                                         {
-                                            @if (!user.IsApproved)
-                                            {
+                                            @if (user.IsApproved != true)
+                                            {                                            
                                                 <form asp-action="Approve" asp-controller="Users" method="post" class="d-inline">
                                                     @Html.AntiForgeryToken()
                                                     <input type="hidden" name="id" value="@user.Id" />

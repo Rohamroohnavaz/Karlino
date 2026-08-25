@@ -99,6 +99,16 @@ namespace MyFinalProject.Domain.Entities.MainModels
             Attach = attach;
         }
 
+        public void SetLinkedInUrl(string linkedInUrl)
+        {
+            LinkedInUrl = linkedInUrl;
+        }
+
+        public void SetGitHubUrl(string gitHubUrl)
+        {
+            GitHubUrl = gitHubUrl;
+        }
+
         public void ChangeJobSeekerTitle(string jobSeekerTitle)
         {
             if (string.IsNullOrWhiteSpace(Title))

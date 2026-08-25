@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using MyFinalProject.Application.Commands.ViewModels;
 using MyFinalProject.Application.Constants;
 using MyFinalProject.Application.DTOs;
 using MyFinalProject.Application.ServiceExceptions;
@@ -27,6 +29,7 @@ namespace MyFinalProject.Application.Services.MainServices
         private readonly UserManager<User> _userManager;
         private readonly IAdvertisementRepository _advertiserRepository;
         private readonly IEmailService _emailService;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
         public RequestResumeService(IRequestResumeRepository requestResumeRepository
             , ICurrentUserService currentUserService
@@ -34,7 +37,8 @@ namespace MyFinalProject.Application.Services.MainServices
             , IAttachService attachService
             , UserManager<User> userManager
             , IAdvertisementRepository advertisementRepository
-            , IEmailService emailService)
+            , IEmailService emailService
+            , IWebHostEnvironment webHostEnvironment)
         {
             _requestRepository = requestResumeRepository;
             _currentUserService = currentUserService;
@@ -43,6 +47,7 @@ namespace MyFinalProject.Application.Services.MainServices
             _userManager = userManager;
             _advertiserRepository = advertisementRepository;
             _emailService = emailService;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<Guid> CreateResumeRequest(Guid advertisementId, CreateRequestResumeDto dto)
@@ -195,8 +200,8 @@ namespace MyFinalProject.Application.Services.MainServices
             return request;
         }
 
-        public async Task ChangeStatusAsync(Guid requestId, 
-            RequestStatus newStatus ,CancellationToken cancellationToken)
+        public async Task ChangeStatusAsync(Guid requestId,
+            RequestStatus newStatus, CancellationToken cancellationToken)
         {
             var requestResume = await _requestRepository.GetByIdAsync(requestId);
             if (requestResume is null)
@@ -207,7 +212,7 @@ namespace MyFinalProject.Application.Services.MainServices
             await _requestRepository.UpdateAsync(requestResume);
             await _unitOfWork.SaveChangesAsync();
 
-            await SendStatusChangedEmailAsync(requestResume, newStatus ,cancellationToken);
+            await SendStatusChangedEmailAsync(requestResume, newStatus, cancellationToken);
 
         }
 
@@ -301,6 +306,141 @@ namespace MyFinalProject.Application.Services.MainServices
                 return false;
             }
         }
+
+
+        public async Task<ResumesDto> GetResumesDtoAsync(Guid userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var resume = await _requestRepository.GetRequestByUserId(userId);
+
+            if (resume == null)
+            {
+                return new ResumesDto
+                {
+                    FullName = $"{user.FirstName} {user.LastName}",
+                    Email = user.Email,
+                    PhoneNumber = user.PhoneNumber,
+                    City = user.City ?? ""
+                };
+            }
+
+            return new ResumesDto
+            {
+                FullName = $"{user.FirstName} {user.LastName}",
+                JobTitle = resume.Title ?? "",
+                AboutMe = resume.AboutMe ?? "",
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                City = resume.City ?? "",
+                Address = resume.Address ?? "",
+                LinkedInUrl = resume.LinkedInUrl ?? "",
+                GitHubUrl = resume.GitHubUrl ?? "",
+                EducationDegree = resume.EducationDegree ?? "",
+                EducationField = resume.EducationField ?? "",
+                University = resume.University ?? "",
+                EducationStartYear = resume.EducationStartYear,
+                EducationEndYear = resume.EducationEndYear,
+                WorkTitle = resume.WorkTitle ?? "",
+                CompanyName = resume.CompanyName ?? "",
+                WorkDescription = resume.WorkDescription ?? "",
+                WorkStartYear = resume.WorkStartYear,
+                WorkEndYear = resume.WorkEndYear,
+                Skills = resume.Skills ?? "",
+                Languages = resume.Languages ?? "",
+                ResumeFilePath = resume.ResumeFilePath ?? ""
+            };
+        }
+
+        // در ResumeService.cs
+        public async Task<bool> SaveResumeAsync(Guid userId, ResumesDto dto, string? savedFilePath)
+        {
+            var resume = await _requestRepository.GetRequestByUserId(userId);
+            bool isNew = resume == null;
+
+            if (isNew)
+            {
+                resume = new RequestResume(
+                    jobSeekerName: dto.JobSeekerName ?? "نام",
+                    jobSeekerLastName: dto.JobSeekerLastName ?? "نام خانوادگی",
+                    province: dto.Province ?? "تهران",
+                    city: dto.City ?? "تهران",
+                    startDate: DateTime.Now,
+                    expireDate: DateTime.Now.AddYears(1),
+                    userId: userId,
+                    advertisementId: Guid.Empty,
+                    attachmentId: Guid.Empty
+                );
+
+                resume.IsDeleted = false;
+            }
+
+            resume.ChangeJobSeekerTitle(dto.JobTitle);
+            resume.SetAboutMe(dto.AboutMe);
+            resume.ChangeCity(dto.City);
+            resume.SetAddress(dto.Address);
+            resume.SetLinkedInUrl(dto.LinkedInUrl);
+            resume.SetLinkedInUrl(dto.GitHubUrl);
+            resume.EducationDegree = dto.EducationDegree;
+            resume.EducationField = dto.EducationField;
+            resume.University = dto.University;
+            resume.EducationStartYear = dto.EducationStartYear;
+            resume.EducationEndYear = dto.EducationEndYear;
+            resume.WorkTitle = dto.WorkTitle;
+            resume.CompanyName = dto.CompanyName;
+            resume.WorkDescription = dto.WorkDescription;
+            resume.WorkStartYear = dto.WorkStartYear;
+            resume.WorkEndYear = dto.WorkEndYear;
+            resume.Skills = dto.Skills;
+            resume.Languages = dto.Languages;
+            resume.SetDescription(dto.AboutMe);
+
+            if (!string.IsNullOrEmpty(savedFilePath))
+            {
+                resume.ResumeFilePath = savedFilePath;
+            }
+
+            resume.SetModifiedAt();
+
+            if (isNew)
+                await _requestRepository.AddAsync(resume);
+            else
+                await _requestRepository.UpdateAsync(resume);
+
+            await _unitOfWork.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<(byte[] FileBytes, string FileName)?> GetResumeFileAsync(Guid userId)
+        {
+            var resume = await _requestRepository.GetRequestByUserId(userId);
+            if (resume == null || string.IsNullOrEmpty(resume.ResumeFilePath))
+                return null;
+
+            var filePath = Path.Combine(_webHostEnvironment.WebRootPath, resume.ResumeFilePath.TrimStart('/'));
+            if (!System.IO.File.Exists(filePath))
+                return null;
+
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+            return (fileBytes, "Resume.pdf");
+        }
+
+        public async Task<bool> DeleteResumeAsync(Guid userId)
+        {
+            var resume = await _requestRepository.GetRequestByUserId(userId);
+            if (resume == null) return false;
+
+            if (!string.IsNullOrEmpty(resume.ResumeFilePath))
+            {
+                var filePath = Path.Combine(_webHostEnvironment.WebRootPath, resume.ResumeFilePath.TrimStart('/'));
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                }
+            }
+
+            await _requestRepository.HardDeleteAsync(resume.Id);
+            await _unitOfWork.SaveChangesAsync();
+            return true;
+        }
     }
 }
-  

@@ -23,7 +23,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Interfaces
 
         Task<RequestResume?> GetResumeByAttachId(Guid attachId);
 
-        Task<RequestResume?> GetRequestByUserId(Guid userId);
+        Task<RequestResume> GetRequestByUserId(Guid userId);
 
         Task<RequestResume?> GetRequestWithAttachmentByUserId(Guid requestId, Guid userId);
 
