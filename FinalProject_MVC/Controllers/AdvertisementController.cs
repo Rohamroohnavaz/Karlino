@@ -90,12 +90,12 @@ namespace FinalProject_MVC.Controllers
 
                 await _apiService.PostAsync<object>("/CreateAdvertisement", advertisementData);
 
-                TempData["SuccessMessage"] = "Advertisement Added Successfully !";
+                TempData["SuccessMessage"] = "آگهی با موفقیت ساخته شد !";
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Error In Adding Advertisement : " + ex.Message);
+                ModelState.AddModelError("", " خطا هنگام ساخت آگهی " + ex.Message);
                 return View(adverModel);
             }
         }

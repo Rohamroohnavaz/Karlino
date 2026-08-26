@@ -41,12 +41,46 @@ public class ApiService : IApiService
         if (!response.IsSuccessStatusCode)
         {
             var errorContent = await response.Content.ReadAsStringAsync();
-            System.Diagnostics.Debug.WriteLine($"API Error Detail: {errorContent}");
-            throw new Exception($"API Error: {response.StatusCode} - {errorContent}");
+            string friendlyMessage = "خطای ناشناخته‌ای رخ داده است. لطفاً دوباره تلاش کنید.";
+
+            try
+            {
+                var errorObj = JsonConvert.DeserializeObject<Dictionary<string, object>>(errorContent);
+                if (errorObj != null)
+                {
+                    if (errorObj.ContainsKey("message"))
+                        friendlyMessage = errorObj["message"].ToString();
+                    else if (errorObj.ContainsKey("title"))
+                        friendlyMessage = errorObj["title"].ToString();
+                    else if (errorObj.ContainsKey("error"))
+                        friendlyMessage = errorObj["error"].ToString();
+                }
+            }
+            catch
+            {
+            }
+
+            if (friendlyMessage == "خطای ناشناخته‌ای رخ داده است. لطفاً دوباره تلاش کنید.")
+            {
+                friendlyMessage = response.StatusCode switch
+                {
+                    System.Net.HttpStatusCode.Unauthorized => "نام کاربری یا رمز عبور اشتباه است.",
+                    System.Net.HttpStatusCode.BadRequest => "اطلاعات وارد شده معتبر نیست.",
+                    System.Net.HttpStatusCode.NotFound => "کاربر یافت نشد.",
+                    System.Net.HttpStatusCode.Forbidden => "شما مجوز دسترسی به این بخش را ندارید.",
+                    System.Net.HttpStatusCode.InternalServerError => "خطای داخلی سرور. لطفاً بعداً تلاش کنید.",
+                    _ => $"خطا در ارتباط با سرور (کد: {response.StatusCode})"
+                };
+            }
+
+            throw new Exception(friendlyMessage);
         }
 
         return await HandleResponse<T>(response);
     }
+
+
+
 
     public async Task<T> PutAsync<T>(string endpoint, object data)
     {

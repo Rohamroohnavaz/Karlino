@@ -106,7 +106,7 @@ public class AccountController : Controller
         }
         catch (Exception ex)
         {
-            ModelState.AddModelError("", "Login failed: " + ex.Message);
+            ModelState.AddModelError("", ex.Message);
             return View(model);
         }
     }
@@ -185,7 +185,7 @@ public class AccountController : Controller
         {
             await _apiService.PostAsync<object>("/LogoutUser", null);
         }
-        catch { /* Ignore logout API errors */ }
+        catch { }
 
         HttpContext.Session.Remove("Token");
 
