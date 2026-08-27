@@ -93,6 +93,12 @@ namespace MyFinalProject.Domain.Entities.MainModels
             Status = RequestStatus.Fail;
         }
 
+        public void SetAdvertisement(Advertisement advertisement)
+        {
+            Advertisement = advertisement;
+            AdvertisementId = advertisement?.Id;
+        }
+
         public void SetAttach(Guid? attachId, Attach attach)
         {
             AttachmentId = attachId;

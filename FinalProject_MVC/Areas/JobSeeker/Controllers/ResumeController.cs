@@ -165,7 +165,7 @@ namespace FinalProject_MVC.Areas.JobSeeker.Controllers
             }
             catch (Exception ex)
             {
-                TempData["ErrorMessage"] = $"خطا در ذخیره رزومه: {ex.Message}";
+                TempData["ErrorMessage"] = $"خطا در ذخیره رزومه : {ex.Message}";
                 return View(viewModel);
             }
         }

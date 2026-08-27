@@ -63,6 +63,7 @@ namespace MyFinalProject.Infrastructure.Repositories.MainRepositories.Repos
         public async Task<RequestResume> GetRequestByUserId(Guid userId)
         {
             return await _dbContext.Resumes
+                .Include(r => r.Attach)
                 .FirstOrDefaultAsync(r => r.UserId == userId);
         }
 

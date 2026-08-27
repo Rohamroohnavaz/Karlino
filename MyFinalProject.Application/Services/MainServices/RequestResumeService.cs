@@ -280,7 +280,7 @@ namespace MyFinalProject.Application.Services.MainServices
                 var request = new RequestResume(
                     jobSeekerName: user.FirstName ?? "نام",
                     jobSeekerLastName: user.LastName ?? "نام خانوادگی",
-                    province: "تهران", // یا از پروفایل کاربر
+                    province: "تهران",
                     city: resume?.City ?? "تهران",
                     startDate: DateTime.Now,
                     expireDate: DateTime.Now.AddMonths(3),
@@ -288,6 +288,13 @@ namespace MyFinalProject.Application.Services.MainServices
                     advertisementId: advertisementId,
                     attachmentId: Guid.Empty
                 );
+
+                request.SetAdvertisement(advertisement);
+
+                if (resume?.AttachmentId != null && resume.Attach != null)
+                {
+                    request.SetAttach(resume.AttachmentId, resume.Attach);
+                }
 
                 request.ChangeJobSeekerTitle(resume?.Title ?? "درخواست همکاری");
                 request.SetAboutMe(resume?.AboutMe ?? "");
@@ -351,7 +358,6 @@ namespace MyFinalProject.Application.Services.MainServices
             };
         }
 
-        // در ResumeService.cs
         public async Task<bool> SaveResumeAsync(Guid userId, ResumesDto dto, string? savedFilePath)
         {
             var resume = await _requestRepository.GetRequestByUserId(userId);
