@@ -42,10 +42,10 @@ namespace MyFinalProject.Domain.Entities.MainModels
         public string AboutMe { get; private set; }
         public string Address { get; private set; }
         public DateTime? BirthDate { get; private set; }
-        public string Gender { get; private set; }
-        public string LinkedInUrl { get; private set; }
-        public string GitHubUrl { get; private set; }
-        public string ProfileImageUrl { get; private set; }
+        public string Gender { get; set; }
+        public string? LinkedInUrl { get; private set; }
+        public string? GitHubUrl { get; private set; }
+        public string? ProfileImageUrl { get; private set; }
 
         public string EducationDegree { get; set; }
 
@@ -57,11 +57,11 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         public int? EducationEndYear { get; set; }
 
-        public string WorkTitle { get; set; }
+        public string? WorkTitle { get; set; }
 
         public string CompanyName { get; set; }
 
-        public string WorkDescription { get; set; }
+        public string? WorkDescription { get; set; }
 
         public int? WorkStartYear { get; set; }
 
@@ -69,9 +69,9 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         public string Skills { get; set; }
 
-        public string Languages { get; set; }
+        public string? Languages { get; set; }
 
-        public string ResumeFilePath { get; set; }
+        public string? ResumeFilePath { get; set; }
 
         public RequestStatus Status { get; set; } = RequestStatus.Pending;
         public User? User { get; private set; }
@@ -117,7 +117,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         public void ChangeJobSeekerTitle(string jobSeekerTitle)
         {
-            if (string.IsNullOrWhiteSpace(Title))
+            if (string.IsNullOrWhiteSpace(jobSeekerTitle))
                 throw new Exception("JobSeekerTitle is required !!");
 
             Title = jobSeekerTitle;
@@ -133,25 +133,16 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         public void SetAboutMe(string aboutMe)
         {
-            if (string.IsNullOrWhiteSpace(aboutMe))
-                throw new Exception("AboutMe is required !!");
-
             AboutMe = aboutMe;
         }
 
         public void SetDescription(string description)
         {
-            if (string.IsNullOrWhiteSpace(description))
-                throw new Exception("AboutMe is required !!");
-
             Description = description;
         }
 
         public void SetAddress(string address)
         {
-            if (string.IsNullOrWhiteSpace(address))
-                throw new Exception("AboutMe is required !!");
-
             Address = address;
         }
 

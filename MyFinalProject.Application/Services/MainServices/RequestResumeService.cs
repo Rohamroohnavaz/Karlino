@@ -266,22 +266,56 @@ namespace MyFinalProject.Application.Services.MainServices
         public async Task<bool> ApplyForAdvertisementAsync(Guid userId, Guid advertisementId)
         {
             var user = await _userManager.FindByIdAsync(userId.ToString());
-            if (user == null) return false;
+
+            if (user == null)
+            {
+                Console.WriteLine("APPLY FAILED: USER NOT FOUND");
+                return false;
+            }
 
             var advertisement = await _advertiserRepository.GetByIdAsync(advertisementId);
-            if (advertisement == null || !advertisement.IsActive || advertisement.IsDeleted || advertisement.ExpireDate <= DateTime.Now)
+
+            if (advertisement == null)
+            {
+                Console.WriteLine("APPLY FAILED: ADVERTISEMENT NOT FOUND");
                 return false;
+            }
+
+            if (!advertisement.IsActive)
+            {
+                Console.WriteLine("APPLY FAILED: ADVERTISEMENT INACTIVE");
+                return false;
+            }
+
+            if (advertisement.IsDeleted)
+            {
+                Console.WriteLine("APPLY FAILED: ADVERTISEMENT DELETED");
+                return false;
+            }
+
+            if (advertisement.ExpireDate <= DateTime.Now)
+            {
+                Console.WriteLine("APPLY FAILED: ADVERTISEMENT EXPIRED");
+                return false;
+            }
 
             var resume = await _requestRepository.GetRequestByUserId(userId);
-            if (resume == null) return false;
+
+            if (resume == null)
+            {
+                Console.WriteLine("APPLY FAILED: RESUME NOT FOUND");
+                return false;
+            }
 
             try
             {
+                Console.WriteLine("========== APPLY START ==========");
+
                 var request = new RequestResume(
                     jobSeekerName: user.FirstName ?? "نام",
                     jobSeekerLastName: user.LastName ?? "نام خانوادگی",
                     province: "تهران",
-                    city: resume?.City ?? "تهران",
+                    city: resume.City ?? "تهران",
                     startDate: DateTime.Now,
                     expireDate: DateTime.Now.AddMonths(3),
                     userId: userId,
@@ -289,31 +323,68 @@ namespace MyFinalProject.Application.Services.MainServices
                     attachmentId: Guid.Empty
                 );
 
+                request.CompanyName = resume.CompanyName ?? "ثبت نشده";
+                request.EducationDegree = resume.EducationDegree ?? "ثبت نشده";
+                request.EducationField = resume.EducationField ?? "ثبت نشده";
+                request.University = resume.University ?? "ثبت نشده";
+                request.Gender = resume.Gender ?? "ثبت نشده";
+
+                Console.WriteLine("RequestResume CREATED");
+
                 request.SetAdvertisement(advertisement);
 
-                if (resume?.AttachmentId != null && resume.Attach != null)
+                Console.WriteLine("Advertisement SET");
+
+                if (resume.AttachmentId != null && resume.Attach != null)
                 {
                     request.SetAttach(resume.AttachmentId, resume.Attach);
+                    Console.WriteLine("Attachment SET");
                 }
 
-                request.ChangeJobSeekerTitle(resume?.Title ?? "درخواست همکاری");
-                request.SetAboutMe(resume?.AboutMe ?? "");
-                request.SetDescription(resume?.Description ?? "");
-                request.SetAddress(resume?.Address ?? "");
-                request.Status = MyFinalProject.Domain.Entities.Enums.RequestStatus.Pending;
+                request.ChangeJobSeekerTitle(resume.Title ?? "درخواست همکاری");
+
+                Console.WriteLine("Title SET");
+
+                if (!string.IsNullOrWhiteSpace(resume.AboutMe))
+                    request.SetAboutMe(resume.AboutMe);
+
+                if (!string.IsNullOrWhiteSpace(resume.Description))
+                    request.SetDescription(resume.Description);
+
+                if (!string.IsNullOrWhiteSpace(resume.Address))
+                {
+                    request.SetAddress(resume.Address);
+                }
+                else
+                {
+                    request.SetAddress("ثبت نشده");
+                }
+                
+
+                request.Status = RequestStatus.Pending;
                 request.IsDeleted = false;
 
+                Console.WriteLine("BEFORE ADD");
+
                 await _requestRepository.AddAsync(request);
+
+                Console.WriteLine($"AFTER ADD - Request ID: {request.Id}");
+
                 await _unitOfWork.SaveChangesAsync();
+
+                Console.WriteLine("========== APPLY SAVE SUCCESS ==========");
 
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
+                Console.WriteLine("========== APPLY ERROR ==========");
+                Console.WriteLine(ex.ToString());
+                Console.WriteLine("=================================");
+
                 return false;
             }
         }
-
 
         public async Task<ResumesDto> GetResumesDtoAsync(Guid userId)
         {
@@ -385,7 +456,7 @@ namespace MyFinalProject.Application.Services.MainServices
             resume.ChangeCity(dto.City);
             resume.SetAddress(dto.Address);
             resume.SetLinkedInUrl(dto.LinkedInUrl);
-            resume.SetLinkedInUrl(dto.GitHubUrl);
+            resume.SetGitHubUrl(dto.GitHubUrl);
             resume.EducationDegree = dto.EducationDegree;
             resume.EducationField = dto.EducationField;
             resume.University = dto.University;
