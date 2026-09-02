@@ -320,14 +320,22 @@ namespace MyFinalProject.Application.Services.MainServices
                     expireDate: DateTime.Now.AddMonths(3),
                     userId: userId,
                     advertisementId: advertisementId,
-                    attachmentId: Guid.Empty
+                    attachmentId: null
                 );
+
+                request.SetAdvertisement(resume.Advertisement);
+
+                //if (resume?.AttachmentId != null && resume.AttachmentId != Guid.Empty)
+                //{
+                //    request.AttachmentId = resume.AttachmentId;
+                //}
 
                 request.CompanyName = resume.CompanyName ?? "ثبت نشده";
                 request.EducationDegree = resume.EducationDegree ?? "ثبت نشده";
                 request.EducationField = resume.EducationField ?? "ثبت نشده";
                 request.University = resume.University ?? "ثبت نشده";
                 request.Gender = resume.Gender ?? "ثبت نشده";
+                request.Skills = resume.Skills ?? "";
 
                 Console.WriteLine("RequestResume CREATED");
 
@@ -335,11 +343,7 @@ namespace MyFinalProject.Application.Services.MainServices
 
                 Console.WriteLine("Advertisement SET");
 
-                if (resume.AttachmentId != null && resume.Attach != null)
-                {
-                    request.SetAttach(resume.AttachmentId, resume.Attach);
-                    Console.WriteLine("Attachment SET");
-                }
+                
 
                 request.ChangeJobSeekerTitle(resume.Title ?? "درخواست همکاری");
 

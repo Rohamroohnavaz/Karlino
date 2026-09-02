@@ -19,7 +19,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
 
         public RequestResume(string jobSeekerName, string jobSeekerLastName
             , string province, string city, DateTime startDate, DateTime expireDate
-            , Guid userId, Guid advertisementId, Guid attachmentId)
+            , Guid userId, Guid advertisementId, Guid? attachmentId)
         {
             JobSeekerName = jobSeekerName;
             JobSeekerLastName = jobSeekerLastName;
@@ -87,7 +87,7 @@ namespace MyFinalProject.Domain.Entities.MainModels
         {
             Status = newStatus;
         }
-
+       
         public void Cancel()
         {
             Status = RequestStatus.Fail;
